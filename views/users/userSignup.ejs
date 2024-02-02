@@ -1,0 +1,165 @@
+<%- include('../layouts/userLanding.ejs') %>
+
+<div class="container main-container headerOffset">
+  <div class="row">
+    <div class="breadcrumbDiv col-lg-12">
+      <ul class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li class="active">Authentication</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-9 col-md-9 col-sm-7">
+      <h1 class="section-title-inner">
+        <span><i class="fa fa-lock"></i> Authentication</span>
+      </h1>
+
+      <div class="row userInfo"> 
+        <a class="btn btn-primary" href="/login"
+          ><i class="fa fa-sign-in"></i> Already Have Account</a
+        >
+        <div class="col-xs-12 col-sm-9">
+          <h2 class="block-title-2">Create an account</h2>
+          <% if(emailExcisting){%>
+            <h2 style=" color:red"> email Already exit</h2>
+          <%}%>
+          <form action="/signup" method="POST" id="formData" class="mx-1 mx-md-4" autocomplete="off">
+            <div class="form-group">
+              <label>Username</label>
+              <input
+                name="name"
+                title="Please enter your username (at least 3 characters)"
+                type="text"
+                class="form-control"
+                placeholder="Enter name"
+                minlength="3"
+              />
+            </div>
+            <div class="form-group">
+              <label>Email address</label>
+              <input
+                name="email"
+                title="Please enter valid email"
+                type="email"
+                class="form-control"
+                placeholder="Enter email"
+              />
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input
+                name="phonenumber"
+                minlength="10"
+                maxlength="10"
+                title=" Enter 10 numbers"
+                type="tel"
+                class="form-control"
+                placeholder="Enter phone number"
+              />
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                name="password"
+                minlength="5"
+                title="Please enter your password, between 5 and 12 characters"
+                class="form-control"
+                placeholder="Password"
+              />
+            </div>
+
+            
+
+            
+
+            <br />
+
+           
+
+              <button
+                class="btn btn-primary btn-md"
+                type="submit"
+                
+                style="background-color: #2ecc71; color: white" >
+                <i class="fa fa-user"></i> Sign up
+              </button>
+            </div>
+            <div class="error-message" style="color: rgb(218, 15, 15)"></div>
+            <div style="color: red">
+              <% if (error) { %> <%= error %> <% } %>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!--/row end-->
+    </div>
+  </div>
+  <!--/row-->
+
+  <div style="clear: both"></div>
+</div>
+<!-- /wrapper -->
+
+<div class="gap"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
+  integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
+  integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"> </script> -->
+<!-- <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script> -->
+
+<!--validation-->
+<script>
+
+
+    $("#formData").validate({
+      rules: {
+        name: {
+          required: true,
+          minlength: 4,
+          maxlength: 12,
+        },
+        email: {
+          required: true,
+          email: true,
+        },
+        phonenumber: {
+          required: true,
+          minlength: 10,
+          maxlength: 10,
+        },
+        password: {
+          required: true,
+          minlength: 6,
+          maxlength: 8,
+        },
+      },
+     
+     
+    });
+
+
+</script>
+
+
+
+<style>
+  .error-message {
+    color: red;
+    display: none;
+  }
+</style>
+
+<%- include('../layouts/userFooter.ejs') %>
