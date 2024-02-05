@@ -1,0 +1,327 @@
+<%- include('../layouts/userHeader.ejs') %>
+
+
+<!-- /.Fixed navbar  -->
+<div class="container main-container headerOffset">
+
+    <!-- Main component call to action -->
+
+    <div class="row">
+        <div class="breadcrumbDiv col-lg-12">
+            <ul class="breadcrumb">
+                <li><a href="/home">Home</a></li>
+                <li class="active">SMART WATCHES</li>
+            </ul>
+        </div>
+    </div>
+    <!-- /.row  -->
+
+    <div class="row">
+
+        <!--left column-->
+
+        <div class="col-lg-3 col-md-3 col-sm-12">
+
+            <div class="panel-group" id="accordionNo">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><a data-toggle="collapse" href="#collapseBrand"
+                                                   class="collapseWill active ">
+                            Category <span class="pull-left"> <i class="fa fa-caret-right"></i></span> </a></h4>
+                    </div>
+                    <div id="collapseBrand" class="panel-collapse collapse in">
+                        <div class="panel-body smoothscroll maxheight300">
+                            <div class="block-element">
+                                <label>
+                                    <input type="checkbox" name="tour" value="0"/>
+                                    Headphones </label>
+                            </div>
+                            <div class="block-element">
+                                <label>
+                                    <input type="checkbox" name="tour" value="0"/>
+                                    Smartwatches </label>
+                            </div>
+                            <div class="block-element">
+                                <label>
+                                    <input type="checkbox" name="tour" value="0"/>
+                                    Ear Buds </label>
+                            </div>
+                            <div class="block-element">
+                                <label>
+                                    <input type="checkbox" name="tour" value="0"/>
+                                    Smartwatches </label>
+                            </div>
+                           
+                            <div class="block-element">
+                                <label> &nbsp; </label>
+                                <!-- keep it blank // -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Category-->
+                
+                <!--/Category menu end-->
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><a class="collapseWill active " data-toggle="collapse"
+                                                   href="#collapsePrice">
+                            Price <span class="pull-left"> <i class="fa fa-caret-right"></i></span> </a> <span
+                                class="pull-right clearFilter  label-danger"> Clear </span></h4>
+                    </div>
+                    <div id="collapsePrice" class="panel-collapse collapse in">
+                        <div class="panel-body priceFilterBody">
+                            <!-- -->
+                            <label>
+                                <input type="radio" name="agree" value="0"/>
+                                2000₹ - 3000₹</label>
+                            <br>
+                            <label>
+                                <input type="radio" name="agree" value="1"/>
+                            1500₹ - 2000₹</label>
+                            <br>
+                            <label>
+                                <input type="radio" name="agree" value="1"/>
+                            1000₹ - 1500₹</label>
+                            <br>
+                            <label>
+                                <input type="radio" name="agree" value="1"/>
+                            500₹ - 1000₹</label>
+                            <br>
+                           
+
+                           
+                        </div>
+                    </div>
+                </div>
+                <!--/price panel end-->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><a data-toggle="collapse" href="#collapseThree"
+                                                   class="collapseWill active ">
+                            Brand<span class="pull-left"> <i class="fa fa-caret-right"></i></span> </a></h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <div class="block-element">
+                                <label>
+                                    <input type="checkbox" name="tour" value="3"/>
+                                    Boat </label>
+                            </div>
+                            <div class="block-element">
+                                <label>
+                                    <input type="checkbox" name="tour" value="3"/>
+                                    sony </label>
+                            </div>
+                            <div class="block-element">
+                                <label>
+                                    <input type="checkbox" name="tour" value="3"/>
+                                    JBL </label>
+                            </div>
+                            <div class="block-element">
+                                <label>
+                                    <input type="checkbox" name="tour" value="3"/>
+                                    One Plus+ </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              
+                <!--/brand panel end-->
+
+          
+                <!--/color panel end-->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><a data-toggle="collapse" href="#collapseThree"
+                                                   class="collapseWill active ">
+                            Discount <span class="pull-left"> <i class="fa fa-caret-right"></i></span> </a></h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <div class="block-element">
+                                <label>
+                                    <input type="checkbox" name="tour" value="3"/>
+                                    Non-Discounted items </label>
+                            </div>
+                            <div class="block-element">
+                                <label>
+                                    <input type="checkbox" name="tour" value="3"/>
+                                    Discounted items </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/discount  panel end-->
+            </div>
+        </div>
+
+        <!--right column-->
+        <div class="col-lg-9 col-md-9 col-sm-12">
+            <div class="w100 clearfix category-top">
+                <h2> OUR PRODUCTS </h2>
+
+            
+            <!--/.category-top-->
+
+        
+            <!--/.subCategoryList-->
+
+            <div class="w100 productFilter clearfix">
+                <p class="pull-left"> Showing <strong>12</strong> products </p>
+
+                <div class="pull-right ">
+                    <div class="change-order pull-right">
+                        <select class="form-control" name="orderby">
+                            <option selected="selected">Default sorting</option>
+                            <option value="popularity">Sort by popularity</option>
+                            <option value="rating">Sort by average rating</option>
+                      
+                        </select>
+                    </div>
+                    <div class="change-view pull-right"><a href="#" title="Grid" class="grid-view"> <i
+                            class="fa fa-th-large"></i> </a> <a href="#" title="List" class="list-view "><i
+                            class="fa fa-th-list"></i></a></div>
+                </div>
+            </div>
+            <!--/.productFilter-->
+            <div class="row  categoryProduct xsResponse clearfix">
+                
+                <!--/.item-->
+            
+                <!--/.item-->
+                
+                <!--/.item-->
+                
+                <!--/.item-->
+                <!-- <div class="item col-sm-4 col-lg-4 col-md-4 col-xs-6">
+                    <div class="product">
+                        <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist"
+                           data-placement="left">
+                            <i class="glyphicon glyphicon-heart"></i>
+                        </a>
+
+                        <div class="image">
+                           
+                            <a href="product-details.html"><img src="images/product/35.jpg" alt="img"
+                                                                class="img-responsive"></a></div>
+                        <div class="description">
+                            <h4><a href="product-details.html">humanitatis per</a></h4>
+
+                            <div class="grid-description">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
+                            </div>
+                            <div class="list-description">
+                                <p> Sed sed rutrum purus. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                    Pellentesque risus lacus, iaculis in ante vitae, viverra hendrerit ante. Aliquam vel
+                                    fermentum elit. Morbi rhoncus, neque in vulputate facilisis, leo tortor sollicitudin
+                                    odio, quis pellentesque lorem nisi quis enim. In dolor mi, hendrerit at blandit
+                                    vulputate, congue a purus. Sed eget turpis sit amet orci euismod accumsan. Praesent
+                                    sit amet placerat elit. </p>
+                            </div>
+                            <span class="size">XL / XXL / S </span></div>
+                        <div class="price"><span>$25</span></div>
+                        <div class="action-control"><a class="btn btn-primary"> <span class="add2cart"><i
+                                class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
+                    </div>
+                </div> -->
+                <div class="row categoryProduct xsResponse clearfix" >
+                    <% productData.forEach(product=> { %>
+                        <div class="item col-sm-3 col-lg-3 col-md-3 col-xs-6 grid-view" style="height: 300px;">
+                            <div class="product">
+                                <!-- Uncomment the following lines if you want to include the "Add to Wishlist" button -->
+                                <!-- <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left">
+                                                            <i class="glyphicon glyphicon-heart"></i>
+                                                        </a> -->
+                                <div class="image">
+                                    <a href="/productDetails/<%= product._id %>">
+                                        <img src="/upload/<%= product.productImage1 %>" alt="img"
+                                            class="img-responsive" />
+                                    </a>
+                                </div>
+                                <div class="description">
+                                    <h4 class="small-font-size">
+                                        <a href="/productDetails/<%= product._id %>">
+                                            <%= product.productName %>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="price">
+                                    <span>₹<%= product.productPrice %></span>
+                                </div>
+                                <div class="action-control">
+                                    <a href="/cart/<%= product._id %>" class="btn btn-primary" onclick="addToCart()">
+                                        <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"></i> Add to cart</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                            <!--/.item-->
+                </div>
+               
+                <!--/.item-->
+               
+              
+                <!--/.item-->
+                
+               
+                <!--/.item-->
+               
+         
+                <!--/.item--><div class="item col-sm-4 col-lg-4 col-md-4 col-xs-6">
+                    
+                </div>
+
+               
+                <!--/.item-->
+                
+            
+                <!--/.item-->
+               
+                
+             
+                <!--/.item-->
+              
+                
+                <!--/.item-->
+               
+            </div>
+            <!--/.categoryProduct || product content end-->
+
+           
+            <!--/.categoryFooter-->
+        </div>
+        <!--/right column end-->
+    </div>
+    <!-- /.row  -->
+</div>
+<!-- /main container -->
+
+<div class="gap"></div>
+
+<!-- Product Details Modal  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+ 
+
+
+
+    function addToCart() {
+    
+    Swal.fire({
+        icon: 'success',
+        title: 'Item Added to Cart',
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
+
+
+</script>
+
+
+
+<%- include('../layouts/userFooter.ejs') %>

@@ -1,0 +1,200 @@
+<%- include('../layouts/adminHeader.ejs') %>
+
+<main class="main-wrap">
+    <header class="main-header navbar">
+        <div class="col-search">
+            <form class="searchform">
+                <div class="input-group">
+                    <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                    <button class="btn btn-light bg" type="button"> <i
+                            class="material-icons md-search"></i></button>
+                </div>
+                <datalist id="search_terms">
+                    <option value="Products">
+                    <option value="New orders">
+                    <option value="Apple iphone">
+                    <option value="Ahmed Hassan">
+                </datalist>
+            </form>
+        </div>
+        <div>
+            <a href="/admin" class="btn btn-primary">Logout</a>
+          </div>
+    </header>
+
+    <main class="main-wrap" style="width: 50%; margin-left: 12em;">
+        
+        <section class="content-main">
+
+            
+
+
+            <!DOCTYPE html>
+            <html lang="en">
+
+            <head>
+                <meta charset="UTF-8">
+                <title>Edit Product</title>
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+            </head>
+
+            <body>
+                <div class="container mt-5">
+                    <h2>Edit Product</h2>
+
+
+
+
+
+                    <form action="/admin/editProduct/<%=productData._id%>" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="productName">Product Name</label>
+                            <input type="text" class="form-control" id="productName"
+                                value="<%= productData.productName %>" name="productName" >
+                        </div>
+
+
+
+
+
+                        <div class="input-group mb-3">
+                            <img src="/upload/<%= productData.productImage1 %>" alt="" id="preview1"
+                                style="width: 100px; height: 100px">
+                            <div class="input-group mb-3">
+                                <input name="productImage1" id="productImage1" type="file" class="form-control"
+                                    placeholder="Product Image1" onchange="displayImage1()" >
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <img src="/upload/<%= productData.productImage2 %>" alt=""
+                                style="width: 100px; height: 100px">
+                            <div class="input-group mb-3">
+                                <input name="productImage2" id="productImage2" type="file" class="form-control"
+                                    placeholder="Product Image2" onchange="displayImage2()" >
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <img src="/upload/<%= productData.productImage3 %>" alt=""
+                                style="width: 100px; height: 100px" id="preview1">
+                            <div class="input-group mb-3">
+                                <input name="productImage3" type="file" class="form-control" onchange="displayImage3()">
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input name="productPrice" type="text" class="form-control"
+                                value="<%= productData.productPrice %>">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <input name="productStock" type="text" class="form-control"
+                                value="<%= productData.productStock %>">
+                        </div>
+
+
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="Category">Category</label>
+
+                                <select class="form-control p_input" name="category" placeholder="category" >
+                                    <% categories.forEach((value)=>{ %>
+                                        <option value="<%=value.categoryName  %>">
+                                            <%= value.categoryName %>
+                                        </option>
+                                        <% }) %>
+
+                                </select>
+
+                                <!-- <div class="form-group">
+
+                                                <input type="file" class="form-control-file" id="productImage"
+                                                    name="productImage">
+                                            </div> -->
+                                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Save Changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            </body>
+
+            </html>
+
+
+
+
+
+
+
+
+
+
+            <!-- <div class="pagination-area mt-15 mb-50">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-start">
+                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                    <li class="page-item"><a class="page-link" href="#">02</a></li>
+                    <li class="page-item"><a class="page-link" href="#">03</a></li>
+                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#">16</a></li>
+                    <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                </ul>
+            </nav>
+        </div> -->
+        </section> <!-- content-main end// -->
+        
+    </main>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- {{!-- onchange image display --}} -->
+    <!-- <script>
+        function displayImage1() {
+            const reader = new FileReader()
+            reader.onload = () => {
+                preview1.src = reader.result
+            }
+            const file = document.querySelector("#productImage1").files[0];
+            if (file) {
+                preview1.style.display = 'block'
+                reader.readAsDataURL(file)
+            }
+        }
+        function displayImage2() {
+            const reader = new FileReader()
+            reader.onload = () => {
+                preview2.src = reader.result
+            }
+            const file = document.querySelector("#productImage2").files[0];
+            if (file) {
+                preview2.style.display = 'block'
+                reader.readAsDataURL(file)
+            }
+        }
+        function displayImage3() {
+            const reader = new FileReader()
+            reader.onload = () => {
+                preview3.src = reader.result
+            }
+            const file = document.querySelector("#productImage3").files[0];
+            if (file) {
+                preview3.style.display = 'block'
+                reader.readAsDataURL(file)
+            }
+        }
+    </script> -->
+
+<%- include('../layouts/adminFooter.ejs') %>

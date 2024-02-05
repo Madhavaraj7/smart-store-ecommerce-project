@@ -5,14 +5,19 @@ const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const randomstring = require("randomstring");
 
-
+const productCollection = require("../models/productModel.js");
+const categoryCollection = require("../models/categoryModel.js");
 
 //////////////////to dispaly landing page
 
 const userLandingPage = async (req, res) => {
   try {
+    if (req.session.isLoggedin) {
+      res.redirect("/home");
+    } else {
+      res.render("users/userLandingPage", { error: null });
+    }
     console.log("hello");
-    res.render("users/userLandingPage", { error: null });
   } catch (error) {
     console.log(error.message);
   }
@@ -149,19 +154,34 @@ const verifyLogin = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    const userData = await userdata.findOne({ email: email });
+    const userData = await userdata.findOne({ email: email, isBlocked: false });
+    // const user = await userdata.findOne({ email: email });
+
+    if (!userData) {
+      req.session.userNotFound = true;
+      res.render("users/login", {
+        message: "user is blocked",
+      });
+    }
+    if (userData.isBlocked) {
+      req.session.userNotFound = true;
+      res.render("users/login", {
+        message: "user is Not Found",
+      });
+    }
 
     if (userData) {
       const passwordMatch = await bcrypt.compare(password, userData.password);
       //authentication of user
       if (passwordMatch) {
         req.session.user_id = userData._id;
-        req.session.isLoggedin = true
-  
-        req.session.userIsThere ={
-          isAlive :true,
-          userName:userData.name
-        }
+        req.session.isLoggedin = true;
+
+        req.session.userIsThere = {
+          isAlive: true,
+          userName: userData.name,
+        };
+        req.session.save();
         res.redirect("/home");
       } else {
         res.render("users/login", {
@@ -230,7 +250,7 @@ const sendResetPasswordMail = async (name, email, token) => {
         pass: "shpv unkn wdpx lpsy",
       },
     });
-    console.log(token)
+    console.log(token);
     const mailOptions = {
       from: "storesmart863@gmail.com",
       to: email,
@@ -284,34 +304,90 @@ const securePassword = async (password) => {
   }
 };
 
-const resetPassword = async(req,res)=>{
+const resetPassword = async (req, res) => {
   try {
-
     const password = req.body.password;
     const user_id = req.body.user_id;
     const secure_password = await securePassword(password);
 
-    const updateddata=await userdata.findByIdAndUpdate({_id:user_id},{$set:{password:secure_password ,token:''}});
-    res.redirect("/login")
-   
+    const updateddata = await userdata.findByIdAndUpdate(
+      { _id: user_id },
+      { $set: { password: secure_password, token: "" } }
+    );
+    res.redirect("/login");
   } catch (error) {
     console.log(error.message);
-    
   }
-}
+};
 
 //logout function
 const userLogout = async (req, res) => {
   try {
     // req.session.destroy();
-    req.session.userId = false
-    req.session.isLoggedin = false
-    console.log("logged out"); 
-    res.redirect("/admin");
+    req.session.userId = false;
+    req.session.isLoggedin = null;
+    req.session.userIsThere = false;
+    req.session.save();
+    console.log("logged out");
+    res.redirect("/");
   } catch (error) {
     console.log(error.message);
   }
 };
+
+const productspage = async (req, res) => {
+  try {
+    let page = Number(req.query.page) || 1;
+    let limit = 4;
+    let skip = (page - 1) * limit;
+
+    let categoryData = await categoryCollection.find({ isListed: true });
+    let productData = await productCollection
+      .find({ isListed: true })
+      .skip(skip)
+      .limit(limit)
+
+
+    let count = await productCollection.countDocuments({ isListed: true });
+
+    let totalPages = Math.ceil(count / limit);
+    let totalPagesArray = new Array(totalPages).fill(null);
+
+    res.render("users/productlist", {
+      categoryData,
+      productData,
+      currentUser: req.session.currentUser,
+      user: req.session.user,
+      count,
+      limit,
+      totalPagesArray,
+      currentPage: page,
+      selectedFilter: req.session.selectedFilter,
+    });
+
+    console.log(req.session.currentUser);
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+
+
+const productDetils = async (req, res) => {
+  try {
+    const currentProduct = await productCollection.findOne({
+      _id: req.params.id,
+    });
+    console.log(currentProduct);
+    res.render("users/productDetils.ejs", {
+      user: req.session.user,
+      currentProduct,
+    });
+  } catch (error) { }
+};
+
+
 
 
 module.exports = {
@@ -329,8 +405,19 @@ module.exports = {
   resetPassword,
   securePassword,
   userLogout,
+  productspage,
+  productDetils,
   // getUserLoginController,
   // userLoginController,
+
+
+
+
+
+
+
+
+
 
   //    OTP   //
 
@@ -351,11 +438,11 @@ module.exports = {
 
       const user = new userdata({ name, email, phonenumber, password });
       console.log(user);
-      req.session.userIsThere ={
-        isAlive :true,
-        userName:name
-      }
-      req.session.save()
+      req.session.userIsThere = {
+        isAlive: true,
+        userName: name,
+      };
+      // req.session.save();
       await user.save();
       res.redirect("/home");
     } else {
@@ -366,10 +453,14 @@ module.exports = {
   home: async (req, res) => {
     try {
       req.session.userIsThere;
-      
-        console.log(req.url);
-        res.render("users/home",{isAlive :req.session.userIsThere     });
-      
+      if (req.session.isLoggedin) {
+        res.render("users/home", { isAlive: req.session.userIsThere });
+      } else {
+        res.redirect("/");
+      }
+
+      console.log(req.url);
+
       console.log("heyyy");
     } catch (error) {
       console.log(error.message);

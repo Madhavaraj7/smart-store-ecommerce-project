@@ -5,9 +5,14 @@ const path = require("path");
 const session = require('express-session')
 const bcrypt = require('bcrypt')
 
-
+const nocache = require("nocache");
 
 const app = express();
+app.use(nocache());
+
+
+
+
 
 const dbConnect = require("./config/dbConnection");
 

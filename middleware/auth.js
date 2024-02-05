@@ -2,10 +2,9 @@
 const isLogin = async (req, res, next) => {
   try {
     if (req.session.isLoggedin) {
-      next();
-     
+      return res.redirect("/home");
     } else {
-      return res.redirect("/");
+      next();
     }
   } catch (error) {
     console.log(error.message);

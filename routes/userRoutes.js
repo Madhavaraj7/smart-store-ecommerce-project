@@ -31,8 +31,8 @@ userRoute.post('/resendOTP', userController.insertUser);
 userRoute.get("/home",userController.home)
 
 
-userRoute.get("/login",  userController.loadLogin);
-userRoute.post("/login", userController.verifyLogin);
+userRoute.get("/login", auth.isLogin,userController.loadLogin);
+userRoute.post("/login",userController.verifyLogin);
 
 
 userRoute.get("/forget",userController.forgetLoad)
@@ -46,6 +46,18 @@ userRoute.post("/forget-password",userController.resetPassword)
 
 
 userRoute.get("/logout", userController.userLogout);
+
+
+userRoute.get('/productList',   userController.productspage);
+
+userRoute.get('/productDetails/:id',userController.productDetils);
+
+
+
+
+
+
+
 
 
 

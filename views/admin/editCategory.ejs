@@ -1,0 +1,149 @@
+<%- include('../layouts/adminHeader.ejs') %>
+
+
+<main class="main-wrap">
+    <header class="main-header navbar">
+        <div class="col-search">
+            <form class="searchform">
+                <div class="input-group">
+                    <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                    <button class="btn btn-light bg" type="button"> <i
+                            class="material-icons md-search"></i></button>
+                </div>
+                <datalist id="search_terms">
+                    <option value="Products">
+                    <option value="New orders">
+                    <option value="Apple iphone">
+                    <option value="Ahmed Hassan">
+                </datalist>
+            </form>
+        </div>
+        <div>
+            <a href="/admin" class="btn btn-primary">Logout</a>
+          </div>
+    </header>
+
+
+    <main class="main-wrap" style="width: 50%; margin-left: 12em;">
+       
+        <section class="content-main">
+
+            <div class="card mb-4">
+
+
+            </div> <!-- card end// -->
+
+
+            <!DOCTYPE html>
+            <html lang="en">
+
+            <head>
+                <meta charset="UTF-8">
+                <title>Edit Category</title>
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+            </head>
+
+            <body>
+                <div class="container mt-5">
+                    <h2>Edit Category</h2>
+                    <form action="/admin/editCategories/<%=data._id%>" method="POST" class="mt-4">
+                        <div class="form-group">
+                            <label for="categoriesName">Category Name</label>
+                            <input type="text" class="form-control" id="categoriesName" value="<%=data.categoryName%>" name="categoriesName" required>
+                        </div>
+                
+                        <div class="form-group">
+                            <label for="categoriesDescription">Category Description</label>
+                            <textarea class="form-control" id="categoriesDescription" rows="3" name="categoriesDescription"><%=data.categoryDescription%></textarea>
+                        </div>
+                
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+                
+
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            </body>
+
+            </html>
+
+
+
+
+
+
+
+
+
+
+            <!-- <div class="pagination-area mt-15 mb-50">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-start">
+                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                    <li class="page-item"><a class="page-link" href="#">02</a></li>
+                    <li class="page-item"><a class="page-link" href="#">03</a></li>
+                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#">16</a></li>
+                    <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                </ul>
+            </nav>
+        </div> -->
+        </section> <!-- content-main end// -->
+        
+    </main>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- {{!-- onchange image display --}} -->
+    <!-- <script>
+        function displayImage1() {
+            const reader = new FileReader()
+            reader.onload = () => {
+                preview1.src = reader.result
+            }
+            const file = document.querySelector("#productImage1").files[0];
+            if (file) {
+                preview1.style.display = 'block'
+                reader.readAsDataURL(file)
+            }
+        }
+        function displayImage2() {
+            const reader = new FileReader()
+            reader.onload = () => {
+                preview2.src = reader.result
+            }
+            const file = document.querySelector("#productImage2").files[0];
+            if (file) {
+                preview2.style.display = 'block'
+                reader.readAsDataURL(file)
+            }
+        }
+        function displayImage3() {
+            const reader = new FileReader()
+            reader.onload = () => {
+                preview3.src = reader.result
+            }
+            const file = document.querySelector("#productImage3").files[0];
+            if (file) {
+                preview3.style.display = 'block'
+                reader.readAsDataURL(file)
+            }
+        }
+    </script>
+ -->
+
+
+
+
+
+<%- include('../layouts/adminFooter.ejs') %>

@@ -1,0 +1,104 @@
+<%- include('../layouts/adminHeader.ejs') %>
+
+
+<main class="main-wrap">
+    <header class="main-header navbar">
+        <div class="col-search">
+            <form class="searchform">
+                <div class="input-group">
+                    <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                    <button class="btn btn-light bg" type="button"> <i
+                            class="material-icons md-search"></i></button>
+                </div>
+                <datalist id="search_terms">
+                    <option value="Products">
+                    <option value="New orders">
+                    <option value="Apple iphone">
+                    <option value="Ahmed Hassan">
+                </datalist>
+            </form>
+        </div>
+        <div>
+            <a href="/admin" class="btn btn-primary">Logout</a>
+          </div>
+    </header>
+    <section class="content-main">
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">USER MANAGEMENT</h2>
+                    <div>
+                        <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button>
+                        <button class="btn btn-md rounded font-sm hover-up">Publich</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive content p-3">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Phone</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% users.forEach((user,i) => { %>
+          
+                    <tr id="<%= user._id %>">
+                      <th scope="row"><%= i+1 %></th>
+                      <td><%= user.name %></td>
+                      <td><%= user.email %></td>
+                      <td><%= user.phonenumber %></td>
+                      <% if(user.isBlocked){ %>
+                      <td>
+                        <a href="/admin/unblock-user/<%= user._id %>" class="btn btn-danger"
+                          >Blocked</a
+                        >
+                      </td>
+                      <% }else{ %>
+                      <td>
+                        <a href="/admin/block-user/<%= user._id %>" class="btn btn-success"
+                          >Unblocked</a
+                        >
+                      </td>
+                      <% } %>
+                    
+                    <% }) %>
+                  </tbody>
+                </table>
+
+
+
+
+
+
+
+        </div>
+
+
+        <div class="d-flex justify-content-center py-3">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+             
+              <% for( let i = 0; i < count/limit; i++ ) { %>
+              <li class="page-item">
+                <a class="page-link" href="/admin/userManagement?page=<%=i+1 %>"><%= i+1 %></a>
+              </li>
+              <% } %>
+             
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+    </section>
+
+
+
+
+
+<%- include('../layouts/adminFooter.ejs') %>
