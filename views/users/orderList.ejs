@@ -1,0 +1,704 @@
+<%- include('../layouts/userHeader.ejs') %>
+
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Mirrored from templatecycle.com/tshop/v6/gray/index-logged-in.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 09 Dec 2023 06:54:30 GMT -->
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Fav and touch icons -->
+    <link
+      rel="apple-touch-icon-precomposed"
+      sizes="144x144"
+      href="../assets/ico/apple-touch-icon-144-precomposed.png"
+    />
+    <link
+      rel="apple-touch-icon-precomposed"
+      sizes="114x114"
+      href="../assets/ico/apple-touch-icon-114-precomposed.png"
+    />
+    <link
+      rel="apple-touch-icon-precomposed"
+      sizes="72x72"
+      href="../assets/ico/apple-touch-icon-72-precomposed.png"
+    />
+    <link
+      rel="apple-touch-icon-precomposed"
+      href="ico/apple-touch-icon-57-precomposed.html"
+    />
+    <link rel="shortcut icon" href="..assets/ico/favicon.png" />
+    <title>TSHOP - Bootstrap E-Commerce Parallax Theme</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    
+    <link href="https://cdn.datatables.net/v/dt/dt-1.13.8/datatables.min.css" rel="stylesheet">
+ 
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/style.css" rel="stylesheet" />
+      <!-- styles needed by footable  -->
+      <link href="/assets/css/footable-0.1.css" rel="stylesheet" type="text/css"/>
+      <link href="/assets/css/footable.sortable-0.1.css" rel="stylesheet" type="text/css"/>
+
+    <!-- Just for debugging purposes. -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- include pace script for automatic web page progress bar  -->
+
+    <script>
+      paceOptions = {
+        elements: true,
+      };
+    </script>
+    <script src="/assets/js/pace.min.js"></script>
+    <!-- add theme styles for this template -->
+    <link
+      id="pagestyle"
+      rel="stylesheet"
+      type="text/css"
+      href="/assets/css/skin-1.css"
+    />
+    <link rel="stylesheet" type="text/css" href="/assets/css/gray-look.css" />
+  </head>
+
+  <body>
+    <script type="text/javascript">
+      function swapStyleSheet(sheet) {
+        document.getElementById("pagestyle").setAttribute("href", sheet);
+      }
+    </script>
+    <style>
+      .header {
+        position: fixed;
+        top: 30px;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 2rem 9%;
+        background: var(--bg-color);
+        z-index: 100;
+        box-shadow: 0 3px 10px var(--bg-color);
+      }
+      .header .sticky {
+        border-bottom: 0.3rem rgba(0, 0, 0, 0.2);
+      }
+      .logo {
+        width: 170px;
+        height: 39px;
+        margin-left: 490px;
+      }
+      nav a {
+        color: var(--text-color);
+        font-size: 1.8rem;
+        margin-left: 3rem;
+        font-weight: 500;
+        transition: 0.5s;
+      }
+      nav a:hover,
+      nav a.active {
+        color: var(--main-color);
+      }
+
+      .themeControll {
+        background: #2d3e50;
+        height: auto;
+        width: 100px;
+        position: fixed;
+        left: 0;
+        padding: 20px;
+        top: 20%;
+        z-index: 999999;
+        -webkit-transform: translateX(0);
+        -moz-transform: translateX(0);
+        -o-transform: translateX(0);
+        -ms-transform: translateX(0);
+        transform: translateX(0);
+        opacity: 1;
+        -ms-filter: none;
+        filter: none;
+        -webkit-transition: opacity 0.5s linear,
+          -webkit-transform 0.7s cubic-bezier(0.56, 0.48, 0, 0.99);
+        -moz-transition: opacity 0.5s linear,
+          -moz-transform 0.7s cubic-bezier(0.56, 0.48, 0, 0.99);
+        -o-transition: opacity 0.5s linear,
+          -o-transform 0.7s cubic-bezier(0.56, 0.48, 0, 0.99);
+        -ms-transition: opacity 0.5s linear,
+          -ms-transform 0.7s cubic-bezier(0.56, 0.48, 0, 0.99);
+        transition: opacity 0.5s linear,
+          transform 0.7s cubic-bezier(0.56, 0.48, 0, 0.99);
+      }
+
+      .themeControll.active {
+        display: block;
+        -webkit-transform: translateX(-100px);
+        -moz-transform: translateX(-100px);
+        -o-transform: translateX(-100px);
+        -ms-transform: translateX(-1020px);
+        transform: translateX(-100px);
+        -webkit-transition: opacity 0.5s linear,
+          -webkit-transform 0.7s cubic-bezier(0.56, 0.48, 0, 0.99);
+        -moz-transition: opacity 0.5s linear,
+          -moz-transform 0.7s cubic-bezier(0.56, 0.48, 0, 0.99);
+        -o-transition: opacity 0.5s linear,
+          -o-transform 0.7s cubic-bezier(0.56, 0.48, 0, 0.99);
+        -ms-transition: opacity 0.5s linear,
+          -ms-transform 0.7s cubic-bezier(0.56, 0.48, 0, 0.99);
+        transition: opacity 0.5s linear,
+          transform 0.7s cubic-bezier(0.56, 0.48, 0, 0.99);
+      }
+
+      .themeControll a {
+        border-radius: 3px;
+        clear: both;
+        display: block;
+        height: 25px;
+        margin-bottom: 4px;
+        width: 50px;
+      }
+
+      .tbtn {
+        background: #2d3e50;
+        color: #ffffff !important;
+        font-size: 30px;
+        height: auto;
+        padding: 10px;
+        position: absolute;
+        right: -40px;
+        top: 0;
+        width: 40px;
+        cursor: pointer;
+      }
+
+      @media (max-width: 780px) {
+        .themeControll {
+          display: none;
+        }
+      }
+    </style>
+
+    <div class="themeControll">
+      <h3
+        style="width: 60px; font-size: 10px; line-height: 12px"
+        class="uppercase color-white text-center"
+      >
+        Choose your colour
+      </h3>
+      <a
+        onclick="swapStyleSheet('/assets/css/skin-8.css')"
+        style="background: #3bca95; border-top: 12px solid #34bc8a"
+      >
+      </a>
+      <a
+        onclick="swapStyleSheet('../assets/css/skin-1.css')"
+        style="background: #4ec67f; border-top: 12px solid #27ae60"
+      >
+      </a>
+      <a
+        onclick="swapStyleSheet('../assets/css/skin-2.css')"
+        style="background: #1abc9c; border-top: 12px solid #16a085"
+      >
+      </a>
+      <a
+        onclick="swapStyleSheet('../assets/css/skin-3.css')"
+        style="background: #3498db; border-top: 12px solid #2980b9"
+      >
+      </a>
+      <a
+        onclick="swapStyleSheet('../assets/css/skin-4.css')"
+        style="background: #9b59b6; border-top: 12px solid #9149af"
+      >
+      </a>
+      <a
+        onclick="swapStyleSheet('../assets/css/skin-5.css')"
+        style="background: #e74c3c; border-top: 12px solid #c0392b"
+      >
+      </a>
+      <a
+        onclick="swapStyleSheet('../assets/css/skin-7.css')"
+        style="background: #95a5a6; border-top: 12px solid #7f8c8d"
+      >
+      </a>
+      <a
+        onclick="swapStyleSheet('../assets/css/skin-9.css')"
+        style="background: #f7b529; border-top: 12px solid #e78e00"
+      >
+      </a>
+      <a
+        onclick="swapStyleSheet('../assets/css/skin-10.css')"
+        style="background: #f17370; border-top: 12px solid #f26663"
+      >
+      </a>
+      <a
+        onclick="swapStyleSheet('../assets/css/skin-11.css')"
+        style="background: #273646; border-top: 12px solid #2ecc71"
+      >
+      </a>
+      <a
+        onclick="swapStyleSheet('../assets/css/skin-6.css')"
+        style="background: #34495e; border-top: 12px solid #283949"
+      >
+      </a>
+      <h3
+        style="width: 60px; font-size: 10px; line-height: 12px"
+        class="uppercase color-white text-center"
+      >
+        <br />
+        <a
+          style="color: #fff"
+          href="https://templatecycle.com/tshop/v6/index.html"
+          ><i class="fa fa-angle-double-left"></i> Theme Chooser
+        </a>
+      </h3>
+      <p class="tbtn"><i class="fa fa-angle-double-left"></i></p>
+    </div>
+
+    <!-- Modal Login start -->
+
+    <!-- /.Modal Login -->
+
+    <!-- Modal Signup start -->
+
+    <!-- /.ModalSignup End -->
+
+    <!-- Fixed navbar start -->
+    <div
+      class="navbar navbar-tshop navbar-fixed-top megamenu"
+      role="navigation"
+    >
+      <div class="navbar-top">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
+              <div class="pull-left">
+                <ul class="userMenu">
+                  <li>
+                    <a href="contact-us.html">
+                      <span class="hidden-xs">contact us</span
+                      ><i
+                        class="glyphicon glyphicon-info-sign hide visible-xs"
+                      ></i>
+                    </a>
+                  </li>
+                  <li class="phone-number">
+                    <a href="callto:+12025550151">
+                      <span>
+                        <i class="glyphicon glyphicon-phone-alt"></i
+                      ></span>
+                      <span class="hidden-xs" style="margin-left: 5px">
+                        +1-202-555-0151
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div
+              class="col-lg-6 col-sm-6 col-xs-6 col-md-6 no-margin no-padding"
+            >
+              <div class="pull-right">
+                <ul class="userMenu">
+                  <li>
+                    <a href="/home"
+                      ><span class="hidden-xs"> my Account</span>
+                      <i class="glyphicon glyphicon-user hide visible-xs"></i
+                    ></a>
+                  </li>
+
+                  <li class="dropdown hasUserMenu">
+                    
+                    
+                      
+                      
+                        <a href="/logout"
+                          ><i class="fa fa-sign-out"></i> Log Out</a
+                        >
+                      
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--/.navbar-top-->
+
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-collapse"
+          >
+            <span class="sr-only"> Toggle navigation </span>
+            <span class="icon-bar"> </span> <span class="icon-bar"> </span>
+            <span class="icon-bar"> </span>
+          </button>
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".navbar-cart"
+          >
+            <i class="fa fa-shopping-cart colorWhite"> </i>
+            <span class="cartRespons colorWhite"> Cart ($210.00) </span>
+          </button>
+          <a class="navbar-brand" href="/home">
+            <img
+              src="/images/logo.png"
+              alt="TSHOP"
+              style="width: 200px; height: 39px; margin-right: 09px"
+            />
+          </a>
+
+          <!-- this part for mobile -->
+          <div class="search-box pull-right hidden-lg hidden-md hidden-sm">
+            <div class="input-group">
+              <button class="btn btn-nobg getFullSearch" type="button">
+                <i class="fa fa-search"> </i>
+              </button>
+            </div>
+            <!-- /input-group -->
+          </div>
+        </div>
+
+        <!-- this part is duplicate from cartMenu  keep it for mobile -->
+        <div class="navbar-cart collapse">
+          <div class="cartMenu col-lg-4 col-xs-12 col-md-4">
+            <div class="w100 miniCartTable scroll-pane">
+              <table>
+                <tbody>
+                  <tr class="miniCartProduct">
+                    <td style="width: 20%" class="miniCartProductThumb">
+                      <div>
+                        <a href="product-details.html">
+                          <img src="/images/product/3.jpg" alt="img" />
+                        </a>
+                      </div>
+                    </td>
+                    <td style="width: 40%">
+                      <div class="miniCartDescription">
+                        <h4>
+                          <a href="product-details.html">
+                            TSHOP T shirt Black
+                          </a>
+                        </h4>
+                        <span class="size"> 12 x 1.5 L </span>
+
+                        <div class="price"><span> $8.80 </span></div>
+                      </div>
+                    </td>
+                    <td style="width: 10%" class="miniCartQuantity">
+                      <a> X 1 </a>
+                    </td>
+                    <td style="width: 15%" class="miniCartSubtotal">
+                      <span> $8.80 </span>
+                    </td>
+                    <td style="width: 5%" class="delete"><a> x </a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!--/.miniCartTable-->
+
+            <div class="miniCartFooter miniCartFooterInMobile text-right">
+              <h3 class="text-right subtotal">Subtotal: $210</h3>
+              <a class="btn btn-sm btn-danger" href="/cart">
+                <i class="fa fa-shopping-cart"> </i> VIEW CART
+              </a>
+              <a href="checkout-0.html" class="btn btn-sm btn-primary">
+                CHECKOUT
+              </a>
+            </div>
+            <!--/.miniCartFooter-->
+          </div>
+          <!--/.cartMenu-->
+        </div>
+        <!--/.navbar-cart-->
+
+        <div class="navbar-collapse collapse">
+          <!--- this part will be hidden for mobile version -->
+          <div class="nav navbar-nav navbar-right hidden-xs">
+            <div class="dropdown cartMenu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-shopping-cart"> </i>
+                <span class="cartRespons"> Cart ($210.00) </span>
+                <b class="caret"> </b>
+              </a>
+
+              <div class="dropdown-menu col-lg-4 col-xs-12 col-md-4">
+                <div class="w100 miniCartTable scroll-pane">
+                  <table></table>
+                </div>
+                <!--/.miniCartTable-->
+
+                <div class="miniCartFooter text-right">
+                  <a class="btn btn-sm btn-danger" href="/cart">
+                    <i class="fa fa-shopping-cart"> </i> VIEW CART </a
+                  ><a class="btn btn-sm btn-primary" href="checkout-1.html">
+                    CHECKOUT
+                  </a>
+                </div>
+                <!--/.miniCartFooter-->
+              </div>
+              <!--/.dropdown-menu-->
+            </div>
+            <!--/.cartMenu-->
+
+            <div class="search-box">
+              <div class="input-group">
+                <button class="btn btn-nobg getFullSearch" type="button">
+                  <i class="fa fa-search"> </i>
+                </button>
+              </div>
+              <!-- /input-group -->
+            </div>
+            <!--/.search-box -->
+          </div>
+          <!--/.navbar-nav hidden-xs-->
+        </div>
+        <!--/.nav-collapse -->
+      </div>
+      <!--/.container -->
+
+      <div class="search-full text-right">
+        <a class="pull-right search-close">
+          <i class="fa fa-times-circle"> </i>
+        </a>
+
+        <div class="searchInputBox pull-right">
+          <input
+            type="search"
+            data-searchurl="search?="
+            name="q"
+            placeholder="start typing and hit enter to search"
+            class="search-input"
+          />
+          <button class="btn-nobg search-btn" type="submit">
+            <i class="fa fa-search"> </i>
+          </button>
+        </div>
+      </div>
+      <!--/.search-full-->
+    </div>
+
+
+<div class="container main-container headerOffset">
+    <div class="row">
+        <div class="breadcrumbDiv col-lg-12">
+            <ul class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li><a href="/account">My Account</a></li>
+                <li class="active"> Order List</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-9 col-md-9 col-sm-7">
+            <h1 class="section-title-inner"><span><i class="fa fa-list-alt"></i> Order List </span></h1>
+
+            <div class="row userInfo">
+                <div class="col-lg-12">
+                    <h2 class="block-title-2"> Your Order List </h2>
+                </div>
+
+                <div style="clear:both"></div>
+                <% if (orderData) { %>
+                <div class="col-xs-12 col-xs-12">
+                    <table class="footable">
+                        <thead>
+                            <tr>
+                                <th data-class="expand" data-sort-initial="true"><span title="table sorted by this column on load">Order ID</span></th>
+                                <th data-hide="phone,tablet" data-sort-ignore="true">No. of items</th>
+                                <th data-hide="phone,tablet">Payment Method</th>
+                                <th data-hide="default">Price</th>
+                                <th data-hide="default" data-type="numeric">Date</th>
+                                <th data-hide="phone" data-type="numeric">Status</th>
+                                <th data-hide="phone" data-type="numeric">View status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% orderData.forEach(order => { %>
+                                <tr>
+                                    <td>#<%= order.orderNumber %></td>
+                                    <td><%= order.cartData.length %> <small>item(s)</small></td>
+                                    <td><%= order.paymentType %></td>
+                                    <td>₹<%= order.grandTotalCost %></td>
+                                    <td data-value="<%= order.orderDateFormatted %>"><%= order.orderDateFormatted %></td>
+                                    <td data-value="<%= order.orderStatus %>"><span class="label label-primary"><%= order.orderStatus %></span></td>
+                                    <td><a href="/account/orderList/orderStatus/<%= order._id %>" class="btn btn-primary btn-sm">Order Status</a></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                    
+                </div>
+                <% } else { %>
+                <h1>No orders placed yet!</h1>
+                <% } %>
+                <div style="clear:both"></div>
+
+                <div class="col-lg-12 clearfix">
+                    <ul class="pager">
+                        <li class="previous pull-right"><a href="index.html"> <i class="fa fa-home"></i> Go to Shop
+                            </a>
+                        </li>
+                        <li class="next pull-left"><a href="account.html"> &larr; Back to My Account</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!--/row end-->
+
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-5"></div>
+    </div>
+    <!--/row-->
+
+    <div style="clear:both"></div>
+</div>
+
+
+
+
+
+
+<br>
+<br>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+
+
+
+
+
+<!--/.row-->
+
+<div class="width100 section-block">
+    <h3 class="section-title"><span> BRAND</span> <a id="nextBrand" class="link pull-right carousel-nav"> <i
+            class="fa fa-angle-right"></i></a> <a id="prevBrand" class="link pull-right carousel-nav"> <i
+            class="fa fa-angle-left"></i> </a></h3>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <ul class="no-margin brand-carousel owl-carousel owl-theme">
+                <li><a><img src="/images/brand/unnamed.png" alt="img"></a></li>
+                <li><a><img src="/images/brand/FreeVector-Sony-Vector-Logo.jpg" alt="img"></a></li>
+                <li><a><img src="/images/brand/unnamed.png" alt="img"></a></li>
+                <li><a><img src="/images/brand/FreeVector-Sony-Vector-Logo.jpg" alt="img"></a></li>
+                <li><a><img src="/images/brand/unnamed.png" alt="img"></a></li>
+                <li><a><img src="/images/brand/FreeVector-Sony-Vector-Logo.jpg" alt="img"></a></li>
+                <li><a><img src="/images/brand/unnamed.png" alt="img"></a></li>
+                <li><a><img src="/images/brand/FreeVector-Sony-Vector-Logo.jpg" alt="img"></a></li>
+                <li><a><img src="/images/brand/unnamed.png" alt="img"></a></li>
+
+
+
+
+
+
+
+
+                
+
+              
+
+
+
+                
+
+             
+            </ul>
+        </div>
+    </div>
+    <!--/.row-->
+</div>
+        <!--/.item-->
+
+    
+        <!--/.item-->
+
+        <!--/.item-->
+
+        <!--/.item-->
+
+    
+        <!--/.item-->
+
+        
+<!--/.footer-bottom-->
+</footer>
+
+
+<!-- Modal review start -->
+
+<!-- /.Modal review -->
+
+ <!-- Le javascript
+================================================== -->
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/assets/js/jquery/jquery-2.1.3.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <!-- include /footable plugin -->
+    <script src="/assets/js/footable.js" type="text/javascript"></script>
+    <script src="/assets/js/footable.sortable.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.footable').footable();
+        });
+    </script>
+
+
+    <!-- include  parallax plugin -->
+    <script type="text/javascript" src="/assets/js/jquery.parallax-1.1.js"></script>
+
+    <!-- optionally include helper plugins -->
+    <script type="text/javascript" src="/assets/js/helper-plugins/jquery.mousewheel.min.js"></script>
+
+    <!-- include mCustomScrollbar plugin //Custom Scrollbar  -->
+
+    <script type="text/javascript" src="/assets/js/jquery.mCustomScrollbar.js"></script>
+
+    <!-- include icheck plugin // customized checkboxes and radio buttons   -->
+    <script type="text/javascript" src="/assets/plugins/icheck-1.x/icheck.min.js"></script>
+
+    <!-- include grid.js // for equal Div height  -->
+    <script src="/assets/plugins/jquery-match-height-master/dist/jquery.matchHeight-min.js"></script>
+    <script src="/assets/js/grids.js"></script>
+
+    <!-- include carousel slider plugin  -->
+    <script src="/assets/js/owl.carousel.min.js"></script>
+
+    <!-- jQuery select2 // custom select   -->
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+
+    <!-- include touchspin.js // touch friendly input spinner component   -->
+    <script src="/assets/js/bootstrap.touchspin.js"></script>
+
+    <!-- include custom script for site  -->
+    <script src="/assets/js/script.js"></script>
+    
+
+</body>

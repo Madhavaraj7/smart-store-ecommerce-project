@@ -1,0 +1,103 @@
+<%- include('../layouts/adminHeader.ejs') %>
+
+<main class="main-wrap" style="background-color: rgb(255, 255, 255); color: white;">
+    <header class="main-header navbar">
+        <div class="col-search">
+            <form class="searchform">
+                <div class="input-group">
+                    <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                    <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                </div>
+                <datalist id="search_terms">
+                    <option value="Products">
+                    <option value="New orders">
+                    <option value="Apple iphone">
+                    <option value="Ahmed Hassan">
+                </datalist>
+            </form>
+        </div>
+        <div>
+            <a href="/admin" class="btn btn-primary">Logout</a>
+        </div>
+    </header>
+
+    <div class="container pt-2">
+        <table id="example" class="table table-bordered table-hover" style="width: 100%">
+            <thead>
+                <tr>
+                    <th scope="col" class="border-dark">Order No</th>
+                    <th scope="col" class="border-dark">Amount</th>
+                    <th scope="col" class="border-dark">Payment</th>
+                    <th scope="col" class="border-dark">Status</th>
+                    <th class="border-dark">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% orderData.forEach(order=> { %>
+                <tr>
+                    <td><button disabled="disabled">
+                            <a href="/admin/orderManagement/orderStatus/<%= order._id %>">
+                                <%= order.orderNumber %>
+                            </a>
+                        </button> </td>
+                    <td>₹<%= order.grandTotalCost%></td>
+                    <td><%= order.paymentType %></td>
+                    <td><%= order.orderStatus %></td>
+                    <td>
+                        <% if (order.orderStatus !=='Cancelled' ) { %>
+                        <div class="btn-group">
+                            <button class="btn btn-secondary btn-lg dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false"></button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="/admin/orderManagement/pending/<%= order._id %>"
+                                        onclick="return confirm('Are you sure you want to change the status to Pending?')">
+                                        Pending
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/admin/orderManagement/shipped/<%= order._id %>">
+                                        Shipped
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="/admin/orderManagement/delivered/<%= order._id %>">
+                                        Delivered
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/admin/orderManagement/return/<%= order._id %>">
+                                        Return
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="/admin/orderManagement/cancelled/<%= order._id %>">
+                                        Cancelled
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <% } %>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center py-3">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <% for( let i = 0; i < count/limit; i++ ) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="/admin/orderManagement/?page=<%=i+1 %>"><%= i+1 %></a>
+                    </li>
+                    <% } %>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</main>
+
+<%- include('../layouts/adminFooter.ejs') %>

@@ -96,6 +96,17 @@ userRoute.all('/checkout/orderPlaced', blockedUserCheck, cartController.orderPla
 userRoute.all('/checkout/orderPlacedEnd', blockedUserCheck,cartController.orderPlacedEnd)
 
 
+userRoute.get('/account/orderList', blockedUserCheck, accountController.orderList);
+
+userRoute.get('/account/orderList/orderStatus/:id', blockedUserCheck, accountController.orderStatus)
+
+
+userRoute.put('/account/orderList/orderStatus/cancelOrder/:id', blockedUserCheck,accountController.cancelOrder )
+
+
+
+
+
 
 
 

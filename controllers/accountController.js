@@ -1,6 +1,9 @@
 const bcrypt = require("bcrypt");
 const userCollection = require("../models/userModel");
 const addressCollection = require("../models/addressModel");
+const orderCollection = require("../models/orderModel");
+const formatDate = require("../service/formatDateHelper");
+
 
 
 
@@ -136,5 +139,60 @@ module.exports = {
     } catch (error) {
       console.error(error);
     }
-  }
+  },
+
+  orderList: async (req, res) => {
+    try {
+      let orderData = await orderCollection.find({
+        userId: req.session.currentUser._id,
+      });
+
+      //sending the formatted date to the page
+      orderData = orderData.map((v) => {
+        v.orderDateFormatted = formatDate(v.orderDate);
+        return v;
+      });
+
+      res.render("users/orderList", {
+        currentUser: req.session.currentUser,
+        orderData,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  orderStatus: async (req, res) => {
+    try {
+      let orderData = await orderCollection
+        .findOne({ _id: req.params.id })
+        .populate("addressChosen");
+      let isCancelled = orderData.orderStatus == "Cancelled";
+      res.render("users/orderStatus", {
+        currentUser: req.session.currentUser,
+        orderData,
+        isCancelled,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  cancelOrder: async (req, res) => {
+    try {
+      const orderData = await orderCollection.findOne({ _id: req.params.id });
+
+      await orderCollection.findByIdAndUpdate(
+        { _id: req.params.id },
+        { $set: { orderStatus: "Cancelled" } }
+      );
+
+      
+
+      
+
+      res.json({ success: true });
+    } catch (error) {
+      console.error(error);
+    }
+  },
 }
+

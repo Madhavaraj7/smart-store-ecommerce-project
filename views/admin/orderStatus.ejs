@@ -1,0 +1,199 @@
+<%- include('../layouts/adminHeader.ejs') %>
+
+
+
+<main class="main-wrap" style="background-color: rgb(15, 15, 15); color: rgb(11, 10, 10);">
+    <header class="main-header navbar">
+        <div class="col-search">
+            <form class="searchform">
+                <div class="input-group">
+                    <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                    <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                </div>
+                <datalist id="search_terms">
+                    <option value="Products">
+                    <option value="New orders">
+                    <option value="Apple iphone">
+                    <option value="Ahmed Hassan">
+                </datalist>
+            </form>
+        </div>
+        <div>
+            <a href="/admin" class="btn btn-primary">Logout</a>
+        </div>
+    </header>
+
+
+    <section class="order-section">
+
+        <div class="container p-3">
+            <div class="order-details">
+                <div class="row">
+                    <div class="col-6 text-center"> <!-- Add text-center class to center the content -->
+                        <p class="order-number"><strong>Order Number:</strong> #<%= orderData.orderNumber %></p>
+                        <div class="card text-white bg-white mb-3"> <!-- Change bg-success to your desired light green color -->
+                            <div class="card-body">
+                                <h5 class="card-title"><%= orderData.orderStatus %></h5>
+                            </div>
+                        </div>
+                        <div class="order-info">
+                            <p class="order-status"><strong>Status:</strong> <%= orderData.orderStatus %></p>
+                            <p class="order-date"><strong>Order Date:</strong> <%= orderData.orderDate %></p>
+                        </div>
+                    </div>
+                    <style>
+                        .bg-lightgreen {
+                            background-color: #000000; /* Your desired light green color */
+                        }
+                    </style>
+                    
+                    
+                    
+                    <div class="col-6">
+                        <div class="card bg-light address-card">
+                            <div class="card-header">Address</div>
+                            <div class="card-body">
+                                <h5 class="card-title"><%= orderData.addressChosen.addressTitle %></h5>
+                                <p class="card-text">
+                                    <%= orderData.addressChosen.addressLine1 %> <br />
+                                    <%= orderData.addressChosen.addressLine2 %> <br />
+                                    Phone: <%= orderData.addressChosen.phone %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row p-3">
+                    <div class="col-6">
+                        <!-- Previous content here -->
+                
+                        <!-- Payment card in a light green box -->
+                        <div class="payment-box bg-black p-3">
+                            <div class="payment-card card text-white bg-secondary">
+                                <div class="card-header">Payment</div>
+                                <div class="card-body">
+                                    <h5 class="card-title">₹<%= orderData.grandTotalCost %></h5>
+                                    <p class="card-text"><%= orderData.paymentType %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    .bg-lightgreen {
+                        background-color: #0a0a0a; /* Your desired light green color */
+                    }
+                
+                    .payment-box {
+                        border: 1px solid #0f0d0d; /* Add a border for the box */
+                        border-radius: 8px; /* Add border radius for rounded corners */
+                    }
+                </style>
+                
+                
+                <h5 class="product-details-heading">Product details:</h5>
+                <div class="row p-3">
+                    <table id="orderStatus" class="table">
+                        <thead>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Total Cost</th>
+                        </thead>
+                        <tbody>
+                            <% orderData.cartData.forEach(cartItem=> { %>
+                                <tr>
+                                    <td>
+                                        <div class="product-image"><a href=""><img
+                                                    src="/upload/<%= cartItem.productId.productImage1 %>" alt=""></a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="product-info">
+                                            <h4><%= cartItem.productId.productName %></h4>
+                                            <div class="product-price"><span>₹<%= cartItem.productId.productPrice %></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><%= cartItem.productQuantity %></td>
+                                    <td>
+                                        <div class="total-cost"><span>₹<%= cartItem.totalCostPerProduct %></span></div>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    
+    </section>
+    
+
+ 
+
+
+
+
+
+<style>
+
+/* Additional styles for the modified HTML structure */
+
+.order-section {
+background-color: #faf5f5; /* Background color for the entire section */
+padding: 20px;
+}
+
+.order-details {
+background-color: #fff; /* Background color for the order details */
+border: 2px solid #000000; /* Border around the order details */
+padding: 20px;
+}
+
+.order-number {
+font-size: 18px;
+margin-bottom: 15px;
+}
+
+.order-status-card {
+max-width: 18rem;
+}
+
+.order-info {
+margin-top: 15px;
+}
+
+.address-card,
+.payment-card {
+max-width: 18rem;
+}
+
+.product-details-heading {
+margin-top: 20px;
+margin-bottom: 10px;
+}
+
+.product-image img {
+max-width: 100px;
+height: auto;
+}
+
+.product-info h4 {
+margin-bottom: 5px;
+}
+
+.product-price span {
+font-weight: bold;
+}
+
+.total-cost span {
+font-weight: bold;
+}
+
+
+</style>
+
+
+<%- include('../layouts/adminFooter.ejs') %>

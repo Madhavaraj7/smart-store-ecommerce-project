@@ -77,51 +77,10 @@
                       </tr>
                   </thead>
                   <tbody>
-                      <!-- {{#each productData}}
-                  <tr>
-                      <td>{{this.productName}}</td>
-                      <td>{{this.parentCategory}}</td>
-                      <td><img src="/images/productImages/{{this.productImage1}}" alt=""
-                              style="width: 100px; height: 100px"></td>
-                      <td><img src="/images/productImages/{{this.productImage2}}" alt=""
-                              style="width: 100px; height: 100px"></td>
-                      <td><img src="/images/productImages/{{this.productImage3}}" alt=""
-                              style="width: 100px; height: 100px"></td>
-                      <td>₹{{this.productPrice}}</td>
-                      <td>{{this.productStock}}</td>
-  
-                      {{#if this.isListed}}
-                      <td>
-                          <form action="/admin/productManagement/unList/{{this._id}}" method="POST">
-                              <button type="submit" class="btn btn-success">Unlist</button>
-                          </form>
-                      </td>
-                      {{else}}
-                      <td>
-                          <form action="/admin/productManagement/list/{{this._id}}" method="POST">
-                              <button type="submit" class="btn btn-danger">List</button>
-                          </form>
-                      </td>
-                      {{/if}}
-                      <td>
-                          <button type="button" class="btn btn-info" data-bs-toggle="modal"
-                              data-bs-target="#editModal{{@index}}">
-                              <i class="fas fa-edit"></i>
-                          </button>
-  
-                          </button>
-                          <button type="button" class="btn btn-info"
-                              onclick="return confirm('Are you sure you want to delete {{this.categoryName}} product?')">
-                              <a href="/admin/productManagement/delete/{{this._id}}"><i class="fa fa-trash"
-                                      aria-hidden="true"></i></a>
-                          </button>
-                      </td>
-                  </tr>
-                  {{/each}} -->
+                   
 
                       <% productData.forEach(function(product,i) { %>
                           <tr>
-                            <th scope="row"><%= i+1 %></th>
 
 
                               <td>

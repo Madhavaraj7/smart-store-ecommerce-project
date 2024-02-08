@@ -11,7 +11,9 @@ const upload = require('../service/multer.js')
 
 const adminController = require("../controllers/adminController"); //requiring userController module
 const categorieyController = require("../controllers/categoryController"); //requiring userController module
-const productController = require('../controllers/productController')
+const productController = require('../controllers/productController');
+const orderController = require('../controllers/orderController.js')
+
 
 
 
@@ -66,6 +68,24 @@ adminRoute.post('/list/:id',isAdmin, productController.listProduct)
 
 
 adminRoute.get('/deleteProduct/:id',isAdmin, productController.deleteProduct)
+
+
+adminRoute.get('/orderManagement', orderController.orderManagement)
+
+
+adminRoute.get('/orderManagement/pending/:id', orderController.changeStatusPending)
+
+adminRoute.get('/orderManagement/shipped/:id', orderController.changeStatusShipped)
+adminRoute.get('/orderManagement/delivered/:id', orderController.changeStatusDelivered)
+
+adminRoute.get('/orderManagement/return/:id', orderController.changeStatusReturn)
+adminRoute.get('/orderManagement/cancelled/:id', orderController.changeStatusCancelled)
+adminRoute.get('/orderManagement/cancelled/:id', orderController.changeStatusCancelled)
+
+adminRoute.get('/orderManagement/orderStatus/:id', orderController.orderStatusPage)
+
+
+
 
 
 
