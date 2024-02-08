@@ -403,7 +403,7 @@
 
             <div class="miniCartFooter miniCartFooterInMobile text-right">
               <h3 class="text-right subtotal">Subtotal: $210</h3>
-              <a class="btn btn-sm btn-danger" href="cart.html">
+              <a class="btn btn-sm btn-danger" href="/cart">
                 <i class="fa fa-shopping-cart"> </i> VIEW CART
               </a>
               <a href="checkout-0.html" class="btn btn-sm btn-primary">
@@ -433,7 +433,7 @@
                 <!--/.miniCartTable-->
 
                 <div class="miniCartFooter text-right">
-                  <a class="btn btn-sm btn-danger" href="cart.html">
+                  <a class="btn btn-sm btn-danger" href="/cart">
                     <i class="fa fa-shopping-cart"> </i> VIEW CART </a
                   ><a class="btn btn-sm btn-primary" href="checkout-1.html">
                     CHECKOUT
@@ -529,51 +529,48 @@
                
                 <!--/.color-details-->
 
-                <div class="productFilter productFilterLook2">
-                    <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-xs-6">
-                            <div class="filterBox">
-                                <select class="form-control">
-                                    <option value="strawberries" selected>Quantity</option>
-                                    <option value="mango">1</option>
-                                    <option value="bananas">2</option>
-                                    <option value="watermelon">3</option>
-                                    <option value="grapes">4</option>
-                                    <option value="mango">5</option>
-                                    <option value="bananas">6</option>
-                                    <option value="watermelon">7</option>
-                                    <option value="grapes">8</option>
-                                    <option value="mango">9</option>
-                                    <option value="bananas">10</option>
-                                  
-                                   
-                                </select>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
+               <br>
+               <br>
+               
+              
 
                 <!-- productFilter -->
+           
 
                 <div class="cart-actions">
                     <div class="addto row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <button 
+                            <!-- <button 
                                     class="button btn-block btn-cart cart first" title="Add to Cart" type="button" onclick="addToCart()">Add
                                 to Cart
-                            </button>
-                            <script>
-                                function addToCart() {
+                            </button> -->
+                            
+                            <a href="/cart/<%= currentProduct._id %>" class="button btn-block btn-cart cart first green-button" onclick="addToCart()"><span>add to cart</span></a>
+                            <style>
+                              .green-button {   
+                                background: #4ec67f;
+                                color: white;}
+                            </style>
+                            <!-- <script>
+                                function addToCart("<currentProduct._id %>") {
                                   // Redirect to the cart.html page
-                                  window.location.href = 'cart.html';
+                                  window.location.href = '/cart';
                                 }
-                              </script>
+                              </script> -->
                             <!-- <li class="next pull-left"><a href="account.html"> ← Back to My Account</a></li> -->
 
                         </div>
                         
                     </div>
+                    <br>
+                    <br>
+                    
+                    <div class="details-filter-row details-row-size">
+                      <label for="qty"> Qty:<%= currentProduct.productStock %></label>
+                      <div class="product-details-quantity">
+                          <!-- <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required> -->
+                      </div><!-- End .product-details-quantity -->
+                  </div><!-- End .details-filter-row -->
                     <div style="clear:both"></div>
                     <h3 class="incaps"><i class="fa fa fa-check-circle-o color-in"></i> In stock</h3>
 
@@ -761,6 +758,27 @@
         });
 
     });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  
+
+try {
+  function addToCart() {
+
+Swal.fire({
+    icon: 'success',
+    title: 'Item Added to Cart',
+    showConfirmButton: false,
+    timer: 1500
+});
+}
+  
+} catch (error) {
+  console.log(error);
+  
+}
 </script>
 
 </body>

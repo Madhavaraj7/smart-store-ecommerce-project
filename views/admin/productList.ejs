@@ -119,8 +119,11 @@
                   </tr>
                   {{/each}} -->
 
-                      <% productData.forEach(function(product, index) { %>
+                      <% productData.forEach(function(product,i) { %>
                           <tr>
+                            <th scope="row"><%= i+1 %></th>
+
+
                               <td>
                                   <%= product.productName %>
                               </td>
@@ -172,10 +175,6 @@
 
 
 
-                                              <!-- <button type="button" class="btn btn-info" data-bs-toggle="modal"
-                                  data-bs-target="#editModal<%= index %>">
-                                  <i class="fas fa-edit"></i>
-                              </button> -->
 
                                               <a class="btn btn-info"
                                                   onclick="return deleteConfirmation('<%= product.categoryName %>', '<%= product._id %>')"
@@ -199,6 +198,7 @@
 
                                           </td>
                           </tr>
+                          
                           <% }); %>
 
                   </tbody>
@@ -208,7 +208,19 @@
 
 
 
-
+              <div class="d-flex justify-content-center py-3">
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination">
+                   
+                    <% for( let i = 0; i < count/limit; i++ ) { %>
+                    <li class="page-item">
+                      <a class="page-link" href="/admin/products/?page=<%=i+1 %>"><%= i+1 %></a>
+                    </li>
+                    <% } %>
+                   
+                  </ul>
+                
+              </div>
 
 
 
@@ -244,19 +256,7 @@
               </ul>
           </nav>
       </div> -->
-      <div class="d-flex justify-content-center py-3">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination">
-             
-              <% for( let i = 0; i < count/limit; i++ ) { %>
-              <li class="page-item">
-                <a class="page-link" href="/products/?page=<%=i+1 %>"><%= i+1 %></a>
-              </li>
-              <% } %>
-             
-            </ul>
-          
-        </div>
+     
       
      
   </section> <!-- content-main end// -->

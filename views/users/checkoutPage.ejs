@@ -1,0 +1,260 @@
+<%- include('../layouts/userHeader.ejs') %>
+
+
+<div class="container main-container headerOffset">
+    <div class="row">
+        <div class="breadcrumbDiv col-lg-12">
+            <ul class="breadcrumb">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li class="active"> Checkout</li>
+            </ul>
+        </div>
+    </div>
+    <!--/.row-->
+
+    <div class="row">
+        <div class="col-lg-9 col-md-9 col-sm-7">
+            <h1 class="section-title-inner"><span><i class="glyphicon glyphicon-shopping-cart"></i> ONEPAGE
+                    CHECKOUT</span></h1>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-5 rightSidebar">
+            <h4 class="caps"><a href="category.html"><i class="fa fa-chevron-left"></i> Back to shopping </a></h4>
+        </div>
+    </div>
+    <!--/.row-->
+
+    <div class="row">
+        <div class="col-lg-9 col-md-9 col-sm-12">
+            <div class="row userInfo">
+                <div class="col-xs-12 col-sm-12">
+
+                    <div class="w100 clearfix">
+                        <div class="row userInfo">
+
+                            <div style="clear: both"></div>
+
+                            <div class="onepage-checkout col-lg-12">
+                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingOne">
+                                            <h4 class="panel-title">
+                                                <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                                    href="#BillingInformation" aria-expanded="true"
+                                                    aria-controls="BillingInformation">
+                                                    Billing and Shipping information
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="BillingInformation" class="panel-collapse collapse in"
+                                            role="tabpanel" aria-labelledby="BillingInformation">
+                                            <div class="panel-body">
+
+                                                <div style="clear: both"></div>
+
+                                                <div id="exisitingAddressBox" class="collapse in">
+                                                    <div class="form-group uppercase"><strong>Select address</strong>
+                                                    </div>
+                                                    <div class="w100 clearfix">
+                                                        <% addressData.forEach(function(address) { %>
+                                                        <div class="col-xs-12 col-sm-6 col-md-4">
+                                                            <div class="panel panel-default">
+                                                                <div class="panel-heading">
+                                                                    <h3 class="panel-title"><strong><%= address.addressTitle %></strong></h3>
+                                                                </div>
+                                                                <div class="panel-body">
+                                                                    <ul>
+                                                                        <li><span class="address-name"> <strong><%= address.firstName %> <%= address.lastName %></strong></span></li>
+                                                                        <li><span class="address-line1"><%= address.addressLine1 %></span></li>
+                                                                        <li><span class="address-line2"><%= address.addressLine2 %></span></li>
+                                                                        <li><span> <strong>Mobile</strong> : <%= address.phone %></span></li>
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="panel-footer panel-footer-address"><a
+                                                                        href="/account/editAddress/<%= address._id %>"
+                                                                        class="btn btn-sm btn-success"> <i
+                                                                            class="fa fa-edit"> </i> Edit </a>
+                                                                    <a class="btn btn-sm btn-danger"
+                                                                        onclick="return confirm('Do you want to delete?')"
+                                                                        href="/account/deleteAddress/<%= address._id %>">
+                                                                        <i class="fa fa-minus-circle"></i>
+                                                                        Delete </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <% }); %>
+                                                    </div>
+                                                    <!--/.w100-->
+                                                    <div class="gap"></div>
+
+                                                    <div class="col-lg-12 clearfix">
+                                                        <a class="btn btn-primary" href="/account/addAddress"><i
+                                                                class="fa fa-plus-circle"></i>
+                                                            Add New Address </a>
+                                                    </div>
+
+                                                    <div class="gap"></div>
+
+                                                    <div class="form-group required maxwidth300">
+                                                        <label for="InputCountry">Select Address <sup>*</sup>
+                                                        </label>
+                                                        <select class="form-control" required aria-required="true"
+                                                            id="SelectAddress" name="chosenAddress">
+                                                            <% addressData.forEach(function(address) { %>
+                                                            <option value="<%= address._id %>">
+                                                                <%= address.addressTitle %>
+                                                            </option>
+                                                            <% }); %>
+                                                        </select>
+                                                        <br>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading" role="tab" id="">
+                                                        <h4 class="panel-title">
+                                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                                                data-parent="#accordion" href="#Paymentmethod"
+                                                                aria-expanded="false" aria-controls="Paymentmethod">
+                                                                Payment method
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+
+                                                    <div id="Paymentmethod" class="panel-collapse collapse"
+                                                        role="tabpanel">
+                                                        <div class="panel-body">
+
+                                                            <div class="onepage-payment">
+
+                                                                <div style="clear:both;"></div>
+
+                                                                <div class="card-paynemt-box payment-method">
+                                                                    <label class="radio-inline" for="CashOnDelivery"
+                                                                        aria-controls="CashOnDeliveryCollapse">
+                                                                        <input name="radios" id="COD" value="COD"
+                                                                            type="radio" checked>Cash On Delivery
+                                                                    </label>
+                                                                </div>
+
+                                                                <!-- <div class="card-paynemt-box payment-method">
+                                                                    <label class="radio-inline" for="wallet"
+                                                                        aria-controls="CashOnDeliveryCollapse">
+                                                                        <input name="radios" id="wallet" value="wallet"
+                                                                            type="radio">Wallet
+                                                                    </label>
+                                                                </div> -->
+
+                                                                <div class="card-paynemt-box payment-method">
+                                                                    <label class="radio-inline" for="razorpay"
+                                                                        aria-controls="CashOnDeliveryCollapse">
+                                                                        <input name="radios" id="razorpay"
+                                                                            value="razorpay" type="radio">UPI
+                                                                    </label>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <br>
+
+                                                <div id="orderBtn" class="pull-left btn btn-primary btn-lg">
+                                                    Order &nbsp; <i class="fa fa-arrow-circle-right"></i>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--/onepage-checkout-->
+
+                        </div>
+                        <!--/row end-->
+
+                    </div>
+
+                </div>
+            </div>
+            <!--/row end-->
+
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 rightSidebar">
+            <div class="w100 cartMiniTable">
+                <table id="cart-summary" class="std table">
+                    <tbody>
+                        <tr>
+                            <td>Total Price</td>
+                            <td class="price" id="totalPrice1">₹<%= grandTotal %></td>
+                        </tr>
+                        <tr >
+                            <td>Shipping</td>
+                            <td class="price">Free shipping!</td>
+                        </tr>
+                        <tr>
+                            <td>Total Discount</td>
+                            <td class="price" id="totalDiscount">₹0</td>
+                        </tr>
+                        <tr>
+                            <td>Grand Total</td>
+                            <td class="site-color" id="total-price">₹<span id="grandTotal"><%= grandTotal %></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <!-- <td colspan="2">
+                                <div class="input-append couponForm">
+                                    <form id="couponApplyForm">
+                                        <input class="col-lg-8" name="couponCode" id="appendedInputButton"
+                                            type="text" placeholder="Enter coupon code">
+                                        <button class="col-lg-4 btn btn-success" type="submit">Apply!</button>
+                                    </form>
+                                </div>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                    <tbody>
+                    </tbody>
+                </table>
+
+
+            </div>
+            <!--  /cartMiniTable-->
+
+        </div>
+        <!--/rightSidebar-->
+
+    </div>
+    <!--/row-->
+</div>
+<script>
+    const orderBtnElement = document.getElementById('orderBtn');
+    const CODElement = document.getElementById('COD');
+
+
+    orderBtnElement.addEventListener('click', orderBtnClickFunction);
+
+    async function orderBtnClickFunction(event) {
+        try {
+            event.preventDefault();
+        if (CODElement.checked) {
+          console.log('cod');
+          window.location.href = '/checkout/orderPlacedEnd';
+        }
+          
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+
+
+
+</script>
+
+
+
+<%- include('../layouts/userFooter.ejs') %>

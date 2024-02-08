@@ -176,6 +176,8 @@ const verifyLogin = async (req, res) => {
       if (passwordMatch) {
         req.session.user_id = userData._id;
         req.session.isLoggedin = true;
+        req.session.currentUser=userData,
+
 
         req.session.userIsThere = {
           isAlive: true,
@@ -345,8 +347,8 @@ const productspage = async (req, res) => {
     let productData = await productCollection
       .find({ isListed: true })
       .skip(skip)
-      .limit(limit)
-
+      .limit(limit);
+    console.log(productData);
 
     let count = await productCollection.countDocuments({ isListed: true });
 
@@ -372,8 +374,6 @@ const productspage = async (req, res) => {
   }
 };
 
-
-
 const productDetils = async (req, res) => {
   try {
     const currentProduct = await productCollection.findOne({
@@ -384,11 +384,8 @@ const productDetils = async (req, res) => {
       user: req.session.user,
       currentProduct,
     });
-  } catch (error) { }
+  } catch (error) {}
 };
-
-
-
 
 module.exports = {
   userLandingPage,
@@ -409,15 +406,6 @@ module.exports = {
   productDetils,
   // getUserLoginController,
   // userLoginController,
-
-
-
-
-
-
-
-
-
 
   //    OTP   //
 
@@ -453,8 +441,35 @@ module.exports = {
   home: async (req, res) => {
     try {
       req.session.userIsThere;
+      let page = Number(req.query.page) || 1;
+      let limit = 4;
+      let skip = (page - 1) * limit;
+
       if (req.session.isLoggedin) {
-        res.render("users/home", { isAlive: req.session.userIsThere });
+        let categoryData = await categoryCollection.find({ isListed: true });
+        let productData = await productCollection
+          .find({ isListed: true })
+          .skip(skip)
+          .limit(limit);
+
+        let count = await productCollection.countDocuments({ isListed: true });
+
+        let totalPages = Math.ceil(count / limit);
+        let totalPagesArray = new Array(totalPages).fill(null);
+
+
+        res.render("users/home", {
+          isAlive: req.session.userIsThere,
+          categoryData,
+          productData,
+          currentUser: req.session.currentUser,
+          user: req.session.user,
+          count,
+          limit,
+          totalPagesArray,
+          currentPage: page,
+          selectedFilter: req.session.selectedFilter,
+        });
       } else {
         res.redirect("/");
       }
