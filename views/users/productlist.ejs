@@ -23,111 +23,85 @@
         <div class="col-lg-3 col-md-3 col-sm-12">
 
             <div class="panel-group" id="accordionNo">
-                <div class="panel panel-default">
+                 <!--Category-->
+                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title"><a data-toggle="collapse" href="#collapseBrand"
-                                                   class="collapseWill active ">
-                            Category <span class="pull-left"> <i class="fa fa-caret-right"></i></span> </a></h4>
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#collapseCategory" class="collapseWill active">
+                                <span class="pull-left">
+                                    <i class="fa fa-caret-right"></i></span>
+                                Category
+                            </a>
+                        </h4>
                     </div>
-                    <div id="collapseBrand" class="panel-collapse collapse in">
-                        <div class="panel-body smoothscroll maxheight300">
-                            <div class="block-element">
-                                <label>
-                                    <input type="checkbox" name="tour" value="0"/>
-                                    Headphones </label>
-                            </div>
-                            <div class="block-element">
-                                <label>
-                                    <input type="checkbox" name="tour" value="0"/>
-                                    Smartwatches </label>
-                            </div>
-                            <div class="block-element">
-                                <label>
-                                    <input type="checkbox" name="tour" value="0"/>
-                                    Ear Buds </label>
-                            </div>
-                            <div class="block-element">
-                                <label>
-                                    <input type="checkbox" name="tour" value="0"/>
-                                    Smartwatches </label>
-                            </div>
-                           
-                            <div class="block-element">
-                                <label> &nbsp; </label>
-                                <!-- keep it blank // -->
-                            </div>
+                    <div id="collapseCategory" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <ul class="nav nav-pills nav-stacked tree">
+                                <% categoryData.forEach(function(data) { %>
+                                    <li class="active dropdown-tree open-tree">
+                                        <a href="/productlist/filter/category/<%= data.categoryName %>">
+                                            <% /* <!-- <span class="badge pull-right">42</span> --> */ %>
+                                            <%= data.categoryName %>
+                                        </a>
+                                    </li>
+                                <% }); %>
+                            </ul>
                         </div>
                     </div>
+                    
                 </div>
                 <!--Category-->
                 
                 <!--/Category menu end-->
 
+            
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title"><a class="collapseWill active " data-toggle="collapse"
-                                                   href="#collapsePrice">
-                            Price <span class="pull-left"> <i class="fa fa-caret-right"></i></span> </a> <span
-                                class="pull-right clearFilter  label-danger"> Clear </span></h4>
+                        <h4 class="panel-title">
+                            <a class="collapseWill active" data-toggle="collapse" href="#collapsePrice">
+                                Price
+                                <span class="pull-left">
+                                    <i class="fa fa-caret-right"></i></span>
+                            </a>
+                            <span class="pull-right clearFilter label-danger">
+                                Clear
+                            </span>
+                        </h4>
                     </div>
                     <div id="collapsePrice" class="panel-collapse collapse in">
                         <div class="panel-body priceFilterBody">
                             <!-- -->
-                            <label>
-                                <input type="radio" name="agree" value="0"/>
-                                2000₹ - 3000₹</label>
-                            <br>
-                            <label>
-                                <input type="radio" name="agree" value="1"/>
-                            1500₹ - 2000₹</label>
-                            <br>
-                            <label>
-                                <input type="radio" name="agree" value="1"/>
-                            1000₹ - 1500₹</label>
-                            <br>
-                            <label>
-                                <input type="radio" name="agree" value="1"/>
-                            500₹ - 1000₹</label>
-                            <br>
-                           
+                            <form action="/productlist/filter/priceRange">
+                                <label>
+                                    <input type="radio" name="priceRange" value="0" />
+                                    Less than ₹1000</label>
+                                <br />
+                                <label>
+                                    <input type="radio" name="priceRange" value="1" />
+                                    ₹1000 - ₹2000</label>
+                                <br />
+                                <label>
+                                    <input type="radio" name="priceRange" value="2" />
+                                    ₹2000 - ₹3000</label>
+                                <br />
+                                <label>
+                                    <input type="radio" name="priceRange" value="3" />
+                                    ₹3000 - ₹4000</label>
+                                <br />
+                                <button type="submit" class="btn btn-default pull-right">
+                                    check
+                                </button>
+                            </form>
+                            
 
                            
+                                
+                               
                         </div>
                     </div>
                 </div>
                 <!--/price panel end-->
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title"><a data-toggle="collapse" href="#collapseThree"
-                                                   class="collapseWill active ">
-                            Brand<span class="pull-left"> <i class="fa fa-caret-right"></i></span> </a></h4>
-                    </div>
-                    <div id="collapseThree" class="panel-collapse collapse in">
-                        <div class="panel-body">
-                            <div class="block-element">
-                                <label>
-                                    <input type="checkbox" name="tour" value="3"/>
-                                    Boat </label>
-                            </div>
-                            <div class="block-element">
-                                <label>
-                                    <input type="checkbox" name="tour" value="3"/>
-                                    sony </label>
-                            </div>
-                            <div class="block-element">
-                                <label>
-                                    <input type="checkbox" name="tour" value="3"/>
-                                    JBL </label>
-                            </div>
-                            <div class="block-element">
-                                <label>
-                                    <input type="checkbox" name="tour" value="3"/>
-                                    One Plus+ </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              
+                
                 <!--/brand panel end-->
 
           
@@ -168,23 +142,26 @@
         
             <!--/.subCategoryList-->
 
-            <div class="w100 productFilter clearfix">
-                <p class="pull-left"> Showing <strong>12</strong> products </p>
-
-                <div class="pull-right ">
-                    <div class="change-order pull-right">
-                        <select class="form-control" name="orderby">
-                            <option selected="selected">Default sorting</option>
-                            <option value="popularity">Sort by popularity</option>
-                            <option value="rating">Sort by average rating</option>
-                      
-                        </select>
+                <div class="w100 productFilter clearfix">
+                    <p class="pull-left">Showing <strong><%= productData.length %></strong> products</p>
+                    <div class="pull-right">
+                        <div class="change-order pull-right">
+                            <select id="sortDropdown" class="form-control" name="orderby" onchange="sortDropdownFn()">
+                                <option id="default" value="default" selected="selected">Default sorting</option>
+                                <option id="priceAscending" value="priceAscending">Sort by price: low to high</option>
+                                <option id="priceDescending" value="priceDescending">Sort by price: high to low</option>
+                            </select>
+                        </div>
+                        <div class="change-view pull-right">
+                            <a href="#" title="Grid" class="grid-view">
+                                <i class="fa fa-th-large"></i>
+                            </a>
+                            <a href="#" title="List" class="list-view"><i class="fa fa-th-list"></i></a>
+                        </div>
                     </div>
-                    <div class="change-view pull-right"><a href="#" title="Grid" class="grid-view"> <i
-                            class="fa fa-th-large"></i> </a> <a href="#" title="List" class="list-view "><i
-                            class="fa fa-th-list"></i></a></div>
                 </div>
             </div>
+            
             <!--/.productFilter-->
             <div class="row  categoryProduct xsResponse clearfix">
                 
@@ -226,16 +203,16 @@
                                 class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
                     </div>
                 </div> -->
-                <div class="row categoryProduct xsResponse clearfix" >
+                <div class="row categoryProduct xsResponse clearfix" style="width: 80rem; padding-left: 20px; flex-wrap: wrap; " >
                     <% productData.forEach((product, i)=> { %>
-                        <div class="item col-sm-3 col-lg-3 col-md-1 col-xs-6 grid-view" style="height: 300px;">
+                        <div class="item col-sm-4 col-lg-4 col-md-4 col-xs-6 grid-view" >
                             <div class="product">
                                 <!-- Uncomment the following lines if you want to include the "Add to Wishlist" button -->
                                 <!-- <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left">
                                                             <i class="glyphicon glyphicon-heart"></i>
                                                         </a> -->
                                 <div class="image">
-                                    <a href="/productDetails/<%= product._id %>">
+                                    <a href="/productDetails/<%= product._id %>"> 
                                         <img src="/upload/<%= product.productImage1 %>" alt="img"
                                             class="img-responsive" />
                                     </a>
@@ -260,20 +237,23 @@
                         <% }); %>
                  
                             <!--/.item-->
-                            <div class="d-flex justify-content-center py-3" >
-                                <nav aria-label="Page navigation example">
-                                  <ul class="pagination" style="margin-top: 9em;
-                                  margin-left: 29em;">
-                                   
-                                    <% for( let i = 0; i < count/limit; i++ ) { %>
-                                    <li class="page-item">
-                                      <a class="page-link" href="/productlist/?page=<%=i+1 %>"><%= i+1 %></a>
-                                    </li>
-                                    <% } %>
-                                   
-                                  </ul>
-                                
-                              </div>
+</div>
+                    <div class="w100 categoryFooter">
+    <div class="pagination pull-left no-margin-top">
+        <ul class="pagination no-margin-top">
+            <li><a href="#">«</a></li>
+            <% totalPagesArray.forEach(function(page, index) { %>
+                <li class=""><a href="/productList?pageNo=<%= index + 1 %>"><%= index + 1 %></a></li>
+            <% }); %>
+            <li><a href="#">»</a></li>
+        </ul>
+    </div>
+    <!-- <div class="pull-right pull-right col-sm-4 col-xs-12 no-padding text-right text-left-xs">
+        <p>Showing 1–<%= /* Add the total number of results here */ %> of 12 results</p>
+    </div> -->
+</div>
+
+
                 </div>
 
                
@@ -334,6 +314,34 @@
 }
 
 
+</script>
+<script>
+    async function sortDropdownFn() {
+        try {
+            console.log(sortDropdown.value)
+            if (sortDropdown.value == 'default') {
+                return window.location.href = '/productList'
+            }
+            const response = await fetch('/productList/sort/' + sortDropdown.value, { method: 'GET' })
+            const data = await response.json()
+            let sortDropdownElement = document.getElementById(`${sortDropdown.value}`)
+            sortDropdownElement.setAttribute('selected', true)
+            if (data.success) {
+                localStorage.setItem('selectedDropdownOption', sortDropdown.value)
+                window.location.href = '/productList'
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const selectedDropdownOption = localStorage.getItem('selectedDropdownOption')
+        if (selectedDropdownOption) {
+            document.getElementById('sortDropdown').value = selectedDropdownOption
+        }
+    })
 </script>
 
 

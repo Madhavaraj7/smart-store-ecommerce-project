@@ -61,15 +61,15 @@
             </div>
             <div class="form-group">
               <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                minlength="5"
-                title="Please enter your password, between 5 and 12 characters"
-                class="form-control"
-                placeholder="Password"
-              />
+              <input type="password"
+              name="password" id="password" class="form-control"  placeholder="Enter password"
+              onkeyup="checkPasswordStrength();" />
             </div>
+            <div id="password-strength-status"></div>
+
+
+
+     
 
             
 
@@ -140,15 +140,36 @@
           minlength: 10,
           maxlength: 10,
         },
-        password: {
-          required: true,
-          minlength: 6,
-          maxlength: 8,
-        },
+        password:{
+          required:true,
+        }
+       
       },
      
      
     });
+    function checkPasswordStrength() {
+	var number = /([0-9])/;
+	var alphabets = /([a-zA-Z])/;
+	var special_characters = /([~,!,@,#,$,%,^,&,*,-,_,+,=,?,>,<])/;
+	var password = $('#password').val().trim();
+	if (password.length < 6) {
+		$('#password-strength-status').removeClass();
+		$('#password-strength-status').addClass('weak-password');
+		$('#password-strength-status').html("Weak (should be atleast 6 characters.)");
+	} else {
+		if (password.match(number) && password.match(alphabets) && password.match(special_characters)) {
+			$('#password-strength-status').removeClass();
+			$('#password-strength-status').addClass('strong-password');
+			$('#password-strength-status').html("Strong");
+		}
+		else {
+			$('#password-strength-status').removeClass();
+			$('#password-strength-status').addClass('medium-password');
+			$('#password-strength-status').html("Medium (should include alphabets, numbers and special characters.)");
+		}
+	}
+}
 
 
 </script>

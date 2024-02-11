@@ -65,7 +65,7 @@ const productlist= async (req, res) => {
             productStock: req.body.productStock,
           },
         ]);
-        // console.log(req.files[0].filename);
+        console.log(req.files[0].filename);
         res.redirect("/admin/products");
       } else {
         console.log("out");

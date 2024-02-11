@@ -177,8 +177,6 @@ const verifyLogin = async (req, res) => {
         req.session.user_id = userData._id;
         req.session.isLoggedin = true;
         req.session.currentUser=userData,
-
-
         req.session.userIsThere = {
           isAlive: true,
           userName: userData.name,
@@ -330,6 +328,7 @@ const userLogout = async (req, res) => {
     req.session.isLoggedin = null;
     req.session.userIsThere = false;
     req.session.save();
+    req.session.user_id=null;
     console.log("logged out");
     res.redirect("/");
   } catch (error) {
@@ -337,42 +336,7 @@ const userLogout = async (req, res) => {
   }
 };
 
-const productspage = async (req, res) => {
-  try {
-    let page = Number(req.query.page) || 1;
-    let limit = 4;
-    let skip = (page - 1) * limit;
 
-    let categoryData = await categoryCollection.find({ isListed: true });
-    let productData = await productCollection
-      .find({ isListed: true })
-      .skip(skip)
-      .limit(limit);
-    console.log(productData);
-
-    let count = await productCollection.countDocuments({ isListed: true });
-
-    let totalPages = Math.ceil(count / limit);
-    let totalPagesArray = new Array(totalPages).fill(null);
-
-    res.render("users/productlist", {
-      categoryData,
-      productData,
-      currentUser: req.session.currentUser,
-      user: req.session.user,
-      count,
-      limit,
-      totalPagesArray,
-      currentPage: page,
-      selectedFilter: req.session.selectedFilter,
-    });
-
-    console.log(req.session.currentUser);
-  } catch (error) {
-    console.error("Error fetching product data:", error);
-    res.status(500).send("Internal Server Error");
-  }
-};
 
 const productDetils = async (req, res) => {
   try {
@@ -381,6 +345,7 @@ const productDetils = async (req, res) => {
     });
     console.log(currentProduct);
     res.render("users/productDetils.ejs", {
+      _id: req.body.user_id,
       user: req.session.user,
       currentProduct,
     });
@@ -402,7 +367,6 @@ module.exports = {
   resetPassword,
   securePassword,
   userLogout,
-  productspage,
   productDetils,
   // getUserLoginController,
   // userLoginController,
@@ -442,7 +406,7 @@ module.exports = {
     try {
       req.session.userIsThere;
       let page = Number(req.query.page) || 1;
-      let limit = 4;
+      let limit = 6;
       let skip = (page - 1) * limit;
 
       if (req.session.isLoggedin) {
@@ -459,6 +423,7 @@ module.exports = {
 
 
         res.render("users/home", {
+          _id: req.session.user_id ,
           isAlive: req.session.userIsThere,
           categoryData,
           productData,

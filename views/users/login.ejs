@@ -51,8 +51,8 @@
 <button
                 class="btn btn-primary btn-md"
                 type="submit"
-                
-                style="background-color: #2ecc71; color: white" >
+                id="btn"
+                style="background-color: #2ecc71; color: white" onclick="login()">
                 <i class="fa fa-sign-in"></i> Sign in
               </button>
 
@@ -72,6 +72,30 @@
 <!-- /wrapper -->
 
 <div class="gap"></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+  
+
+    try {
+      function login() {
+    
+    Swal.fire({
+        icon: 'success',
+        title: 'Welcome Back',
+        showConfirmButton: false,
+        timer: 4500
+    });
+    }
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+    </script>
 
 
 

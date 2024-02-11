@@ -24,8 +24,8 @@
       rel="apple-touch-icon-precomposed"
       href="ico/apple-touch-icon-57-precomposed.html"
     />
-    <link rel="shortcut icon" href="assets/ico/favicon.png" />
-    <title>TSHOP - Bootstrap E-Commerce Parallax Theme</title>
+    <link rel="shortcut icon" href="/images/logo.png" />
+    <title>SMART STORE</title>
     <!-- Bootstrap core CSS -->
     <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet" />
 
@@ -436,10 +436,10 @@
 
             <div class="miniCartFooter miniCartFooterInMobile text-right">
               <h3 class="text-right subtotal">Subtotal: $210</h3>
-              <a class="btn btn-sm btn-danger" href="cart.html">
+              <a class="btn btn-sm btn-danger" href="/cart">
                 <i class="fa fa-shopping-cart"> </i> VIEW CART
               </a>
-              <a href="checkout-0.html" class="btn btn-sm btn-primary">
+              <a href="/checkout" class="btn btn-sm btn-primary">
                 CHECKOUT
               </a>
             </div>
@@ -466,9 +466,9 @@
                 <!--/.miniCartTable-->
 
                 <div class="miniCartFooter text-right">
-                  <a class="btn btn-sm btn-danger" href="cart.html">
+                  <a class="btn btn-sm btn-danger" href="/cart">
                     <i class="fa fa-shopping-cart"> </i> VIEW CART </a
-                  ><a class="btn btn-sm btn-primary" href="checkout-1.html">
+                  ><a class="btn btn-sm btn-primary" href="/checkout">
                     CHECKOUT
                   </a>
                 </div>
@@ -684,12 +684,11 @@
   
 
 
-    <div class="row featuredPostContainer globalPadding style2">
+<div class="row featuredPostContainer globalPadding style2">
       <h3 class="section-title style2 text-center"><span>NEW LAUNCHES</span></h3>
-
-      <div class="row categoryProduct xsResponse clearfix" style="width: 109rem;" >
+   <div id="productslider" class="owl-carousel owl-theme" style="width: 110rem;" >
         <% productData.forEach(product=> { %>
-            <div class="item col-sm-3 col-lg-3 col-md-3 col-xs-6 grid-view" style="height: 300px;">
+            <div class="item">
                 <div class="product">
                     <!-- Uncomment the following lines if you want to include the "Add to Wishlist" button -->
                     <!-- <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left">
@@ -726,7 +725,7 @@
                 <!--/.item-->
     </div>
    
-  <!--/.featuredPostContainer-->
+  </div> <!--/.featuredPostContainer-->
 </div>
     <br>
     <br>
@@ -746,6 +745,34 @@
     <br>
     
 
+    <footer class="site-footer" style="width: 100%;">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-4">
+                  <h3>About Us</h3>
+                  <p>Welcome to Smart Store, where we strive to provide an exceptional shopping experience by offering high-quality products, excellent customer service, and innovative solutions to meet all your needs. At Smart Store, we are dedicated to helping you make smarter choices while enjoying the convenience of online shopping</p>
+              </div>
+              <div class="col-md-4">
+                  <h3>Quick Links</h3>
+                  <ul class="list-unstyled">
+                      <li><a href="/home">Home</a></li>
+                      <li><a href="/productList">Shop</a></li>
+                      <li><a href="#">About</a></li>
+                      <li><a href="#">Contact</a></li>
+                  </ul>
+              </div>
+              <div class="col-md-4">
+                  <h3>Connect With Us</h3>
+                  <ul class="list-unstyled">
+                      <li><a href="#">Facebook</a></li>
+                      <li><a href="#">Twitter</a></li>
+                      <li><a href="#">Instagram</a></li>
+                      <li><a href="#">LinkedIn</a></li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+    </footer>
     <style>
       .site-footer {
         background-color: #101011;
@@ -778,34 +805,6 @@
     }
     
     </style>
-    <footer class="site-footer" style="width: 100%;">
-      <div class="container">
-          <div class="row">
-              <div class="col-md-4">
-                  <h3>About Us</h3>
-                  <p>Welcome to Smart Store, where we strive to provide an exceptional shopping experience by offering high-quality products, excellent customer service, and innovative solutions to meet all your needs. At Smart Store, we are dedicated to helping you make smarter choices while enjoying the convenience of online shopping</p>
-              </div>
-              <div class="col-md-4">
-                  <h3>Quick Links</h3>
-                  <ul class="list-unstyled">
-                      <li><a href="/home">Home</a></li>
-                      <li><a href="/productList">Shop</a></li>
-                      <li><a href="#">About</a></li>
-                      <li><a href="#">Contact</a></li>
-                  </ul>
-              </div>
-              <div class="col-md-4">
-                  <h3>Connect With Us</h3>
-                  <ul class="list-unstyled">
-                      <li><a href="#">Facebook</a></li>
-                      <li><a href="#">Twitter</a></li>
-                      <li><a href="#">Instagram</a></li>
-                      <li><a href="#">LinkedIn</a></li>
-                  </ul>
-              </div>
-          </div>
-      </div>
-    </footer>
     
     
       

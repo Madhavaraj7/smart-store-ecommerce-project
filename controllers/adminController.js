@@ -75,6 +75,7 @@ const adminLogout = async (req, res) => {
     // req.session.isLoggedin = false
     req.session.isAdmin = false;
     req.session.admin = null;
+    req.session.user_id=null;
     console.log("logged out");
     res.redirect("/admin");
   } catch (error) {

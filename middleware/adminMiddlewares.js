@@ -1,10 +1,16 @@
 //to check weather user is logged in or not
-const isAdmin = (req, res, next) => {
-  if (req.session.isAdmin) {
+const isAdmin = async(req,res,next)=>{
+  try {
+    if (req.session.user_id) {
+
+    } else {
+      res.redirect('/admin');
+    }
     next();
-  } else {
-    res.redirect("/admin");
+
+  } catch (error) {
+    console.log(error.message);
   }
-};
+}
 
 module.exports = { isAdmin };

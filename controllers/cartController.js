@@ -44,6 +44,7 @@ const cart = async (req, res) => {
     // console.log(req.session.user);
 
     res.render("users/cart", {
+      signIn: req.session.signIn,
       user: req.body.user,
       // addressData: req.session.addressData,
       // addressData,
@@ -165,6 +166,7 @@ const checkoutPage = async (req, res) => {
     let userCartData = await grandTotal(req);
     console.log(addressData);
     res.render("users/checkoutPage", {
+      signIn: req.session.signIn,
       user: req.body.user,
       currentUser: req.session.currentUser,
       grandTotal: req.session.grandTotal,
@@ -241,6 +243,7 @@ const orderPlacedEnd = async (req, res) => {
   console.log('StockSold incremented successfully.');
   console.log("rendering next");
   res.render("users/orderPlacedPage", {
+    signIn: req.session.signIn,
     user: req.session.user,
     orderCartData: cartData,
     orderData: req.session.currentOrder,

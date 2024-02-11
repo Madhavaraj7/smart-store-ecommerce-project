@@ -12,14 +12,18 @@ app.use(nocache());
 
 
 
-
-
 const dbConnect = require("./config/dbConnection");
-
 dbConnect();
 
+//VIEW ENGINE
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
+//requiring bodyparser
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -29,7 +33,6 @@ app.use(
 
 const userRoute = require("./routes/userRoutes");
 
-// const config = require('./config/config')
 
 app.use("/", userRoute);
 
@@ -37,8 +40,12 @@ app.use("/", userRoute);
 const adminRoute = require("./routes/adminRoute");
 app.use("/admin", adminRoute);
 
+
+
+
 const PORT = process.env.PORT || 3001;
 
+//listen to port 3000
 app.listen(PORT, () => {
   console.log(`Server Started at http://localhost:${PORT}...`);
 });
