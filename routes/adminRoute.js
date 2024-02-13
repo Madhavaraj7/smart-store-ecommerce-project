@@ -14,6 +14,10 @@ const adminController = require("../controllers/adminController"); //requiring u
 const categorieyController = require("../controllers/categoryController"); //requiring userController module
 const productController = require('../controllers/productController');
 const orderController = require('../controllers/orderController.js')
+const salesReportController = require('../controllers/salesReportController.js')
+const couponController = require('../controllers/couponController.js')
+
+
 
 
 
@@ -75,8 +79,19 @@ adminRoute.get('/orderManagement/cancelled/:id', orderController.changeStatusCan
 adminRoute.get('/orderManagement/orderStatus/:id', orderController.orderStatusPage)
 
 
+// -------------------------------------------------------SALES REPORT------------------------------------------------------------------------------
+
+adminRoute.get('/salesReport',  salesReportController.salesReport);
+adminRoute.post('/salesReport/filter',  salesReportController.salesReportFilter);
+adminRoute.get('/salesReport/download/xlsx',  salesReportController.salesReportDownload)
 
 
+// -------------------------------------------------------Coupon Managementt------------------------------------------------------------------------------
+
+
+
+adminRoute.get('/couponManagement', couponController.couponManagement)
+adminRoute.post('/couponManagement/addCoupon',  couponController.addCoupon)
 
 
 

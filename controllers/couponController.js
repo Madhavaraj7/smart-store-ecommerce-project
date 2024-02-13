@@ -1,0 +1,58 @@
+const couponCollection = require("../models/couponModel.js");
+const formatDate = require('../service/formatDateHelper.js')
+const productCollection = require("../models/productModel.js");
+const categoryCollection = require("../models/categoryModel.js");
+
+
+
+const couponManagement = async (req, res) => {
+    try {
+  
+  
+  
+  
+      let couponData = await couponCollection.find();
+      couponData = couponData.map((v) => {
+        v.startDateFormatted = formatDate(v.startDate, "YYYY-MM-DD");
+        v.expiryDateFormatted = formatDate(v.expiryDate, "YYYY-MM-DD");
+        return v;
+      });
+      res.render("admin/coupon", { couponData,
+      
+   });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const addCoupon = async (req, res) => {
+    try {
+      let existingCoupon = await couponCollection.findOne({
+        couponCode: { $regex: new RegExp(req.body.couponCode, "i") },
+      });
+  
+      if (!existingCoupon) {
+        await couponCollection.insertMany([
+          {
+            couponCode: req.body.couponCode,
+            discountPercentage: req.body.discountPercentage,
+            startDate: new Date(req.body.startDate),
+            expiryDate: new Date(req.body.expiryDate),
+            minimumPurchase: req.body.minimumPurchase,
+            maximumDiscount: req.body.maximumDiscount,
+          },
+        ]);
+        res.json({ couponAdded: true });
+      } else {
+        res.json({ couponCodeExists: true });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  module.exports = {
+    couponManagement,
+    addCoupon,
+
+  };
+  

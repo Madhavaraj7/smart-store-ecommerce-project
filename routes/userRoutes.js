@@ -8,6 +8,8 @@ const accountController = require('../controllers/accountController.js')
 const userController = require('../controllers/userController');
 const cartController =  require("../controllers/cartController.js")
 const shopPageController = require('../controllers/shopPageController.js')
+const wishlistController = require('../controllers/wishlistController.js')
+
 const user = require('../models/userModel');
 
 // requiring auth
@@ -121,6 +123,16 @@ userRoute.patch('/account/changePassword', auth.isLogin,blockedUserCheck, accoun
 userRoute.get('/account/orderList', auth.isLogin,blockedUserCheck, accountController.orderList);
 userRoute.get('/account/orderList/orderStatus/:id',auth.isLogin, blockedUserCheck, accountController.orderStatus)
 userRoute.put('/account/orderList/orderStatus/cancelOrder/:id',auth.isLogin, blockedUserCheck,accountController.cancelOrder )
+
+
+// -------------------------------------------------------WISH LIST------------------------------------------------------------------------------
+
+userRoute.get("/wishlist",wishlistController.getWishList)
+userRoute.get('/wishlist/:id',auth.isLogin, blockedUserCheck,wishlistController.addToWishlistController) 
+userRoute.delete('/wishlist/delete/:id', auth.isLogin,blockedUserCheck,wishlistController.removeFromWishList) 
+
+
+
 
 
 
