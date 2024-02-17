@@ -3,6 +3,8 @@ const userCollection = require("../models/userModel");
 const addressCollection = require("../models/addressModel");
 const orderCollection = require("../models/orderModel");
 const formatDate = require("../service/formatDateHelper");
+const walletCollection = require("../models/walletModel.js");
+
 
 
 
@@ -14,12 +16,25 @@ module.exports = {
       let userData = await userCollection.findOne({
         _id: req.session.currentUser._id,
       });
-    
+      let walletData = await walletCollection.findOne({
+        userId: req.session.currentUser._id,
+        
+      });
+      console.log(walletData);
 
-     
+      //sending the formatted date to the page
+      if (walletData?.walletTransaction.length>0) {
+        walletData.walletTransaction = walletData.walletTransaction
+          .map((v) => {
+            v.transactionDateFormatted = formatDate(v.transactionDate);
+            return v;
+          })
+          .reverse(); //reverse is for sorting the latest transactions
+      }
       res.render("users/account", {
         currentUser: req.session.currentUser,
         userData,
+        walletData,
       });
     } catch (error) {
       console.error(error);
@@ -185,9 +200,19 @@ module.exports = {
         { $set: { orderStatus: "Cancelled" } }
       );
 
-      
+      let walletTransaction = {
+        transactionDate: new Date(),
+        transactionAmount: orderData.grandTotalCost,
+        transactionType: "Refund from cancelled Order",
+      };
 
-      
+      await walletCollection.findOneAndUpdate(
+        { userId: req.session.currentUser._id },
+        {
+          $inc: { walletBalance: orderData.grandTotalCost },
+          $push: { walletTransaction },
+        }
+      );
 
       res.json({ success: true });
     } catch (error) {

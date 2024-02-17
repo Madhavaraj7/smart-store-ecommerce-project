@@ -1,5 +1,7 @@
 const orderCollection = require("../models/orderModel.js");
 const userCollection = require("../models/userModel.js");
+const walletCollection = require("../models/walletModel")
+
 
 
 // order management page
@@ -80,6 +82,8 @@ const changeStatusReturn = async (req, res) => {
       let orderData = await orderCollection
         .findOne({ _id: req.params.id })
         .populate("userId");
+      await walletCollection.findOneAndUpdate( { userId : orderData.userId._id  }, { walletBalance: orderData.grandTotalCost })
+
       await userCollection.findByIdAndUpdate(
         { _id: orderData.userId._id },
         { wallet: orderData.grandTotalCost }

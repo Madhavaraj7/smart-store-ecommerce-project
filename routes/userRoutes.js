@@ -98,6 +98,12 @@ userRoute.put('/cart/incQty/:id', auth.isLogin,blockedUserCheck,  cartController
 userRoute.get('/checkout', auth.isLogin,blockedUserCheck, cartController.checkoutPage)
 userRoute.all('/checkout/orderPlaced', auth.isLogin,blockedUserCheck, cartController.orderPlaced);
 userRoute.all('/checkout/orderPlacedEnd', auth.isLogin,blockedUserCheck,cartController.orderPlacedEnd)
+// userRoute.post('/checkout/razorpay/create/orderId', blockedUserCheck, cartController.razorpayCreateOrderId)
+userRoute.post('/checkout/razorpay/create/orderId', blockedUserCheck,cartController.razorpayCreateOrderId)
+
+
+userRoute.post("/checkout/applyCoupon",blockedUserCheck, cartController.applyCoupon);
+
 
 
 

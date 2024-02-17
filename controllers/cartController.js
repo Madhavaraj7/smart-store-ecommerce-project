@@ -6,6 +6,11 @@ const profileCollection = require("../models/addressModel.js");
 const productModel = require("../models/productModel.js");
 const CartModel = require("../models/cartModel.js");
 const orderCollection = require("../models/orderModel.js");
+const couponCollection = require("../models/couponModel.js");
+const walletCollection = require("../models/walletModel.js");
+const razorpay = require("../service/razorpay.js");
+
+
 
 async function grandTotal(req) {
   try {
@@ -179,6 +184,31 @@ const checkoutPage = async (req, res) => {
     res.redirect("/cart");
   }
 };
+const razorpayCreateOrderId= async (req, res) => {
+
+  if(req.query?.combinedWalletPayment){
+
+    let walletData = await walletCollection.findOne({userId: req.session.currentUser._id})
+
+    var options = {
+      amount: req.session.grandTotal - walletData.walletBalance  + "00", // amount in the smallest currency unit
+      currency: "INR",
+    };
+
+
+  }else{
+
+    var options = {
+      amount: req.session.grandTotal + "00", // amount in the smallest currency unit
+      currency: "INR",
+    };
+  }
+
+
+  razorpay.instance.orders.create(options, function (err, order) {
+    res.json(order);
+  });
+}
 
 const orderPlaced = async (req, res) => {
   console.log('q');
@@ -186,16 +216,45 @@ const orderPlaced = async (req, res) => {
     console.log(req.session.grandTotal);
     if (req.body.razorpay_payment_id) {
       //razorpay payment
-      // await orderCollection.updateOne(
-      //   { _id: req.session.currentOrder._id },
-      //   {
-      //     $set: {
-      //       paymentId: req.body.razorpay_payment_id,
-      //       paymentType: "Razorpay",
-      //     },
-      //   }
-      // );
-      // res.redirect("/checkout/orderPlacedEnd");
+      await orderCollection.updateOne(
+        { _id: req.session.currentOrder._id },
+        {
+          $set: {
+            paymentId: req.body.razorpay_payment_id,
+            paymentType: "Razorpay",
+          },
+        }
+      );
+      res.redirect("/checkout/orderPlacedEnd");
+    } else if (req.body.walletPayment) {
+      const walletData = await walletCollection.findOne({
+        userId : req.session.currentUser._id,
+      });
+      if (walletData.walletBalance >= req.session.grandTotal) {
+        walletData.walletBalance -= req.session.grandTotal;
+
+        // wallet tranaction data 
+        let walletTransaction = {
+          transactionDate : new Date(),
+          transactionAmount: -req.session.grandTotal,
+          transactionType: "Debited for placed order",
+        };
+        walletData.walletTransaction.push(walletTransaction)
+        await walletData.save();
+
+        await orderCollection.updateOne(
+          { _id: req.session.currentOrder._id },
+          {
+            $set: {
+              paymentId: Math.floor(Math.random() * 9000000000) + 1000000000 ,
+              paymentType: "Wallet",
+            },
+          })
+
+        res.json({ success: true });
+      } else {
+        return res.json({ insufficientWalletBalance: true });
+      }
     } else {
       //incase of COD
       await orderCollection.updateOne(
@@ -207,13 +266,16 @@ const orderPlaced = async (req, res) => {
           },
         }
       );
-      console.log("ed");
+
       res.json({ success: true });
     }
   } catch (error) {
     console.error(error);
   }
 };
+
+
+
 
 const orderPlacedEnd = async (req, res) => {
   let cartData = await cartCollection
@@ -255,6 +317,69 @@ const orderPlacedEnd = async (req, res) => {
 
 
 
+
+
+const applyCoupon = async (req, res) => {
+  try {
+    console.log("1");
+    let { couponCode } = req.body;
+
+    let couponData = await couponCollection.findOne({ couponCode });
+
+    if (couponData) {
+      
+      console.log("2");
+      console.log(couponData);
+
+      let { grandTotal } = req.session;
+      let { minimumPurchase, expiryDate } = couponData;
+      let minimumPurchaseCheck = minimumPurchase < grandTotal;
+      let expiryDateCheck = new Date() < new Date(expiryDate);
+      console.log("3");
+      console.log(expiryDateCheck);
+      console.log(minimumPurchaseCheck);
+
+      if (minimumPurchaseCheck && expiryDateCheck) {
+        console.log("4");
+
+        let { discountPercentage, maximumDiscount } = couponData;
+        let discountAmount =
+          (grandTotal * discountPercentage) / 100 > maximumDiscount
+            ? maximumDiscount
+            : (grandTotal * discountPercentage) / 100;
+
+        let { currentOrder } = req.session;
+        await orderCollection.findByIdAndUpdate(
+          { _id: currentOrder._id },
+          {
+            $set: { couponApplied: couponData._id },
+            $inc: { grandTotalCost: -discountAmount },
+          }
+        );
+        console.log("5");
+
+        // req.session.grandTotal -= discountAmount;
+        req.session.grandTotal -= discountAmount;
+        console.log(req.session.grandTotal);
+        console.log(discountAmount);
+
+        // Respond with a success status and indication that the coupon was applied
+        res.status(202).json({ couponApplied: true, discountAmount });
+      } else {
+        // Respond with an error status if the coupon is not applicable
+        res.status(501).json({ couponApplied: false });
+      }
+    } else {
+      // Respond with an error status if the coupon does not exist
+      res.status(501).json({ couponApplied: false });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+
 module.exports = {
   cart,
   addToCart,
@@ -264,4 +389,6 @@ module.exports = {
   checkoutPage,
   orderPlaced,
   orderPlacedEnd,
+  applyCoupon,
+  razorpayCreateOrderId,
 };

@@ -1,0 +1,301 @@
+<%- include('../layouts/adminHeader.ejs') %>
+
+<main class="main-wrap">
+    <header class="main-header navbar">
+        <div class="col-search">
+            <form class="searchform">
+                <div class="input-group">
+                    <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                    <button class="btn btn-light bg" type="button"> <i
+                            class="material-icons md-search"></i></button>
+                </div>
+                <datalist id="search_terms">
+                    <option value="Products">
+                    <option value="New orders">
+                    <option value="Apple iphone">
+                    <option value="Ahmed Hassan">
+                </datalist>
+            </form>
+        </div>
+        <div>
+            <a href="/admin" class="btn btn-primary">Logout</a>
+          </div>
+    </header>
+    <br>
+    <br>
+
+ <!-- Add Product Offer Button (Triggers modal) -->
+ <div class="pt-3">
+  <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addProductOfferModal">
+      Add New Product Offer
+  </button>
+</div>
+
+<!--Add Product Offer Modal -->
+
+<div class="modal fade" id="addProductOfferModal" tabindex="-1" aria-labelledby="addProductOfferModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProductOfferModalLabel">Add New Product Offer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="addProductOfferForm" role="form">
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <label class="container">
+                            <label for="productName" class="mb-2">Product Name: </label>
+                            <select name="productName" id="productName" class="form-select"
+                                aria-label="Default select example">
+                                <% productData.forEach(function(product) { %>
+                                    <option>
+                                        <div><%= product.productName %></div>
+                                        <div><img src="/images/about/1.jpg" alt="ddd"></div>
+                                    </option>
+                                <% }); %>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="offerPercentageInput p-2">
+                        <label for="productOfferPercentage" class="mb-2">Product Offer Percentage: </label>
+                        <div class="input-group">
+                            <input id="productOfferPercentage" name="productOfferPercentage" class="form-control"
+                                placeholder="Enter the offer percentage">
+                        </div>
+                        <div class="form-text">Choose a percentage to be discounted. Between 5% and 90%.</div>
+                    </div>
+                    <div class="startDateInput p-2">
+                        <label for="startDate">Offer Start Date: </label>
+                        <div class="input-group">
+                            <input id="startDate" name="startDate" type="date" class="form-control">
+                        </div>
+                        <div class="form-text">Choose a start date for the offer to be considered.</div>
+                    </div>
+                    <div class="endDateInput p-2">
+                        <label for="endDate">Offer Expiry Date : </label>
+                        <div class="input-group">
+                            <input id="endDate" name="endDate" type="date" class="form-control">
+                        </div>
+                        <div class="form-text">Choose an expiry date for the offer to end.</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="addCouponBtn" type="submit" class="btn btn-info">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Main Table -->
+<div class="container pt-3">
+  <table id="example" class="display" style="width:100%">
+      <thead>
+          <tr>
+              <td>S No</td>
+              <td>Product Name</td>
+              <td>Offer Percentage</td>
+              <td>Start Date</td>
+              <td>End Date</td>
+              <td>Current Status</td>
+              <td>Action</td>
+          </tr>
+      </thead>
+      <tbody>
+          <% productOfferData.forEach(function(product, index,i) { %>
+              <tr>
+                  <td><%= index + 1 %></td>
+                  <td><%= product.productName %></td>
+                  <td><%= product.productOfferPercentage %>%</td>
+                  <td><%= product.startDateFormatted %></td>
+                  <td><%= product.endDateFormatted %></td>
+                  <% if (product.currentStatus) { %>
+                      <td><button class="btn btn-success">Active</button></td>
+                  <% } else { %>
+                      <td><button class="btn btn-danger">Inactive</button></td>
+                  <% } %>
+                  <td>
+                    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#editModal<%= index %>">
+                        Edit
+                    </button>
+                </td>
+                
+              </tr>
+          <% }); %>
+      </tbody>
+  </table>
+</div>
+
+
+    <!-- Edit Product Offer Modal  -->
+    <% productOfferData.forEach(function(product, index) { %>
+      <div class="modal fade" id="editModal<%= index %>" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="modalLabel">Edit Coupon</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <form id="editProductOfferForm<%= index %>" role="form">
+                      <div class="modal-body">
+                          <div class="input-group mb-3">
+                              <label class="container">
+                                  <label for="productName" class="mb-2">Product Name:</label>
+                                  <select name="productName" id="productName<%= index %>" class="form-select" value="<%= product.productName %>" disabled>
+                                      <% productData.forEach(function(productDataItem) { %>
+                                          <% if (productDataItem.productName === product.productName) { %>
+                                              <option selected><%= productDataItem.productName %></option>
+                                          <% } else { %>
+                                              <option><%= productDataItem.productName %></option>
+                                          <% } %>
+                                      <% }); %>
+                                  </select>
+                              </label>
+                          </div>
+  
+                          <div class="offerPercentageInput p-2">
+                              <label for="productOfferPercentage" class="mb-2">Product Offer Percentage: </label>
+                              <div class="input-group">
+                                  <input id="productOfferPercentage<%= index %>" name="productOfferPercentage" class="form-control" placeholder="Enter the offer percentage" value="<%= product.productOfferPercentage %>">
+                              </div>
+                              <div class="form-text">Choose a percentage to be discounted. Between 5% and 90%.</div>
+                          </div>
+  
+                          <div class="startDateInput p-2">
+                              <label for="startDate">Offer Start Date: </label>
+                              <div class="input-group">
+                                  <input id="startDate<%= index %>" name="startDate" type="date" class="form-control" value="<%= product.startDateFormatted %>">
+                              </div>
+                              <div class="form-text">Choose a start date for the offer to be considered.</div>
+                          </div>
+  
+                          <div class="endDateInput p-2">
+                              <label for="endDate">Offer Expiry Date : </label>
+                              <div class="input-group">
+                                  <input id="endDate<%= index %>" name="endDate" type="date" class="form-control" value="<%= product.endDateFormatted %>">
+                              </div>
+                              <div class="form-text">Choose an expiry date for the offer to end.</div>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button id="editOfferBtn" type="submit" class="btn btn-info">Save changes</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+
+ <!-- Edit Product Script- form validation  -->
+ <script>
+    $(document).ready(function () {
+        $("#editProductOfferForm<%= index %>").submit(async function (event) {
+            event.preventDefault();
+            console.log('1');
+            let formData = {
+            
+                productName: $("#productName<%= index %>").val(),
+                discountPercentage: $("#productOfferPercentage<%= index %>").val(),
+                startDate: $("#startDate<%= index %>").val(),
+                expiryDate: $("#endDate<%= index %>").val(),
+               
+            };
+            console.log(formData);
+
+            let response = await fetch('/admin/productOfferManagement/editOffer/<%= product._id %>', {
+                method: 'PUT',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
+
+            let result = await response.json();
+            console.log(result);
+            if (result.success) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Your offer has been updated",
+                    showConfirmButton: false,
+                    timer: 3500
+                }).then(() => location.reload());
+            } else if (result.success) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Coupon code already exists",
+                    text: "Coupon code must be unique"
+                });
+            }
+        });
+    });
+</script>
+    
+
+
+
+      
+  <% }); %>
+  
+
+
+<script>
+  $(document).ready(function () {
+      $("#addProductOfferForm").validate({
+          rules: {
+              productName: "required",
+              productOfferPercentage: {
+                  required: true,
+                  min: 5,
+                  max: 90
+              },
+              startDate: {
+                  required: true,
+              },
+              endDate: {
+                  required: true,
+              }
+          },
+          submitHandler: async function (form, event) {
+              event.preventDefault()
+
+              let formData = {
+                  productName: form.productName.value,
+                  productOfferPercentage: form.productOfferPercentage.value,
+                  startDate: form.startDate.value,
+                  endDate: form.endDate.value
+              }
+
+              let response = await fetch('/admin/productOfferManagement/addOffer', {
+                  method: 'POST',
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(formData)
+              })
+
+              let result = await response.json()
+
+              if (result.success) {
+                  Swal.fire({
+                      icon: "success",
+                      title: "New product offer succesfully added",
+                      showConfirmButton: false,
+                      timer: 3000
+                  }).then(() => location.reload())
+              } else {
+                  await Swal.fire({
+                      icon: "error",
+                      title: "Product Offer Already Exists for This Product",
+                      text: "Please try editing the offer of this particular product",
+                  });
+              }
+          }
+      });
+  });
+</script>
+
+
+
+
+
+
+<%- include('../layouts/adminFooter.ejs') %>
+</main>

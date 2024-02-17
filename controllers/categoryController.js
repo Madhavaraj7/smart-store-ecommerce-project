@@ -30,22 +30,27 @@ const categoriesPage = async (req, res) => {
 
   const addCategory = async (req, res) => {
     try {
-      let existingcategory = await categoryCollection.findOne({
-        categoryName: { $regex: new RegExp(req.body.categoryName, "i") },
-        categoryName: req.body.categoryName,
-      });console.log(existingcategory);
+      let categoryName = req.body.categoriesName;
+      let categoryExists = await categoryCollection.findOne({
+        categoryName: { $regex: new RegExp(`^${categoryName}$`, "i") },
+      });
+      console.log(categoryExists);
+      console.log(req.body);
+      if (!categoryExists) {
+        await new categoryCollection({
+          categoryName: req.body.categoriesName,
+          categoryDescription: req.body.categoriesDescription,
+        }).save();
+        console.log("Added category");
+        res.redirect("/admin/categories");
+      } else {
+        console.log("Category already exists!");
   
-      if (!existingcategory) {
-        await categoryCollection.insertMany([
-          {
-            categoryName: req.body.categoriesName,
-            categoryDescription: req.body.categoriesDescription,
-          },
-        ]);
+        req.session.categoryExists = categoryExists;
+        res.redirect("/admin/categories");
       }
-      res.redirect("/admin/categories");
     } catch (error) {
-      console.error(error);
+      console.error("Error adding category:", error);
     }
   };
 

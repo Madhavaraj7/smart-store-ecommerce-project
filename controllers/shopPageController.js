@@ -33,7 +33,7 @@ filterCategory: async (req, res) => {
           req.session.shopProductData = await productCollection.find({
             isListed: true,
             parentCategory: req.params.categoryName,
-          });
+          }).populate("parentCategory");
           res.redirect("/productList");
         } catch (error) {
           console.error(error);

@@ -6,8 +6,9 @@ const productSchema= new mongoose.Schema({
         required: true
     },
     parentCategory:{
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "categories",
+        required: true,
     },
     productImage1:{
         type: String,
@@ -30,11 +31,13 @@ const productSchema= new mongoose.Schema({
         type: Number,
         default: 0
     },
-
     isListed: {
         type: Boolean,
         default: true
-    }
+    },
+    productOfferId: { type: mongoose.Types.ObjectId, default: null },
+    productOfferPercentage: { type: Number, default: null },
+    priceBeforeOffer : { type: Number, default: null },
 })
 
 const productCollection= mongoose.model('products',productSchema)

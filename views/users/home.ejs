@@ -686,52 +686,42 @@
 
 <div class="row featuredPostContainer globalPadding style2">
       <h3 class="section-title style2 text-center"><span>NEW LAUNCHES</span></h3>
-   <div id="productslider" class="owl-carousel owl-theme" style="width: 110rem;" >
-        <% productData.forEach(product=> { %>
-            <div class="item">
-                <div class="product">
-                  <a
-                  class="add-fav tooltipHere"
-                  data-toggle="tooltip"
-                  data-original-title="Add to Wishlist"
-                  data-placement="left"
-                >
-                  <i class="glyphicon glyphicon-heart"></i>
-                </a>
-                    <!-- Uncomment the following lines if you want to include the "Add to Wishlist" button -->
-                    <!-- <a class="add-fav tooltipHere" data-toggle="tooltip" data-original-title="Add to Wishlist" data-placement="left">
-                                                <i class="glyphicon glyphicon-heart"></i>
-                                            </a> -->
-                    <div class="image">
-                        <a href="/productDetails/<%= product._id %>">
-                            <img src="/upload/<%= product.productImage1 %>" alt="img"
-                                class="img-responsive" />
-                        </a>
+      <div id="productslider" class="owl-carousel owl-theme">
+        <% productData.forEach(function(product) { %>
+        <div class="item">
+            <div class="product">
+                <div class="image">
+                    <a href="/productDetails/<%= product._id %>"><img src="/upload/<%= product.productImage1 %>"
+                            alt="img" class="img-responsive" /></a>
+                    <% if (product.productOfferId) { %>
+                    <div class="promotion">
+                        <span class="discount"> <%= product.productOfferPercentage %>  % OFF</span>
                     </div>
-                    <div class="description">
-                        <h4 class="small-font-size">
-                            <a href="/productDetails/<%= product._id %>">
-                                <%= product.productName %>
-                            </a>
-                        </h4>
+                    <% } %>
+                    <% if (product.productStock === 0) { %>
+                    <div class="promotion">
+                        <span class="discount">OUT OF STOCK!</span>
                     </div>
-                    <div class="price">
-                        <span>₹<%= product.productPrice %></span>
-                    </div>
-                    <div class="action-control">
-                        <a href="/cart/<%= product._id %>" class="btn btn-primary" onclick="addToCart()">
-                            <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"></i> Add to cart</span>
-                        </a>
-                    </div>
+                    <% } %>
                 </div>
+                <div class="description">
+                    <h4>
+                        <a href="/productDetails/<%= product._id %>"><%= product.productName %></a>
+                    </h4>
+                </div>
+                <div class="price"><span>₹<%= product.productPrice %></span></div>
+                <!-- <div class="action-control">
+                      <a onclick="addToCart()" class="btn btn-primary">
+                        <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i>
+                          Add to cart
+                        </span>
+                      </a>
+                    </div> -->
             </div>
-            <% }); %>
-            
-
-
-           
-                <!--/.item-->
+        </div>
+        <% }); %>
     </div>
+    
    
   </div> <!--/.featuredPostContainer-->
 </div>

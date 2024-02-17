@@ -1,0 +1,438 @@
+<%- include('../layouts/adminHeader.ejs') %>
+<main class="main-wrap">
+    <header class="main-header navbar">
+        <div class="col-search">
+            <form class="searchform">
+                <div class="input-group">
+                    <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                    <button class="btn btn-light bg" type="button"> <i
+                            class="material-icons md-search"></i></button>
+                </div>
+                <datalist id="search_terms">
+                    <option value="Products">
+                    <option value="New orders">
+                    <option value="Apple iphone">
+                    <option value="Ahmed Hassan">
+                </datalist>
+            </form>
+        </div>
+        <div>
+            <a href="/admin" class="btn btn-primary">Logout</a>
+          </div>
+    </header>
+    <br>
+    <br>
+<section class="content lists col-md-10" style="padding-left: 100px;">
+    <div>
+      <div class="border rounded p-2">
+        <div class="search d-md-flex justify-content-between border-bottom p-2">
+          <h2>Category Offer List</h2>
+          <button
+            type="button"
+            class="btn btn-dark"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+          >
+            Add Offer
+          </button>
+  
+          <div
+            class="modal fade"
+            id="exampleModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <form id="add-category-offer">
+                    <div class="head text-center my-2">
+                      <h3>Add Offer</h3>
+                    </div>
+                    <div class="mb-3">
+                      <label for="offerCategory" class="form-label"
+                        >Categories</label
+                      >
+                      <select
+                        class="form-select"
+                        id="offerCategory"
+                        name="offerCategory"
+                        aria-label="Default select example"
+                      >
+                        <option value="">Categories</option>
+                        <% categories.forEach((category)=>{ %>
+  
+                        <option value="<%= category._id %>">
+                          <%= category.categoryName %>
+                        </option>
+                        <% }) %>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="offerPercentage" class="form-label"
+                        >Offer percentage</label
+                      >
+                      <input
+                        type="number"
+                        id="offerPercentage"
+                        name="offerPercentage"
+                        class="form-control"
+                      />
+                    </div>
+  
+                    <div class="mb-3">
+                      <label for="startDate" class="form-label">Start Date</label>
+                      <input
+                        type="date"
+                        id="startDate"
+                        name="startDate"
+                        class="form-control"
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="endDate" class="form-label">End Date</label>
+                      <input
+                        type="date"
+                        id="endDate"
+                        name="endDate"
+                        class="form-control"
+                      />
+                    </div>
+                    <div class="mb-3 text-center">
+                      <button class="btn btn-dark">Submit</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive content">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Category</th>
+                <th scope="col">Percentage</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% offers.forEach((offer,i) => { %>
+              <tr>
+                <td><%= i+1 %></td>
+                <td><%= offer.category.categoryName %></td>
+                <td><%= offer.offerPercentage %></td>
+                <td><%= offer.startDate.toLocaleString() %></td>
+                <td><%= offer.endDate.toLocaleString() %></td>
+                <% if (offer.isAvailable) { %>
+                <td>
+                  <a
+                    href="/categoryoffer-status/<%= offer._id %>"
+                    class="btn btn-success"
+                    >Available</a
+                  >
+                </td>
+  
+                <% }else{ %>
+  
+                <td>
+                  <a
+                    href="/categoryoffer-status/<%= offer._id %>"
+                    class="btn btn-danger"
+                    >Not Available</a
+                  >
+                </td>
+                <% }%>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-dark"
+                    data-bs-toggle="modal"
+                    data-bs-target="#edit-offer<%= i %>"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                  <div
+                    class="modal fade"
+                    id="edit-offer<%= i %>"
+                    tabindex="-1"
+                    aria-labelledby="exampleModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-body">
+                          <form id="edit-category-offer<%= i %>">
+                            <div class="head text-center my-2">
+                              <h3>Edit Offer</h3>
+                            </div>
+                            <div class="mb-3">
+                              <label for="offerProduct" class="form-label"
+                                >Product</label
+                              >
+                              <input
+                                type="text"
+                                id="offerId"
+                                name="offerId"
+                                class="hidden"
+                                value="<%= offer._id %>"
+                              />
+                              <input
+                                type="text"
+                                class="form-control disabled"
+                                value="<%= offer.category.categoryName %>"
+                                disabled
+                              />
+                            </div>
+                            <div class="mb-3">
+                              <label for="offerPercentage" class="form-label"
+                                >Offer percentage</label
+                              >
+                              <input
+                                type="number"
+                                id="offerPercentage"
+                                name="offerPercentage"
+                                class="form-control"
+                                value="<%= offer.offerPercentage %>"
+                              />
+                            </div>
+  
+                            <div class="mb-3">
+                              <label for="startDate" class="form-label"
+                                >Start Date</label
+                              >
+                              <input
+                                type="date"
+                                id="startDate<%= i %>"
+                                name="startDate"
+                                class="form-control"
+                                value="<%= offer.startDate.toISOString().split('T')[0]%>"
+                              />
+                            </div>
+                            <div class="mb-3">
+                              <label for="endDate" class="form-label"
+                                >End Date</label
+                              >
+                              <input
+                                type="date"
+                                id="endDate<%= i %>"
+                                name="endDate"
+                                class="form-control"
+                                value="<%= offer.endDate.toISOString().split('T')[0] %>"
+                              />
+                            </div>
+                            <div class="mb-3 text-center">
+                              <button class="btn btn-dark">Submit</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-center py-3">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination"></ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    $("#add-category-offer").validate({
+      rules: {
+        offerProduct: {
+          required: true,
+        },
+        offerPercentage: {
+          required: true,
+          min: 5,
+          max: 80,
+        },
+        startDate: {
+          required: true,
+        },
+        endDate: {
+          required: true,
+        },
+      },
+      submitHandler: async function (form, event) {
+        try {
+          event.preventDefault();
+  
+          const formData = {
+            category: form.offerCategory.value,
+            offerPercentage: form.offerPercentage.value,
+            startDate: form.startDate.value,
+            endDate: form.endDate.value,
+          };
+  
+          const data = await fetch("/admin/add-category-offer", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+          });
+  
+          const json = await data.json();
+  
+          if (json.exist) {
+            Swal.fire({
+              title: "Exist!!",
+              text: "Product Already Have Offer",
+              icon: "error",
+              confirmButtonText: "OK",
+            });
+          } else if (json.success) {
+            Swal.fire({
+              title: "Added!!",
+              text: "Offer Added succesfully",
+              icon: "success",
+              confirmButtonText: "OK",
+            }).then((result) => {
+              window.location.reload();
+            });
+          } else {
+            Swal.fire({
+              title: "Failed!!",
+              text: "failed to add coupon",
+              icon: "error",
+              confirmButtonText: "OK",
+            }).then((result) => {
+              window.location.reload();
+            });
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    });
+  
+    let today = new Date().toISOString().split("T")[0];
+  
+    for (let i = 0; i < "<%= categories.length%>"; i++) {
+      document.addEventListener("DOMContentLoaded", function () {
+        let startDateInput = document.getElementById("startDate" + i);
+        let endDateInput = document.getElementById("endDate" + i);
+  
+        endDateInput.setAttribute("min", today);
+  
+        startDateInput.addEventListener("change", function () {
+          var startDate = startDateInput.value;
+          endDateInput.setAttribute("min", startDate);
+        });
+  
+        endDateInput.addEventListener("change", function () {
+          var endDate = endDateInput.value;
+          startDateInput.setAttribute("max", endDate);
+        });
+      });
+  
+      $("#edit-category-offer" + i).validate({
+        rules: {
+          offerId: {
+            required: true,
+          },
+          offerPercentage: {
+            required: true,
+            min: 5,
+            max: 80,
+          },
+          startDate: {
+            required: true,
+          },
+          endDate: {
+            required: true,
+          },
+        },
+        submitHandler: async function (form, event) {
+          try {
+            event.preventDefault();
+  
+            const formData = {
+              id: form.offerId.value,
+              offerPercentage: form.offerPercentage.value,
+              startDate: form.startDate.value,
+              endDate: form.endDate.value,
+            };
+  
+            const data = await fetch("/admin/edit-category-offer", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(formData),
+            });
+  
+            const json = await data.json();
+  
+            if (json.success) {
+              Swal.fire({
+                title: "Added!!",
+                text: "Offer Updated succesfully",
+                icon: "success",
+                confirmButtonText: "OK",
+              }).then((result) => {
+                window.location.reload();
+              });
+            } else {
+              Swal.fire({
+                title: "Failed!!",
+                text: "failed to update offer",
+                icon: "error",
+                confirmButtonText: "OK",
+              }).then((result) => {
+                window.location.reload();
+              });
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        },
+      });
+    }
+  
+    document.addEventListener("DOMContentLoaded", function () {
+      let startDateInput = document.getElementById("startDate");
+      let endDateInput = document.getElementById("endDate");
+  
+      startDateInput.setAttribute("min", today);
+      endDateInput.setAttribute("min", today);
+  
+      startDateInput.addEventListener("change", function () {
+        var startDate = startDateInput.value;
+        endDateInput.setAttribute("min", startDate);
+      });
+  
+      endDateInput.addEventListener("change", function () {
+        var endDate = endDateInput.value;
+        startDateInput.setAttribute("max", endDate);
+      });
+    });
+  
+    function updateStatus(val) {
+      let selectedStatus = document.getElementById("selectedStatus");
+      selectedStatus.value = val;
+  
+      let form = document.getElementById("statusForm");
+      form.submit();
+    }
+    function handleSubmit(val) {
+      let selectedValue = document.getElementById("selectedValue");
+      selectedValue.value = val;
+  
+      let form = document.getElementById("filter");
+      form.submit();
+    }
+  </script>
+
+
+</main>
+<%- include('../layouts/adminFooter.ejs') %>

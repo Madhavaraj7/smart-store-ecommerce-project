@@ -488,7 +488,7 @@
             <ul class="breadcrumb">
                 <li><a href="/home">Home</a></li>
                 <li><a href="category.html">PRODUCTS</a></li>
-                <li><a href="sub-category.html"><%= currentProduct.parentCategory%></a></li>
+                <li><a href="sub-category.html"><%= currentProduct.parentCategory.categoryName%></a></li>
             </ul>
         </div>
     </div>
@@ -521,11 +521,21 @@
 
 
                
-                <div class="product-price"><span class="price-sales">₹<%= currentProduct.productPrice%>
-                </div>
+            <div class="product-price">
+              <span class="price-sales">₹<%= currentProduct.productPrice %></span>
+              <% if (currentProduct.productOfferId) { %>
+                  <span class="price-standard">₹<%= currentProduct.priceBeforeOffer %></span>
+              <% } %>
+          </div>
+          <% if (currentProduct.productOfferId) { %>
+              <div class="promotion">
+                  <span class="discount"><%= currentProduct.productOfferPercentage %>% OFF</span>
+              </div>
+          <% } %>
+          
                
                 <span>Category:</span>
-                                    <a href="#"><%= currentProduct.parentCategory%></a>
+                                    <a href="#"><%= currentProduct.parentCategory.categoryName%></a>
                
                 <!--/.color-details-->
 

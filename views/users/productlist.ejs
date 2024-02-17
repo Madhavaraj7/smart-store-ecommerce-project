@@ -39,9 +39,9 @@
                             <ul class="nav nav-pills nav-stacked tree">
                                 <% categoryData.forEach(function(data) { %>
                                     <li class="active dropdown-tree open-tree">
-                                        <a href="/productlist/filter/category/<%= data.categoryName %>">
+                                        <a href="/productlist/filter/category/<%= data._id %>">
                                             <% /* <!-- <span class="badge pull-right">42</span> --> */ %>
-                                            <%= data.categoryName %>
+                                            <%= data.categoryName%>
                                         </a>
                                     </li>
                                 <% }); %>
@@ -221,6 +221,8 @@
                                             class="img-responsive" />
                                     </a>
                                 </div>
+                                
+                                
                                 <div class="description">
                                     <h4 class="small-font-size">
                                         <a href="/productDetails/<%= product._id %>">
@@ -228,6 +230,7 @@
                                         </a>
                                     </h4>
                                 </div>
+                                
                                 <div class="price">
                                     <span>₹<%= product.productPrice %></span>
                                 </div>

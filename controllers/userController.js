@@ -7,6 +7,10 @@ const randomstring = require("randomstring");
 
 const productCollection = require("../models/productModel.js");
 const categoryCollection = require("../models/categoryModel.js");
+const walletCollection =  require('../models/walletModel.js')
+const { applyProductOffer, applyCategoryOffer } = require("../service/applyProductOffers.js");
+
+
 
 //////////////////to dispaly landing page
 
@@ -67,6 +71,9 @@ const signedUp = async (req, res) => {
       };
 
       req.session.userData = userData;
+
+
+     
 
       res.redirect("/otpPage");
     } else {
@@ -340,9 +347,7 @@ const userLogout = async (req, res) => {
 
 const productDetils = async (req, res) => {
   try {
-    const currentProduct = await productCollection.findOne({
-      _id: req.params.id,
-    });
+    const currentProduct = await productCollection.findOne({_id: req.params.id,}).populate("parentCategory");
     console.log(currentProduct);
     res.render("users/productDetils.ejs", {
       _id: req.body.user_id,
@@ -396,6 +401,10 @@ module.exports = {
       };
       // req.session.save();
       await user.save();
+     
+      const userDetail = await userdata.findOne({email:user.email})
+    
+      await walletCollection.create({userId : userDetail._id })
       res.redirect("/home");
     } else {
       res.render("users/otpPage", { message: "Invalid otp" });
@@ -406,7 +415,7 @@ module.exports = {
     try {
       req.session.userIsThere;
       let page = Number(req.query.page) || 1;
-      let limit = 6;
+      let limit = 13;
       let skip = (page - 1) * limit;
 
       if (req.session.isLoggedin) {
@@ -421,6 +430,9 @@ module.exports = {
         let totalPages = Math.ceil(count / limit);
         let totalPagesArray = new Array(totalPages).fill(null);
 
+        await applyProductOffer('landingPage');
+
+        console.log(productData);
 
         res.render("users/home", {
           _id: req.session.user_id ,

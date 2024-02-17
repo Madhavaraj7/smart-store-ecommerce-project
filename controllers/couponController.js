@@ -49,10 +49,44 @@ const couponManagement = async (req, res) => {
     } catch (error) {
       console.error(error);
     }
+
+    
   };
+
+  const editCoupon = async (req, res) => {
+    try {
+      console.log('edit coupon');
+      let existingCoupon = await couponCollection.findOne({
+        couponCode: { $regex: new RegExp(req.body.couponCode, "i") },
+      });
+      if (!existingCoupon || existingCoupon._id == req.params.id) {
+        let updateFields = {
+          couponCode: req.body.couponCode,
+          discountPercentage: req.body.discountPercentage,
+          startDate: new Date(req.body.startDate),
+          expiryDate: new Date(req.body.expiryDate),
+          minimumPurchase: req.body.minimumPurchase,
+          maximumDiscount: req.body.maximumDiscount,
+        };
+        await couponCollection.findOneAndUpdate(
+          { _id: req.params.id },
+          { $set: updateFields }
+        );
+        res.json({ couponEdited: true });
+      } else {
+        res.json({ couponCodeExists: true });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+};
+
+
+  
   module.exports = {
     couponManagement,
     addCoupon,
+    editCoupon,
 
   };
   

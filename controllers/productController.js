@@ -12,7 +12,8 @@ const productlist= async (req, res) => {
     
         let   count = await productCollection.find().estimatedDocumentCount();
     
-        let productData = await productCollection.find().skip(skip).limit(limit);
+        let productData = await productCollection.find().populate("parentCategory").skip(skip).limit(limit);
+        console.log(productData);
         let categoryList = await categoryCollection.find(
           {},
           { categoryName: true }
@@ -54,6 +55,7 @@ const productlist= async (req, res) => {
       });
       if (!existingProduct) {
         console.log("in");
+        console.log("gggggggggggg",req.body.parentCategory);
         await productCollection.insertMany([
           {
             productName: req.body.productName,
