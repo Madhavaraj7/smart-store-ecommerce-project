@@ -5,7 +5,7 @@ const categoryOfferModel = require("../models/categoryOfferModel");
 const productCollection = require("../models/productModel");
 const productOfferCollection = require("../models/productOfferModel");
 const formatDate = require("../service/formatDateHelper");
-
+const applyCategoryOffer= require("../service/applyCategoryOffer").applyCategoryOffer;
 
 
 
@@ -34,9 +34,13 @@ module.exports = {
       });
 
       let productData = await productCollection.find();
+      let categoryData = await categoryModel.find();
+
       res.render("admin/productOfferList", {
         productData,
         productOfferData,
+        categoryData,
+
       });
     } catch (error) {
       console.error(error);
@@ -101,4 +105,75 @@ module.exports = {
       console.error(error);
     }
   },
+
+
+  getCategoryOffer : async (req, res) => {
+    try {
+      const categories = await categoryModel.find();
+      const offers = await categoryOfferModel.find().populate("category");
+      applyCategoryOffer();
+      res.render("admin/categoryOfferList", { categories, offers });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+ addCategoryOffer : async (req, res) => {
+  try {
+    const { category, offerPercentage, startDate, endDate } = req.body;
+
+    const offerExist = await categoryOfferModel.findOne({ category });
+
+    if (offerExist) {
+      return res.status(500).send({ exist: true });
+    }
+
+    const offer = await new categoryOfferModel({
+      category,
+      offerPercentage,
+      startDate,
+      endDate,
+    }).save();
+
+    return res.status(200).send({ success: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({ success: false });
+  }
+},
+
+editCategoryOffer :async (req, res) => {
+  try {
+    const { id, offerPercentage, startDate, endDate } = req.body;
+
+    const offer = await categoryOfferModel.findByIdAndUpdate(id, {
+      offerPercentage,
+      startDate,
+      endDate,
+    });
+
+    return res.status(200).send({ success: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({ success: false });
+  }
+},
+editCategoryOfferStatus : async (req, res) => {
+  try {
+    const { id } = req.params;
+    const offer = await categoryOfferModel.findOne({ _id: id });
+    if (offer.isAvailable) {
+      await categoryOfferModel.findByIdAndUpdate(id, {
+        isAvailable: false,
+      });
+    } else {
+      await categoryOfferModel.findByIdAndUpdate(id, {
+        isAvailable: true,
+      });
+    }
+    res.redirect("/category-offer-list");
+  } catch (error) {
+    console.log(error);
+  }
+},
 }

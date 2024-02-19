@@ -466,18 +466,44 @@
           <i class="fa fa-times-circle"> </i>
         </a>
 
-        <div class="searchInputBox pull-right">
-          <input
+        <div  id="searched" class="searchInputBox pull-right">
+          
+          <form class="d-flex" role="search" action="/search-prouct" method="post">
+            <input
             type="search"
             data-searchurl="search?="
-            name="q"
+            name="search"
             placeholder="start typing and hit enter to search"
             class="search-input"
           />
-          <button class="btn-nobg search-btn" type="submit">
-            <i class="fa fa-search"> </i>
-          </button>
+            <button class="btn btn-outline-light rounded-end-pill" type="submit" style="background-color: #e74c3c; color:white; border-color: black;">submit</i></button>
+          </form>
         </div>
       </div>
       <!--/.search-full-->
     </div>
+    <ul class="navbar-nav mb-2 mb-lg-0">
+
+    <li class="nav-item">
+      <button onclick="handleSearch()" type="button" class="btn" >
+        <i class="bi bi-search text-light"></i>
+      </button>
+      
+    </li>
+    </ul>
+
+
+
+
+    <script>
+      function handleSearch(){
+        let search = document.getElementById("searched")
+    
+        if(search.style.display === "none"){
+          search.style.display="flex";
+        }else{
+          search.style.display="none";
+        }
+    
+      }
+    </script>

@@ -238,7 +238,7 @@
 
         if (CODElement.checked) {//cash on delivery 
           window.location.href = '/checkout/orderPlacedEnd'
-        }  else if (walletElement.checked) {
+        } else if (walletElement.checked) {
           let response = await fetch("/checkout/orderPlaced", {
             method: "POST", // or 'PUT'
             headers: {
@@ -247,7 +247,7 @@
             body: JSON.stringify({ walletPayment: true }),
           });
           response = await response.json()
-          if (response.insufficient.WalletBalance) {
+          if (response.insufficientWalletBalance) {
             return Swal.fire({
               icon: "error",
               title: "Insufficient Balance",

@@ -75,6 +75,8 @@ userRoute.get('/productList/filter/category/:categoryName', auth.isLogin,blocked
 userRoute.get('/productList/filter/priceRange', auth.isLogin,blockedUserCheck, shopPageController.filterPriceRange);
 userRoute.get('/productList/sort/priceAscending',auth.isLogin, blockedUserCheck, shopPageController.sortPriceAscending)
 userRoute.get('/productList/sort/priceDescending', auth.isLogin,blockedUserCheck, shopPageController.sortPriceDescending)
+userRoute.post("/search-prouct", shopPageController.searchUserProductController);
+
 
 //single product
 userRoute.get('/productDetails/:id',auth.isLogin,userController.productDetils);

@@ -16,6 +16,7 @@ module.exports={
           
           let productData =
             req.session?.shopProductData || productDataWithPagination;
+            
     
           let totalPages=  Math.ceil(  await productCollection.countDocuments() / productsInOnePage )
           console.log(totalPages);
@@ -23,6 +24,8 @@ module.exports={
     
           res.render("users/productlist", {  currentUser: req.session.currentUser, categoryData, productData, totalPagesArray ,_id: req.session.user_id ,});
           req.session.shopProductData = null;
+          req.session.products = null;
+          req.session.save();
         } catch (error) {
           console.error(error);
         }
@@ -72,6 +75,23 @@ sortPriceAscending: async (req, res) => {
       res.json({ success: true });
     } catch (error) {
       console.error(error);
+    }
+  },
+
+  searchUserProductController : async (req, res) => {
+    try {
+      const { search } = req.body;
+      console.log("search : ",search);
+      const products = await productCollection.find({
+        $or: [
+          { productName: { $regex: search, $options: "i" } },
+        ],
+      }).populate("parentCategory");
+      console.log(products);
+      req.session.shopProductData = products;
+      res.redirect("/productList");
+    } catch (error) {
+      console.log(error);
     }
   },
   

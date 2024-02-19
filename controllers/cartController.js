@@ -230,6 +230,7 @@ const orderPlaced = async (req, res) => {
       const walletData = await walletCollection.findOne({
         userId : req.session.currentUser._id,
       });
+      console.log(walletData);
       if (walletData.walletBalance >= req.session.grandTotal) {
         walletData.walletBalance -= req.session.grandTotal;
 

@@ -136,12 +136,14 @@ adminRoute.put("/couponManagement/editCoupon/:id", couponController.editCoupon);
 adminRoute.get("/productOfferManagement", offerController.productOfferManagement);
 adminRoute.post("/productOfferManagement/addOffer",offerController.addOffer);
 adminRoute.put("/productOfferManagement/editOffer/:id", offerController.editOffer);
-// adminRoute.get("/productoffer-status/:id", offerController.editProductOfferStatus);
 
 // -------------------------------------------------------Category offer Managementt------------------------------------------------------------------------------
 
-// adminRoute.get("/category-offer-list", offerController.getCategoryOffer);
-// adminRoute.post("/add-category-offer", offerController.addCategoryOffer);
+adminRoute.get("/category-offer-list", offerController.getCategoryOffer);
+adminRoute.post("/add-category-offer", offerController.addCategoryOffer);
+adminRoute.put("/edit-category-offer", offerController.editCategoryOffer);
+adminRoute.get("/categoryoffer-status/:id", offerController.editCategoryOfferStatus);
+
 
 
 
