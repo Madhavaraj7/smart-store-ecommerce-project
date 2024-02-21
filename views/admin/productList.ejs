@@ -65,6 +65,7 @@
               <table id="example" class="display" style="width:100%">
                   <thead>
                       <tr>
+                        <th>Sn no</th>
                           <th>Product Name</th>
                           <th>Parent Category</th>
                           <th>Product Image1</th>
@@ -79,8 +80,9 @@
                   <tbody>
                    
 
-                      <% productData.forEach(function(product,i) { %>
+                      <% productData.reverse().forEach(function(product,i) { %>
                           <tr>
+                            <td><%= i+1 %></td>
 
 
                               <td>
@@ -238,6 +240,6 @@
 <!-- Main Script -->
 <script src="assets/js/main.js" type="text/javascript"></script>
 </body>
-
+ 
 
 <%- include('../layouts/adminFooter.ejs') %>

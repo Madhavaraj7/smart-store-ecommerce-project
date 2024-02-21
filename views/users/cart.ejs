@@ -25,111 +25,122 @@
   <!--/.row-->
 
   <div class="row">
+    <% if (userCartData.length) { %>
     <div class="col-lg-9 col-md-9 col-sm-7">
-      <div class="row userInfo">
-        <div class="col-xs-12 col-sm-12">
-          <div class="cartContent w100">
-            <table class="cartTable table-responsive" style="width:100%">
-              <tbody>
-                <tr class="CartProduct cartTableHeader">
-                  <td style="width:15%"> Product</td>
-                  <td style="width:40%">Details</td>
-                  <td style="width:10%" class="delete">&nbsp;</td>
-                  <td style="width:10%"></td>
-                  <td style="width:10%">QTY</td>
+        <div class="row userInfo">
+            <div class="col-xs-12 col-sm-12">
+                <div class="cartContent w100">
+                    <table class="cartTable table-responsive" style="width:100%">
+                        <tbody>
+                            <tr class="CartProduct cartTableHeader">
+                                <td style="width:15%"> Product</td>
+                                <td style="width:40%">Details</td>
+                                <td style="width:10%" class="delete">&nbsp;</td>
+                                <td style="width:10%">QTY</td>
+                                <td style="width:10%">Available</td>
 
-                  <td style="width:15%">Total</td>
-                </tr>
-                <% userCartData.forEach(function(item, index) { %>
-                  <tr class="CartProduct" id="cartProduct<%= index %>">
-                    <td class="CartProductThumb">
-                      <div><a href=""><img src="/upload/<%= item.productId.productImage1 %>" alt="img"></a>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="CartDescription">
-                        <h4><a href="/productDetails/<%= item.productId._id %>"><%= item.productId.productName %></a></h4>
-                        <div id="productPrice<%= index %>" class="price"><span>₹<%= item.productId.productPrice %></span>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="delete"><a title="Delete" onclick="deleteCart('<%= item._id %>','<%= index %>')"> <i
-                          class="glyphicon glyphicon-trash fa-2x"></i></a></td>
-                    <td>
-                      <button type="button" class="btn btn-danger btn-sm"
-                        onclick="cartDec('<%= item._id %>','<%= index %>')">-</button>
-                      <span id="productQuantity<%= index %>"> &nbsp; &nbsp;<%= item.productQuantity %> &nbsp; &nbsp; </span>
-                      <button type="button" class="btn btn-primary btn-sm"
-                        onclick="cartInc('<%= item._id %>','<%= index %>')">+</button>
-                    </td>
-                    <td class="quantity-col">
-                      <div class="cart-product-quantity">
-                        <div id="stockLimit<%= index %>" class="d-none">
-                          <%= item.productId.productStock %>
-                        </div>
-                      </div>
-                    </td>
-                    <td id="totalCostPerProduct<%= index %>" class="price">₹<%= item.totalCostPerProduct %></td>
-                  </tr>
-                <% }); %>
-              </tbody>
-            </table>
-          </div>
-          <!--cartContent-->
+                                <td style="width:15%">Total</td>
+                            </tr>
+                            <% userCartData.forEach(function(item, index) { %>
+                            <tr class="CartProduct" id="cartProduct<%= index %>">
+                                <td class="CartProductThumb">
+                                    <div><a href=""><img src="/upload/<%= item.productId.productImage1 %>"
+                                                alt="img"></a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="CartDescription">
+                                        <h4><a href="/productDetails/<%= item.productId._id %>"><%= item.productId.productName %></a>
+                                        </h4>
+                                        <div id="productPrice<%= index %>" class="price"><span>₹<%= item.productId.productPrice %></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="delete"><a title="Delete" onclick="deleteCart('<%= item._id %>','<%= index %>')"> <i
+                                            class="glyphicon glyphicon-trash fa-2x"></i></a></td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                        onclick="cartDec('<%= item._id %>','<%= index %>')">-</button>
+                                    <span id="productQuantity<%= index %>"> &nbsp; &nbsp;<%= item.productQuantity %> &nbsp; &nbsp; </span>
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                        onclick="cartInc('<%= item._id %>','<%= index %>')">+</button>
+                                </td>
+                                <td class="quantity-col">
+                                    <div class="cart-product-quantity">
+                                        <div id="stockLimit<%= index %>" class="d-none">
+                                            <%= item.productId.productStock %>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td id="totalCostPerProduct<%= index %>" class="price">₹<%= item.totalCostPerProduct %></td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                <!--cartContent-->
 
-          <div class="cartFooter w100">
-            <div class="box-footer">
-              <div class="pull-left"><a href="/" class="btn btn-default"> <i class="fa fa-arrow-left"></i>
-                  &nbsp; Continue shopping </a></div>
-              <div class="pull-right">
-                <a href="/cart">
-                  <button class="btn btn-default"><i class="fa fa-undo"></i> &nbsp; Update cart </button>
-                </a>
-              </div>
+                <div class="cartFooter w100">
+                    <div class="box-footer">
+                        <div class="pull-left"><a href="/" class="btn btn-default"> <i class="fa fa-arrow-left"></i>
+                                &nbsp; Continue shopping </a></div>
+                        <div class="pull-right">
+                            <a href="/cart">
+                                <button class="btn btn-default"><i class="fa fa-undo"></i> &nbsp; Update cart </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!--/ cartFooter -->
+
             </div>
-          </div>
-          <!--/ cartFooter -->
-
         </div>
-      </div>
-      <!--/row end-->
+        <!--/row end-->
 
     </div>
+   
+
     <div class="col-lg-3 col-md-3 col-sm-5 rightSidebar">
-      <div class="contentBox">
-        <div class="w100 costDetails">
-          <% if (userCartData.length) { %>
-          <div class="table-block" id="order-detail-content"><a class="btn btn-primary btn-lg btn-block "
-              title="checkout" href="/checkout" style="margin-bottom:20px"> Proceed to
-              checkout &nbsp; <i class="fa fa-arrow-right"></i> </a>
-            <% } %>
-            <div class="w100 cartMiniTable">
-              <table id="cart-summary" class="std table">
-                <tbody>
-                  <tr>
-                    <td>Total Price</td>
-                    <td id="totalPrice" class="price">₹<%= grandTotal %></td>
-                  </tr>
-                  <tr >
-                    <td>Shipping</td>
-                    <td class="price"><span class="success">Free shipping!</span></td>
-                  </tr>
-                  <tr>
-                    <td>Grand Total</td>
-                    <td class="site-color" id="total-price">₹<span id="grandTotal"><%= grandTotal %></span></td>
-                  </tr>
-                </tbody>
-              </table>
+        <div class="contentBox">
+            <div class="w100 costDetails">
+                <% if (userCartData.length) { %>
+                <div class="table-block" id="order-detail-content"><a class="btn btn-primary btn-lg btn-block "
+                        title="checkout" href="/checkout" style="margin-bottom:20px"> Proceed to
+                        checkout &nbsp; <i class="fa fa-arrow-right"></i> </a>
+                    <% } %>
+                    <div class="w100 cartMiniTable">
+                        <table id="cart-summary" class="std table">
+                            <tbody>
+                                <tr>
+                                    <td>Total Price</td>
+                                    <td id="totalPrice" class="price">₹<%= grandTotal %></td>
+                                </tr>
+                                <tr>
+                                    <td>Shipping</td>
+                                    <td class="price"><span class="success">Free shipping!</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Grand Total</td>
+                                    <td class="site-color" id="total-price">₹<span id="grandTotal"><%= grandTotal %></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
             </div>
-          </div>
+            <% } else { %>
+              <div class="empty-cart-message" style="text-align: center; padding: 20px;">
+                  <img src="images/product/giphy.gif" alt="Empty Cart Image" style="width: 400px; height: 400px; margin-bottom: 10px;">
+                  <h3 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; color: red;">YOUR CART IS EMPTY</h3>
+              </div>
+              <% } %>
         </div>
-      </div>
-      <!-- End popular -->
+        <!-- End popular -->
 
     </div>
     <!--/rightSidebar-->
 
-  </div>
+</div>
+
   <!--/row-->
 
   <div style="clear:both"></div>

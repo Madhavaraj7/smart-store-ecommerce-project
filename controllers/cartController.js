@@ -290,17 +290,15 @@ const orderPlacedEnd = async (req, res) => {
     return v;
   });
   
-  console.log("safjkdhf");
+  
   let orderData= await orderCollection.findOne({ _id: req.session.currentOrder._id})
   if(orderData.paymentType =='toBeChosen'){
     orderData.paymentType = 'COD'
     orderData.save()
   }
-  console.log("safjkdhf");
   
   let x = await cartCollection.findByIdAndUpdate({ _id: req.session.currentOrder._id}).populate("productId");
   
-  console.log("safjkdhf");
 
 
   console.log('StockSold incremented successfully.');
@@ -312,8 +310,8 @@ const orderPlacedEnd = async (req, res) => {
     orderData: req.session.currentOrder,
   });
   //delete product from cart since the order is placed
-  // await cartCollection.deleteMany({ userId: req.session.currentUser._id });
-  // console.log("deleting finished");
+  await cartCollection.deleteMany({ userId: req.session.currentUser._id });
+  console.log("deleting finished");
 };
 
 

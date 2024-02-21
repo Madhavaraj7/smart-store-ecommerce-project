@@ -396,11 +396,12 @@
 
                     <div class="gap"></div>
 
-                    <% if (isCancelled) { %>
+                    <% if (orderData.orderStatus=="Delivered" || orderData.orderStatus=="Retrun" ) { %>
                     <div class="col-sm-12">
-                        <button class="btn btn-danger btn-lg btn-block">This order has been cancelled</button>
-                    </div>
-                    <% } else { %>
+                        <a href="#" id="returnorder"
+                        onclick="returnorderConfirmation('<%= orderData._id %>')"><button
+                          class="btn btn-warning return">RETURN</button></a></div>
+                    <% } else  { %>
                     <div class="col-sm-12">
                         <div id="cancelBtn" class="btn btn-danger" onclick="cancelOrder('<%= orderData._id %>')">Cancel this order</div>
                     </div>
@@ -558,6 +559,32 @@
                     Swal.fire({
                         title: "Cancelled!",
                         text: "Your order has been cancelled.",
+                        icon: "success"
+                    });
+                }
+            });
+        }
+
+        async function returnorderConfirmation(orderId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, return the order"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('/account/orderList/orderStatus/returnorder/' + orderId, { method: 'PUT' }).then(d => console.log(d))
+                    let cancelBtnElement = document.getElementById('returnorder')
+                    let cancelledBtnElement = document.getElementById('597a5bdf082df5a383c94b')
+
+                    cancelBtnElement.style.display = 'none'
+                    cancelledBtnElement.style.display = 'block'
+                    Swal.fire({
+                        title: "Retruned!",
+                        text: "Your order has been Returned.",
                         icon: "success"
                     });
                 }

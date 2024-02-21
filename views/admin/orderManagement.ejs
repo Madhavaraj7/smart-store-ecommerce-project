@@ -25,6 +25,8 @@
         <table id="example" class="table table-bordered table-hover" style="width: 100%">
             <thead>
                 <tr>
+                    <th scope="col" class="border-dark">#</th>
+
                     <th scope="col" class="border-dark">Order No</th>
                     <th scope="col" class="border-dark">Amount</th>
                     <th scope="col" class="border-dark">Payment</th>
@@ -33,8 +35,10 @@
                 </tr>
             </thead>
             <tbody>
-                <% orderData.forEach(order=> { %>
+                <% orderData.forEach((order,i)=> { %>
                 <tr>
+                    <td><%= i+1 %></td>
+
                     <td><button disabled="disabled">
                             <a href="/admin/orderManagement/orderStatus/<%= order._id %>">
                                 <%= order.orderNumber %>

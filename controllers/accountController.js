@@ -132,8 +132,10 @@ module.exports = {
 
   changePassword: async (req, res) => {
     try {
+      
       res.render("users/changePassword", {
         invalidCurrentPassword: req.session.invalidCurrentPassword,
+
       });
     } catch (error) {
       console.error(error);
@@ -219,5 +221,34 @@ module.exports = {
       console.error(error);
     }
   },
-}
 
+
+returnRequest: async(req, res) => {
+  try {
+    const orderData = await orderCollection.findOne({ _id: req.params.id });
+
+    await orderCollection.findByIdAndUpdate(
+      { _id: req.params.id },
+      { $set: { orderStatus: "Retrun" } }
+    );
+
+    let walletTransaction = {
+      transactionDate: new Date(),
+      transactionAmount: orderData.grandTotalCost,
+      transactionType: "Refund from cancelled Order",
+    };
+
+    await walletCollection.findOneAndUpdate(
+      { userId: req.session.currentUser._id },
+      {
+        $inc: { walletBalance: orderData.grandTotalCost },
+        $push: { walletTransaction },
+      }
+    );
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+  }
+}
+}

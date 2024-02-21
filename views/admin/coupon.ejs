@@ -95,8 +95,8 @@
                         <div class="minimumPurchaseInput p-2">
                             <label for="minimumPurchase">Minimum Purchase: </label>
                             <div class="input-group">
-                                <input id="minimumPurchase" name="minimumPurchase" type="text" class="form-control"
-                                    placeholder="Enter minimum purchase required" required />
+                                <input id="minimumPurchase" name="minimumPurchase" type="number" class="form-control"
+                                    placeholder="Enter minimum purchase required" required min="1" />
                             </div>
                             <div class="form-text">
                                 Minimum amount of purchase to be done to allow the coupon
@@ -107,8 +107,8 @@
                         <div class="maximumDiscount p-2">
                             <label for="maximumDiscount">Maximum Discount: </label>
                             <div class="input-group">
-                                <input id="maximumDiscount" name="maximumDiscount" type="text" class="form-control"
-                                    placeholder="Maximum discount applicable" required />
+                                <input id="maximumDiscount" name="maximumDiscount" type="number" class="form-control"
+                                    placeholder="Maximum discount applicable" required  min="1"/>
                             </div>
                             <div class="form-text">
                                 Maximum amount of discount to be allowed while using the coupon.
@@ -210,8 +210,8 @@
                                 <label for="discountPercentageEdit<%= index %>" class="mb-2">Discount Percentage:
                                 </label>
                                 <div class="input-group">
-                                    <input id="discountPercentageEdit<%= index %>" name="discountPercentage" type="text"
-                                        class="form-control" value="<%= coupon.discountPercentage %>" required>
+                                    <input id="discountPercentageEdit<%= index %>" name="discountPercentage" type="number"
+                                        class="form-control" value="<%= coupon.discountPercentage %>" required min="5" max="90">
                                 </div>
                                 <div class="form-text">Choose a percentage to be discounted. Between 5% and 90%.</div>
                             </div>
@@ -237,9 +237,9 @@
                             <div class="minimumPurchaseInput p-2">
                                 <label for="minimumPurchaseEdit<%= index %>">Minimum Purchase: </label>
                                 <div class="input-group">
-                                    <input id="minimumPurchaseEdit<%= index %>" name="minimumPurchase" type="text"
+                                    <input id="minimumPurchaseEdit<%= index %>" name="minimumPurchase" type="number"
                                         class="form-control" placeholder="Enter minimum purchase required"
-                                        value="<%= coupon.minimumPurchase %>" required>
+                                        value="<%= coupon.minimumPurchase %>" required min="1">
                                 </div>
                                 <div class="form-text">Minimum amount of purchase to be done to allow the coupon
                                     discount.</div>
@@ -248,9 +248,9 @@
                             <div class="maximumDiscount p-2">
                                 <label for="maximumDiscountEdit<%= index %>">Maximum Discount: </label>
                                 <div class="input-group">
-                                    <input id="maximumDiscountEdit<%= index %>" name="maximumDiscount" type="text"
+                                    <input id="maximumDiscountEdit<%= index %>" name="maximumDiscount" type="number"
                                         class="form-control" placeholder="Maximum discount applicable"
-                                        value="<%= coupon.maximumDiscount %>" required>
+                                        value="<%= coupon.maximumDiscount %>" required min="1">
                                 </div>
                                 <div class="form-text">Maximum amount of discount to be allowed while using the coupon.
                                 </div>
@@ -265,7 +265,32 @@
             </div>
         </div>
 
+       
+
         <script>
+            var today = new Date().toISOString().split('T')[0];
+        
+            document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('startDate').setAttribute('min', today);
+            });
+    
+            var startDateInput = document.getElementById('startDate<%= index %>');
+            var endDateInput = document.getElementById('endDate<%= index %>');
+            var expiryDateInput = document.getElementById('expiryDate<%= index %>');
+    
+            startDateInput.addEventListener('change', function () {
+            var startDate = startDateInput.value;
+            expiryDateInput.setAttribute('min', startDate);
+            });
+    
+            endDateInput.addEventListener('change', function () {
+            var endDate = endDateInput.value;
+            expiryDateInput.setAttribute('max', endDate);
+            });
+        </script>
+
+        <script>
+            
             $(document).ready(function () {
                 $("#editCouponForm<%= index %>").submit(async function (event) {
                     event.preventDefault();
@@ -317,7 +342,36 @@
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<allScripts>
 
+
+            <script>
+                var today = new Date().toISOString().split('T')[0];
+            
+                document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('startDate').setAttribute('min', today);
+                });
+        
+                var startDateInput = document.getElementById('startDate');
+                var endDateInput = document.getElementById('endDate');
+                var expiryDateInput = document.getElementById('expiryDate');
+        
+                startDateInput.addEventListener('change', function () {
+                var startDate = startDateInput.value;
+                expiryDateInput.setAttribute('min', startDate);
+                });
+        
+                endDateInput.addEventListener('change', function () {
+                var endDate = endDateInput.value;
+                expiryDateInput.setAttribute('max', endDate);
+                });
+            </script>
+            <script>
+                $().ready(function () {
+                    // validate signup form on keyup and submit
+                    $("#addCouponForm").validate();
+                });
+            </script>
             <script>
                 async function addCoupon() {
                     try {
@@ -369,7 +423,7 @@
 
 
 
+</allScripts>
 
 
 <%- include('../layouts/adminFooter.ejs') %>
-

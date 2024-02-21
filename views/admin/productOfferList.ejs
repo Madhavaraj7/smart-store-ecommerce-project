@@ -190,7 +190,26 @@
               </div>
           </div>
       </div>
+      <script>
+        var today = new Date().toISOString().split('T')[0];
 
+        document.addEventListener('DOMContentLoaded', function () {
+            let startDateElement = document.getElementById('startDate<%= index %>');
+            let endDateElement = document.getElementById('endDate<%= index %>');
+            startDateElement.setAttribute('min', today);
+            endDateElement.setAttribute('min', today);
+
+           startDateElement.addEventListener('change', function () {
+                let startDateValue = startDateElement.value;
+                endDateElement.setAttribute('min', startDateValue);
+            });
+
+            endDateElement.addEventListener('change', function () {
+                let endDateValue = endDateElement.value;
+                startDateElement.setAttribute('max', endDateValue);
+            });
+        });
+    </script>
  <!-- Edit Product Script- form validation  -->
  <script>
     $(document).ready(function () {
@@ -240,7 +259,27 @@
   <% }); %>
   
 
+  <script>
+    var today = new Date().toISOString().split('T')[0];
 
+    document.addEventListener('DOMContentLoaded', function () {
+        var startDateInput = document.getElementById('startDate');
+        var endDateInput = document.getElementById('endDate');
+
+        startDateInput.setAttribute('min', today);
+        endDateInput.setAttribute('min', today);
+
+        startDateInput.addEventListener('change', function () {
+            var startDate = startDateInput.value;
+            endDateInput.setAttribute('min', startDate);
+        });
+
+        endDateInput.addEventListener('change', function () {
+            var endDate = endDateInput.value;
+            startDateInput.setAttribute('max', endDate);
+        });
+    });
+</script>
 <script>
   $(document).ready(function () {
       $("#addProductOfferForm").validate({

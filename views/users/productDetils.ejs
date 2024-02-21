@@ -548,13 +548,23 @@
            
 
                 <div class="cart-actions">
-                    <div class="addto row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <!-- <button 
-                                    class="button btn-block btn-cart cart first" title="Add to Cart" type="button" onclick="addToCart()">Add
-                                to Cart
-                            </button> -->
-                            
+                  <div class="addto row">
+                      <% if (productQtyLimit.length === 0) { %>
+                          <!-- Handle the case where productQtyLimit has a length of 0 -->
+                      <% } else { %>
+                          <div class="col-lg-4 col-sm-4 col-xs-4">
+                              <div class="filterBox">
+                                  <label for="qty">Quantity</label>
+                                  <select id="productQuantity" class="form-control" name="productQuantity">
+                                      <span class="text-danger">Out of stock!</span>
+                                      <% productQtyLimit.forEach(function(item, index) { %>
+                                          <option value="<%= index + 1 %>"><%= item %></option>
+                                      <% }); %>
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                          
                             <a href="/cart/<%= currentProduct._id %>" class="button btn-block btn-cart cart first green-button" onclick="addToCart()"><span>add to cart</span></a>
                             <style>
                               .green-button {   
@@ -572,34 +582,25 @@
                                 }
                                  
                              </style>
-                            <!-- <script>
-                                function addToCart("<currentProduct._id %>") {
-                                  // Redirect to the cart.html page
-                                  window.location.href = '/cart';
-                                }
-                              </script> -->
-                            <!-- <li class="next pull-left"><a href="account.html"> ← Back to My Account</a></li> -->
 
-                        </div>
-                        
-                    </div>
-                    <br>
-                    <br>
-                    
-                    <div class="details-filter-row details-row-size">
-                      <label for="qty"> Qty:<%= currentProduct.productStock %></label>
-                      <div class="product-details-quantity">
-                          <!-- <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required> -->
-                      </div><!-- End .product-details-quantity -->
-                  </div><!-- End .details-filter-row -->
-                    <div style="clear:both"></div>
-                    <h3 class="incaps"><i class="fa fa fa-check-circle-o color-in"></i> In stock</h3>
-
-                    <h3 style="display:none" class="incaps"><i class="fa fa-minus-circle color-out"></i> Out of stock
-                    </h3>
-
-                    <h3 class="incaps"><i class="glyphicon glyphicon-lock"></i> Secure online ordering</h3>
-                </div>
+                          </div>
+                      <% } %>
+              
+                      <!-- The following section can be uncommented if needed -->
+                      <!-- <div id="wishlist" class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                          <a class="link-wishlist wishlist btn-block ">Add to Wishlist</a>
+                      </div> -->
+              
+                  </div>
+                  <div style="clear:both"></div>
+                  <% if (productQtyLimit.length === 0) { %>
+                      <h3 class="incaps"><i class="fa fa-minus-circle color-out"></i> Out of stock</h3>
+                  <% } else { %>
+                      <h3 class="incaps"><i class="fa fa fa-check-circle-o color-in"></i> In stock</h3>
+                      <h3 class="incaps"><i class="glyphicon glyphicon-lock"></i> Secure online ordering</h3>
+                  <% } %>
+              </div>
+              
                 <!--/.cart-actions-->
 
 

@@ -72,8 +72,11 @@
                     <th scope="col">Products</th>
                     <th scope="col">No. of Items</th>
                     <th scope="col">Total Cost</th>
+
                     <th scope="col">Payment Method</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">discount Cost</th>
+
                 </tr>
             </thead>
             
@@ -112,8 +115,15 @@
                             <%= sale.paymentType %>
                         </td>
                         <td>
-                            <%= sale.orderStatus %>
+                            <%= sale.orderDate %>
                         </td>
+                        
+                        <td>
+                            <%= sale.discountAmount %>
+                        </td>
+                        
+                        
+
                     </tr>
                     <% }) %>
             </tbody>

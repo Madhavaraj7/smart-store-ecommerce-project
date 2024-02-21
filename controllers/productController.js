@@ -7,7 +7,7 @@ const productlist= async (req, res) => {
     try {
 
         let page = Number(req.query.page) || 1;
-        let limit = 4;
+        let limit = 12;
         let skip = (page - 1) * limit;
     
         let   count = await productCollection.find().estimatedDocumentCount();

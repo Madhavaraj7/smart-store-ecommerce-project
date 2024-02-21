@@ -5,31 +5,60 @@ const productCollection = require("../models/productModel");
 
 module.exports={
     shopPage: async (req, res) => {
-        try {
-          let categoryData = await categoryCollection.find({isListed: true});
+      try {
+        let page = Number(req.query.page) || 1;
+        let limit = 8;
+        let skip = (page - 1) * limit;
+        let productData =
+          req.session?.shopProductData?.slice(skip, limit*page )
+           ||
+          (await productCollection
+            .find({ isListed: true })
+            .skip(skip)
+            .limit(limit));
     
-          let productsInOnePage = 3
-          let pageNo = req.query.pageNo ||  1
-          let skip= (pageNo-1) * productsInOnePage 
-          let limit= productsInOnePage
-          let productDataWithPagination= await productCollection.find({ isListed: true }).skip(skip).limit(limit)
-          
-          let productData =
-            req.session?.shopProductData || productDataWithPagination;
-            
-    
-          let totalPages=  Math.ceil(  await productCollection.countDocuments() / productsInOnePage )
-          console.log(totalPages);
-          let totalPagesArray = new Array(totalPages).fill(null)
-    
-          res.render("users/productlist", {  currentUser: req.session.currentUser, categoryData, productData, totalPagesArray ,_id: req.session.user_id ,});
-          req.session.shopProductData = null;
-          req.session.products = null;
-          req.session.save();
-        } catch (error) {
-          console.error(error);
+        if (req.session.user) {
+          cartData = await cartCollection
+            .find({ userId: req.session?.currentUser?._id })
+            .populate("productId");
+        } else {
+          cartData = [];
         }
-      },
+        let categoryData = await categoryCollection.find({ isListed: true });
+        // let productData = await productCollection
+        //   .find({ isListed: true })
+        //   .skip(skip)
+        //   .limit(limit)
+    
+        let count;
+        if (req.session && req.session.shopProductData) {
+          count = req.session.shopProductData.length;
+        } else {
+          count = await productCollection.countDocuments({ isListed: true });
+        }
+    
+        let totalPages = Math.ceil(count / limit);
+        let totalPagesArray = new Array(totalPages).fill(null);
+        res.render("users/productlist", {
+          categoryData,
+          productData,
+          currentUser: req.session.currentUser,
+          user: req.session.user,
+          count,
+          limit,
+          totalPagesArray,
+          currentPage: page,
+          selectedFilter: req.session.selectedFilter,
+          selectedFilter: req.session.selectedFilter,
+          cartData,
+        });
+    
+        console.log(req.session.currentUser);
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+        res.status(500).send("Internal Server Error");
+      }
+    },
 
 filterCategory: async (req, res) => {
         try {
@@ -59,7 +88,7 @@ filterCategory: async (req, res) => {
 },
 sortPriceAscending: async (req, res) => {
     try {
-      req.session.shopProductData = await productCollection
+      req.session?.shopProductData?.sort( (a,b)=>b.productPrice-a.productPrice  ) || await productCollection
         .find({ isListed: true })
         .sort({ productPrice: 1 });
       res.json({ success: true });
@@ -69,7 +98,7 @@ sortPriceAscending: async (req, res) => {
   },
   sortPriceDescending: async (req, res) => {
     try {
-      req.session.shopProductData = await productCollection
+      req.session?.shopProductData?.sort( (a,b)=>a.productPrice-b.productPrice  ) || await productCollection
         .find({ isListed: true })
         .sort({ productPrice: -1 });
       res.json({ success: true });

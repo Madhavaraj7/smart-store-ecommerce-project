@@ -204,7 +204,7 @@
                     </div>
                 </div> -->
                 <div class="row categoryProduct xsResponse clearfix" style="width: 80rem; padding-left: 20px; flex-wrap: wrap; " >
-                    <% productData.forEach((product, i)=> { %>
+                    <% productData.reverse().forEach((product, i)=> { %>
                         <div class="item col-sm-4 col-lg-4 col-md-4 col-xs-6 grid-view" >
                             <div class="product">
                                 <a href="/cart/<%= product._id %>" class="add-fav tooltipHere"

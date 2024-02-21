@@ -13,7 +13,7 @@ const orderManagement = async (req, res) => {
   
       let count = await orderCollection.find().estimatedDocumentCount();
       let orderData = await orderCollection
-        .find()
+        .find().sort({orderNumber: -1})
         .populate("userId").skip(skip).limit(limit);
        
       console.log(orderData[0]);
@@ -68,7 +68,7 @@ const changeStatusReturn = async (req, res) => {
     try {
       await orderCollection.findOneAndUpdate(
         { _id: req.params.id },
-        { $set: { orderStatus: "Return" } }
+        { $set: { orderStatus: "Retrun" } }
       );
       res.redirect("/admin/orderManagement");
     } catch (error) {

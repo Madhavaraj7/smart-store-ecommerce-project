@@ -82,13 +82,13 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input name="productPrice" type="text" class="form-control"
-                                value="<%= productData.productPrice %>">
+                            <input name="productPrice" type="number" class="form-control"
+                                value="<%= productData.productPrice %>" min="100" required>
                         </div>
 
                         <div class="input-group mb-3">
-                            <input name="productStock" type="text" class="form-control"
-                                value="<%= productData.productStock %>">
+                            <input name="productStock" type="number" class="form-control"
+                                value="<%= productData.productStock %>" min="0" required>
                         </div>
 
 
@@ -97,7 +97,7 @@
                             <div class="form-group">
                                 <label for="Category">Category</label>
 
-                                <select class="form-control p_input" name="category" placeholder="category" >
+                                <select class="form-control p_input" name="categories" placeholder="category" >
                                     <% categories.forEach((value)=>{ %>
                                         <option value="<%=value.categoryName  %>">
                                             <%= value.categoryName %>

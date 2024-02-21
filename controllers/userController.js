@@ -4,6 +4,9 @@ const userdata = require("../models/userModel");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const randomstring = require("randomstring");
+const cartCollection = require("../models/cartModel.js");
+
+const applyReferralOffer= require('../service/applyReferralOffer.js');
 
 const productCollection = require("../models/productModel.js");
 const categoryCollection = require("../models/categoryModel.js");
@@ -32,9 +35,12 @@ const userSignup = async (req, res) => {
   try {
     req.session.emailExcisting;
     res.render("users/userSignup", {
+
       error: null,
       emailExcisting: req.session.emailExcisting,
     });
+    req.session.tempUserReferralCode= req.query?.referralCode
+
     req.session.emailExcisting = false;
     req.session.save();
   } catch (error) {
@@ -59,6 +65,10 @@ const signedUp = async (req, res) => {
     const emailExcisting = await userdata.findOne({ email: req.body.email });
 
     console.log(`emailExcisting \n${emailExcisting}`);
+
+    
+    let referralCode= Math.floor(1000 + Math.random() * 9000);
+
     if (!emailExcisting) {
       const pass = await bcrypt.hash(req.body.password, 10);
       console.log(pass);
@@ -68,6 +78,7 @@ const signedUp = async (req, res) => {
         phonenumber: req.body.phonenumber,
         email: req.body.email,
         password: pass,
+        referralCode,
       };
 
       req.session.userData = userData;
@@ -162,7 +173,6 @@ const verifyLogin = async (req, res) => {
     const password = req.body.password;
 
     const userData = await userdata.findOne({ email: email, isBlocked: false });
-    // const user = await userdata.findOne({ email: email });
 
     if (!userData) {
       req.session.userNotFound = true;
@@ -348,11 +358,25 @@ const userLogout = async (req, res) => {
 const productDetils = async (req, res) => {
   try {
     const currentProduct = await productCollection.findOne({_id: req.params.id,}).populate("parentCategory");
+    var cartProductQuantity=0
+    if(req.session?.currentUser?._id){
+      const cartProduct = await cartCollection.findOne({ userId: req.session.currentUser._id, productId: req.params.id })
+      if(cartProduct){
+        var cartProductQuantity= cartProduct.productQuantity
+      }
+    } 
+    let productQtyLimit= [],i=0
+      while(i<(currentProduct.productStock - cartProductQuantity )){
+        productQtyLimit.push(i+1)
+        i++
+      }
     console.log(currentProduct);
     res.render("users/productDetils.ejs", {
       _id: req.body.user_id,
       user: req.session.user,
       currentProduct,
+      productQtyLimit,
+
     });
   } catch (error) {}
 };
@@ -385,7 +409,7 @@ module.exports = {
   postVerifyOtp: async (req, res) => {
     console.log(req.session.userData);
 
-    const { name, email, phonenumber, password } = req.session.userData;
+    const { name, email, phonenumber, password, referralCode } = req.session.userData;
     const otp = req.body.OTP;
 
     console.log(otp);
@@ -393,7 +417,7 @@ module.exports = {
     if (otp == req.session.otp) {
       console.log("otp verified");
 
-      const user = new userdata({ name, email, phonenumber, password });
+      const user = new userdata({ name, email, phonenumber, password,referralCode });
       console.log(user);
       req.session.userIsThere = {
         isAlive: true,
@@ -403,6 +427,12 @@ module.exports = {
       await user.save();
      
       const userDetail = await userdata.findOne({email:user.email})
+
+
+       let tempUserReferralCode=  req.session?.tempUserReferralCode
+       if(tempUserReferralCode){
+         await applyReferralOffer(tempUserReferralCode)
+       }
     
       await walletCollection.create({userId : userDetail._id })
       res.redirect("/home");

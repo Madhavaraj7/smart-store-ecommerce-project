@@ -85,64 +85,64 @@ adminRoute.get("/deleteProduct/:id", isAdmin, productController.deleteProduct);
 
 // -------------------------------------------------------ORDER MANAGEMENT------------------------------------------------------------------------------
 
-adminRoute.get("/orderManagement", orderController.orderManagement);
+adminRoute.get("/orderManagement",isAdmin, orderController.orderManagement);
 adminRoute.get(
-  "/orderManagement/pending/:id",
+  "/orderManagement/pending/:id",isAdmin,
   orderController.changeStatusPending
 );
 adminRoute.get(
-  "/orderManagement/shipped/:id",
+  "/orderManagement/shipped/:id",isAdmin,
   orderController.changeStatusShipped
 );
 adminRoute.get(
-  "/orderManagement/delivered/:id",
+  "/orderManagement/delivered/:id",isAdmin,
   orderController.changeStatusDelivered
 );
 adminRoute.get(
-  "/orderManagement/return/:id",
+  "/orderManagement/return/:id",isAdmin,
   orderController.changeStatusReturn
 );
 adminRoute.get(
-  "/orderManagement/cancelled/:id",
+  "/orderManagement/cancelled/:id",isAdmin,
   orderController.changeStatusCancelled
 );
 adminRoute.get(
-  "/orderManagement/cancelled/:id",
+  "/orderManagement/cancelled/:id",isAdmin,
   orderController.changeStatusCancelled
 );
 adminRoute.get(
-  "/orderManagement/orderStatus/:id",
+  "/orderManagement/orderStatus/:id",isAdmin,
   orderController.orderStatusPage
 );
 
 // -------------------------------------------------------SALES REPORT------------------------------------------------------------------------------
 
-adminRoute.get("/salesReport", salesReportController.salesReport);
-adminRoute.post("/salesReport/filter", salesReportController.salesReportFilter);
+adminRoute.get("/salesReport", isAdmin,salesReportController.salesReport);
+adminRoute.post("/salesReport/filter", isAdmin,salesReportController.salesReportFilter);
 adminRoute.get(
-  "/salesReport/download/xlsx",
+  "/salesReport/download/xlsx",isAdmin,
   salesReportController.salesReportDownload
 );
 
 // -------------------------------------------------------Coupon Managementt------------------------------------------------------------------------------
 
-adminRoute.get("/couponManagement", couponController.couponManagement);
-adminRoute.post("/couponManagement/addCoupon", couponController.addCoupon);
-adminRoute.put("/couponManagement/editCoupon/:id", couponController.editCoupon);
+adminRoute.get("/couponManagement", isAdmin,couponController.couponManagement);
+adminRoute.post("/couponManagement/addCoupon", isAdmin,couponController.addCoupon);
+adminRoute.put("/couponManagement/editCoupon/:id", isAdmin,couponController.editCoupon);
 
 
 // -------------------------------------------------------product Offer Managementt------------------------------------------------------------------------------
 
-adminRoute.get("/productOfferManagement", offerController.productOfferManagement);
-adminRoute.post("/productOfferManagement/addOffer",offerController.addOffer);
-adminRoute.put("/productOfferManagement/editOffer/:id", offerController.editOffer);
+adminRoute.get("/productOfferManagement", isAdmin,offerController.productOfferManagement);
+adminRoute.post("/productOfferManagement/addOffer",isAdmin,offerController.addOffer);
+adminRoute.put("/productOfferManagement/editOffer/:id", isAdmin,offerController.editOffer);
 
 // -------------------------------------------------------Category offer Managementt------------------------------------------------------------------------------
 
-adminRoute.get("/category-offer-list", offerController.getCategoryOffer);
-adminRoute.post("/add-category-offer", offerController.addCategoryOffer);
-adminRoute.put("/edit-category-offer", offerController.editCategoryOffer);
-adminRoute.get("/categoryoffer-status/:id", offerController.editCategoryOfferStatus);
+adminRoute.get("/category-offer-list", isAdmin,offerController.getCategoryOffer);
+adminRoute.post("/add-category-offer", isAdmin,offerController.addCategoryOffer);
+adminRoute.put("/edit-category-offer", isAdmin,offerController.editCategoryOffer);
+adminRoute.get("/categoryoffer-status/:id", isAdmin,offerController.editCategoryOfferStatus);
 
 
 

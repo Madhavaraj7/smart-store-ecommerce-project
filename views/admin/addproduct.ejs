@@ -1,353 +1,282 @@
 <%- include('../layouts/adminHeader.ejs') %>
 
-
 <main class="main-wrap">
-    <header class="main-header navbar">
-        <div class="col-search">
-            <form class="searchform">
-                <div class="input-group">
-                    <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                    <button class="btn btn-light bg" type="button"> <i
-                            class="material-icons md-search"></i></button>
-                </div>
-                <datalist id="search_terms">
-                    <option value="Products">
-                    <option value="New orders">
-                    <option value="Apple iphone">
-                    <option value="Ahmed Hassan">
-                </datalist>
-            </form>
+  <header class="main-header navbar">
+    <div class="col-search">
+      <form class="searchform">
+        <div class="input-group">
+          <input
+            list="search_terms"
+            type="text"
+            class="form-control"
+            placeholder="Search term"
+          />
+          <button class="btn btn-light bg" type="button">
+            <i class="material-icons md-search"></i>
+          </button>
         </div>
-        <div>
-            <a href="/admin" class="btn btn-primary">Logout</a>
+        <datalist id="search_terms">
+          <option value="Products"></option>
+          <option value="New orders"></option>
+          <option value="Apple iphone"></option>
+          <option value="Ahmed Hassan"></option>
+        </datalist>
+      </form>
+    </div>
+    <div>
+      <a href="/admin" class="btn btn-primary">Logout</a>
+    </div>
+  </header>
+  <section class="content-main">
+    <div class="row">
+      <div class="col-9">
+        <div class="content-header">
+          <h2 class="content-title">Add New Product</h2>
+          <div>
+            <button
+              class="btn btn-light rounded font-sm mr-5 text-body hover-up"
+            >
+              Save to draft
+            </button>
+            <button class="btn btn-md rounded font-sm hover-up">Publich</button>
           </div>
-    </header>
-    <section class="content-main">
-        <div class="row">
-            <div class="col-9">
-                <div class="content-header">
-                    <h2 class="content-title">Add New Product</h2>
-                    <div>
-                        <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">
-                            Save to draft
-                        </button>
-                        <button class="btn btn-md rounded font-sm hover-up">Publich</button>
-                    </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>Basic</h4>
+          </div>
+          <div class="card-body">
+            <form
+              action="/admin/addproduct"
+              method="POST"
+              enctype="multipart/form-data"
+            >
+              <div class="modal-body">
+                <div class="input-group mb-3">
+                  <input
+                    name="productName"
+                    id="productName"
+                    type="name"
+                    class="form-control"
+                    placeholder="Product Name"
+                    required
+                  />
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h4>Basic</h4>
+
+                <div class="input-group mb-3">
+                  <label class="container">
+                    <span>Select Parent Category</span>
+                    <select
+                      name="parentCategory"
+                      class="form-select"
+                      aria-label="Default select example"
+                    >
+                      <% categories.forEach((value)=>{ %>
+                      <option value="<%=value._id%>">
+                        <%= value.categoryName %>
+                      </option>
+                      <% }) %>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="mb-3">
+                    <div id="imageDiv" class="d-flex flex-wrap gap-5"></div>
+                    <div>
+                      <label for="image" class="form-label">Image</label>
+                      <input
+                        type="file"
+                        class="form-control"
+                        id="image"
+                        name="images"
+                        accept="image/*"
+                        multiple
+                        onchange="loadFile(event)"
+                        required
+                      />
                     </div>
-                    <div class="card-body">
-                        <form action="/admin/addproduct" method="POST" enctype="multipart/form-data">
-                            <div class="modal-body">
-                                <div class="input-group mb-3">
-                                    <input name="productName" id="productName" type="name" class="form-control"
-                                        placeholder="Product Name" required />
-                                </div>
+                    <!-- Close button -->
+                    <button type="button" style="width: fit-content; display: none;" id="cls-btn" class="btn btn-danger mt-2" onclick="clearImageInput()">Clear images</button>
+                  </div>
+                 
+                  
 
-                                <div class="input-group mb-3">
-                                    <label class="container">
-                                        <span>Select Parent Category</span>
-                                        <select name="parentCategory" class="form-select"
-                                            aria-label="Default select example">
-                                            <% categories.forEach((value)=>{ %>
-                                                <option value="<%=value._id%>">
-                                                    <%= value.categoryName %>
-                                                </option>
-                                                <% }) %>
-                                        </select>
-                                    </label>
-                                </div>
+                <div class="input-group mb-3">
+                  <input
+                    name="productPrice"
+                    type="number"
+                    class="form-control"
+                    placeholder="Product Price"
+                    min="100"
+                    required
+                  />
+                </div>
+                <div class="input-group mb-3">
+                  <input
+                    name="productStock"
+                    type="number"
+                    class="form-control"
+                    placeholder="Product Stock"
+                    min="0"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button type="submit" id="cropButton" class="btn btn-info">Save changes</button>
+              </div>
+            </form>
 
-                                <div id="img-container" class="input-group mb-3">
-                                    <img id="preview1" src="" style="width: 500px; height: 500px; display: none"
-                                        alt="Img" />
-                                    <img id="croppedImg1" src="" style="width: 500px; height: 500px; display: none"
-                                        alt="Img" />
-                                    <div class="input-group mb-3">
-                                        <input id="input-img1" name="productImage1" type="file" class="form-control"
-                                            placeholder="Product Image1" accept="image/*" onchange="displayImage1(event)" required />
-                                    </div>
-                                </div>
-
-                                <div class="input-group mb-3">
-                                    <img id="preview2" src="" style="width: 500px; height: 500px; display: none"
-                                        alt="Img" />
-                                    <img id="croppedImg2" src="" style="width: 500px; height: 500px; display: none"
-                                        alt="Img" />
-                                    <div class="input-group mb-3">
-                                        <input id="input-img2" name="productImage2" type="file"
-                                            class="form-control" placeholder="Product Image2" accept="image/*"
-                                            onchange="displayImage2(event)" required />
-                                    </div>
-                                </div>
-
-                                <div class="input-group mb-3">
-                                    <img id="preview3" src="" style="width: 500px; height: 500px; display: none"
-                                    alt="Img" />
-                                <img id="croppedImg3" src="" style="width: 500px; height: 500px; display: none"
-                                    alt="Img" />
-                                    <div class="input-group mb-3">
-                                        <input id="input-img3" name="productImage3" type="file"
-                                            class="form-control" placeholder="Product Image3" accept="image/*"
-                                            onchange="displayImage3(event)" required />
-                                    </div>
-                                </div>
-
-                                <div class="input-group mb-3">
-                                    <input name="productPrice" type="tel" class="form-control"
-                                        placeholder="Product Price" required />
-                                </div>
-                                <div class="input-group mb-3">
-                                    <input name="productStock" type="tel" class="form-control"
-                                        placeholder="Product Stock" required />
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                    Close
-                                </button>
-                                <button type="submit" class="btn btn-info">Save changes</button>
-                            </div>
-                        </form>
-
-                        <!-- 
+            <!-- 
                         <div>
                             <input type="file" class="form-control" id="input-img" aria-describedby="emailHelp"
                                 name="image" accept="image/*" required onchange="displayImage1(event)" />
                         </div>
 -->
-                    </div>
-                </div>
-                <!-- card end// -->
-            </div>
+          </div>
         </div>
-    </section>
-    <!-- content-main end// -->
-  
+        <!-- card end// -->
+      </div>
+    </div>
+  </section>
+  <!-- content-main end// -->
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css"
-        integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css"
+    integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"
-        integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"
+    integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
 
-    <!-- <script>
-        function displayImage1(event) {
-            let image = document.getElementById("preview1");
-            let croppedImg = document.getElementById("croppedImg1");
-            let inputImg = document.getElementById("input-img1");
-            image.src = null;
-            croppedImg.src = "";
+  <script>
+    let crop = [];
+    function loadFile(event) {
+      let imageDiv = document.getElementById("imageDiv");
+      imageDiv.innerHTML = "";
 
-            const file = event.target.files[0];
+      const maxImages = 4;
+      const files = event.target.files;
+      if (files.length > maxImages) {
+        alert(`Please select only up to ${maxImages} images.`);
+        document.getElementById("image").value = ""; // Clear the file input
+        return;
+      }
 
-            console.log("start");
-            console.log(file);
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
 
-            if (file) {
-                image.src = URL.createObjectURL(file);
-                console.log("second");
+        const reader = new FileReader();
 
-                let cropper = new Cropper(image, {
-                    aspectRatio: 5 / 4,
-                    autoCrop: false,
-                });
-                // document.getElementById("img-container").style.height = "200px"
+        reader.onload = (e) => {
+          // Create an image element and set its source to the selected file
+          const div = document.createElement("div");
+          div.style.height = "300px";
+          div.style.width = "300px";
+          const img = new Image();
+          img.src = e.target.result;
+          img.style.margin = "30px";
 
-                document.getElementById("cropButton").addEventListener(
-                    "click",
-                    function () {
-                        // Get the cropped canvas data
-                        const canvas = cropper.getCroppedCanvas();
+          // Append the image to the container
+          div.appendChild(img);
+          imageDiv.appendChild(div);
 
-                        // Set the source of the cropped image
-                        croppedImg.src = canvas.toDataURL("image/png");
+          // Initialize Cropper.js on the image
+          const cropper = new Cropper(img, {
+            aspectRatio: 3.5 / 4, // Set the aspect ratio as needed
+            viewMode: 1, // Set the view mode as needed
+          });
 
-                        canvas.toBlob(function (blob) {
-                            const file = new File([blob], "croppedImg.png", {
-                                type: "image/png",
-                            });
+          // Store the cropper instance in the croppers array
+          crop.push(cropper);
+        };
 
-                            const formData = new FormData();
-                            formData.append("image", file);
+        reader.readAsDataURL(file);
+      }
+      // document.getElementById("img-container").style.height = "200px"
 
-                            fetch("/addproduct", {
-                                method: "POST",
-                                body: formData,
-                            })
-                                .then((response) => response.json())
-                                .then((data) => {
-                                    // Check if the upload was successful
-                                    if (data.success) {
-                                        // Optionally, you can handle success here
-                                        window.location.href = "/products"; // Change this URL
-                                    } else {
-                                        // Handle the case where upload was not successful
-                                        console.error("Upload failed:", data.error);
-                                    }
-                                })
-                                .catch((error) => {
-                                    console.error("Error:", error);
-                                });
-                        });
+      document.getElementById("cropButton").addEventListener(
+        "click",
+        function () {
+          // Get the cropped canvas data
+          const canvas = cropper.getCroppedCanvas();
 
-                        cropper.destroy();
-                        // image.style.display = "none";
-                    },
-                    "image/png"
-                );
-            }
-        }
+          // Set the source of the cropped image
+          croppedImg.src = canvas.toDataURL("image/png");
 
-        function displayImage2(event) {
-            let image = document.getElementById("preview2");
-            let croppedImg = document.getElementById("croppedImg2");
-            let inputImg = document.getElementById("input-img3");
-            image.src = null;
-            croppedImg.src = "";
+          canvas.toBlob(function (blob) {
+            const file = new File([blob], "croppedImg.png", {
+              type: "image/png",
+            });
 
-            const file = event.target.files[0];
+            const formData = new FormData();
+            formData.append("image", file);
 
-            console.log("start");
-            console.log(file);
+            fetch("/addproduct", {
+              method: "POST",
+              body: formData,
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                // Check if the upload was successful
+                if (data.success) {
+                  // Optionally, you can handle success here
+                  window.location.href = "/products"; // Change this URL
+                } else {
+                  // Handle the case where upload was not successful
+                  console.error("Upload failed:", data.error);
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          });
 
-            if (file) {
-                image.src = URL.createObjectURL(file);
-                console.log("second");
+          cropper.destroy();
+          // image.style.display = "none";
+        },
+        "image/png"
+      );
+      document.getElementById("cls-btn").style.display="block"
+    }
+  </script>
 
-                let cropper = new Cropper(image, {
-                    aspectRatio: 5 / 4,
-                    autoCrop: false,
-                });
-                // document.getElementById("img-container").style.height = "200px"
+<script>
+    function clearImageInput() {
+      // Reset the value of the input file element
+      document.getElementById('image').value = '';
+      // Optionally, clear any displayed images
+      document.getElementById('imageDiv').innerHTML = '';
+      document.getElementById("cls-btn").style.display="none"
+     
 
-                document.getElementById("cropButton").addEventListener(
-                    "click",
-                    function () {
-                        // Get the cropped canvas data
-                        const canvas = cropper.getCroppedCanvas();
+    }
+  </script>
 
-                        // Set the source of the cropped image
-                        croppedImg.src = canvas.toDataURL("image/png");
-
-                        canvas.toBlob(function (blob) {
-                            const file = new File([blob], "croppedImg.png", {
-                                type: "image/png",
-                            });
-
-                            const formData = new FormData();
-                            formData.append("image", file);
-
-                            fetch("/addproduct", {
-                                method: "POST",
-                                body: formData,
-                            })
-                                .then((response) => response.json())
-                                .then((data) => {
-                                    // Check if the upload was successful
-                                    if (data.success) {
-                                        // Optionally, you can handle success here
-                                        window.location.href = "/products"; // Change this URL
-                                    } else {
-                                        // Handle the case where upload was not successful
-                                        console.error("Upload failed:", data.error);
-                                    }
-                                })
-                                .catch((error) => {
-                                    console.error("Error:", error);
-                                });
-                        });
-
-                        cropper.destroy();
-                        // image.style.display = "none";
-                    },
-                    "image/png"
-                );
-            }
-        }
-
-        function displayImage3(event) {
-            let image = document.getElementById("preview3");
-            let croppedImg = document.getElementById("croppedImg3");
-            let inputImg = document.getElementById("input-img3");
-            image.src = null;
-            croppedImg.src = "";
-
-            const file = event.target.files[0];
-
-            console.log("start");
-            console.log(file);
-
-            if (file) {
-                image.src = URL.createObjectURL(file);
-                console.log("second");
-
-                let cropper = new Cropper(image, {
-                    aspectRatio: 5 / 4,
-                    autoCrop: false,
-                });
-                // document.getElementById("img-container").style.height = "200px"
-
-                document.getElementById("cropButton").addEventListener(
-                    "click",
-                    function () {
-                        // Get the cropped canvas data
-                        const canvas = cropper.getCroppedCanvas();
-
-                        // Set the source of the cropped image
-                        croppedImg.src = canvas.toDataURL("image/png");
-
-                        canvas.toBlob(function (blob) {
-                            const file = new File([blob], "croppedImg.png", {
-                                type: "image/png",
-                            });
-
-                            const formData = new FormData();
-                            formData.append("image", file);
-
-                            fetch("/addproduct", {
-                                method: "POST",
-                                body: formData,
-                            })
-                                .then((response) => response.json())
-                                .then((data) => {
-                                    // Check if the upload was successful
-                                    if (data.success) {
-                                        // Optionally, you can handle success here
-                                        window.location.href = "/products"; // Change this URL
-                                    } else {
-                                        // Handle the case where upload was not successful
-                                        console.error("Upload failed:", data.error);
-                                    }
-                                })
-                                .catch((error) => {
-                                    console.error("Error:", error);
-                                });
-                        });
-
-                        cropper.destroy();
-                        // image.style.display = "none";
-                    },
-                    "image/png"
-                );
-            }
-        }
-    </script> -->
-
-    <!-- <script>
+  <!-- <script>
         $(document).ready(function () {
             $('#example').DataTable();
         });
     </script> -->
 
-    <!-- {{!-- onchange image display --}} -->
-    <!-- <script>
+  <!-- {{!-- onchange image display --}} -->
+  <!-- <script>
         function displayImage1() {
             const reader = new FileReader()
             reader.onload = () => {
@@ -383,4 +312,5 @@
         }
     </script> -->
 
-<%- include('../layouts/adminFooter.ejs') %>
+  <%- include('../layouts/adminFooter.ejs') %>
+</main>
