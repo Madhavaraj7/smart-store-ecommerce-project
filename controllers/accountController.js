@@ -5,9 +5,7 @@ const orderCollection = require("../models/orderModel");
 const formatDate = require("../service/formatDateHelper");
 const walletCollection = require("../models/walletModel.js");
 
-
-
-
+const razorpay = require("../service/razorpay.js");
 
 module.exports = {
   //account
@@ -18,12 +16,10 @@ module.exports = {
       });
       let walletData = await walletCollection.findOne({
         userId: req.session.currentUser._id,
-        
       });
-      console.log(walletData);
 
       //sending the formatted date to the page
-      if (walletData?.walletTransaction.length>0) {
+      if (walletData?.walletTransaction.length > 0) {
         walletData.walletTransaction = walletData.walletTransaction
           .map((v) => {
             v.transactionDateFormatted = formatDate(v.transactionDate);
@@ -87,7 +83,6 @@ module.exports = {
     }
   },
 
-
   editAddress: async (req, res) => {
     try {
       const existingAddress = await addressCollection.findOne({
@@ -132,23 +127,21 @@ module.exports = {
 
   changePassword: async (req, res) => {
     try {
-      
       res.render("users/changePassword", {
         invalidCurrentPassword: req.session.invalidCurrentPassword,
-
       });
     } catch (error) {
       console.error(error);
     }
   },
 
-  changePasswordPatch :async (req, res) => {
+  changePasswordPatch: async (req, res) => {
     try {
       console.log(req.body.password);
       console.log(req.session.user);
-  
+
       await userCollection.updateOne(
-        {    user_id : req.body.user_id},
+        { user_id: req.body.user_id },
         { $set: { password: req.body.password } }
       );
       console.log("1234567");
@@ -184,10 +177,13 @@ module.exports = {
         .findOne({ _id: req.params.id })
         .populate("addressChosen");
       let isCancelled = orderData.orderStatus == "Cancelled";
+      let isReturn = orderData.orderStatus == "Retrun";
+
       res.render("users/orderStatus", {
         currentUser: req.session.currentUser,
         orderData,
         isCancelled,
+        isReturn,
       });
     } catch (error) {
       console.error(error);
@@ -195,11 +191,46 @@ module.exports = {
   },
   cancelOrder: async (req, res) => {
     try {
+      const { cancelReason } = req.body;
+      console.log("hhhhhh", cancelReason);
+
       const orderData = await orderCollection.findOne({ _id: req.params.id });
 
       await orderCollection.findByIdAndUpdate(
         { _id: req.params.id },
-        { $set: { orderStatus: "Cancelled" } }
+        { $set: { orderStatus: "Cancelled", cancelReason } }
+      );
+
+      let walletTransaction = {
+        transactionDate: new Date(),
+        transactionAmount: orderData.grandTotalCost,
+        transactionType: "Refund from cancelled Order",
+      };
+
+      await walletCollection.findOneAndUpdate(
+        { userId: req.session.currentUser._id },
+        {
+          $inc: { walletBalance: orderData.grandTotalCost },
+          $push: { walletTransaction },
+        }
+      );
+
+      res.json({ success: true });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, error: "Internal server error" });
+    }
+  },
+
+  returnRequest: async (req, res) => {
+    try {
+      const { ReturnReason } = req.body;
+
+      const orderData = await orderCollection.findOne({ _id: req.params.id });
+
+      await orderCollection.findByIdAndUpdate(
+        { _id: req.params.id },
+        { $set: { orderStatus: "Retrun", ReturnReason } }
       );
 
       let walletTransaction = {
@@ -222,33 +253,59 @@ module.exports = {
     }
   },
 
+  razorpayCreateWallet: async (req, res) => {
+    const { amount } = req.body;
+    req.session.walletCredit= amount
 
-returnRequest: async(req, res) => {
-  try {
-    const orderData = await orderCollection.findOne({ _id: req.params.id });
-
-    await orderCollection.findByIdAndUpdate(
-      { _id: req.params.id },
-      { $set: { orderStatus: "Retrun" } }
-    );
-
-    let walletTransaction = {
-      transactionDate: new Date(),
-      transactionAmount: orderData.grandTotalCost,
-      transactionType: "Refund from cancelled Order",
+    console.log('wallet amount:'+amount);
+    if (!amount) {
+      return res.status(400).json({ error: "Wallet amount is required" });
+    }
+    const options = {
+      amount: amount  + "00",
+      currency: "INR",
     };
+    console.log("options:");
+    console.log(options);
+    razorpay.instance.orders.create(options, function (err, order) {
+      res.json(order);
+    });
+  },
 
-    await walletCollection.findOneAndUpdate(
-      { userId: req.session.currentUser._id },
-      {
-        $inc: { walletBalance: orderData.grandTotalCost },
-        $push: { walletTransaction },
+
+  addRazorpayAmountToWallet: async (req, res) => {
+    try {
+      console.log('req.body:');
+      console.log(req.body);
+      
+      const userWallet = await walletCollection.findOne({ userId: req.session.currentUser._id });
+      if (!userWallet) {
+        return res.status(404).json({ error: "User wallet not found" });
       }
-    );
+  
+      const newWalletBalance = userWallet.walletBalance + Number( req.session.walletCredit);
 
-    res.json({ success: true });
-  } catch (error) {
-    console.error(error);
-  }
-}
+      console.log(newWalletBalance);
+
+      const walletTransaction = {
+        transactionDate: new Date(),
+        transactionAmount: req.session.walletCredit,
+        transactionType: "Add from Razorpay payment",
+      };
+  
+      await walletCollection.findOneAndUpdate(
+        { userId: req.session.currentUser._id },
+        {
+          $set: { walletBalance: newWalletBalance },
+          $push: { walletTransaction },
+        }
+      );
+      res.redirect("/account");
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+  
+
 }

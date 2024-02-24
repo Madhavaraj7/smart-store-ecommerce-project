@@ -132,6 +132,10 @@ userRoute.get('/account/orderList', auth.isLogin,blockedUserCheck, accountContro
 userRoute.get('/account/orderList/orderStatus/:id',auth.isLogin, blockedUserCheck, accountController.orderStatus)
 userRoute.put('/account/orderList/orderStatus/cancelOrder/:id',auth.isLogin, blockedUserCheck,accountController.cancelOrder )
 userRoute.put('/account/orderList/orderStatus/returnorder/:id', accountController.returnRequest)
+userRoute.post('/account/razorpay/create/orderId', blockedUserCheck, accountController.razorpayCreateWallet)
+userRoute.post('/account/razoropay/end', blockedUserCheck, accountController.addRazorpayAmountToWallet);
+
+
 
 
 

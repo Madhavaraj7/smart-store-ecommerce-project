@@ -140,7 +140,6 @@
                     <th scope="col" class="text-center">Minimum Purchase</th>
                     <th scope="col" class="text-center">Maximum Discount</th>
                     <th scope="col" class="text-center">Current Status</th>
-                    <th scope="col" class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -165,7 +164,6 @@
                         </td>
                         <td class="text-center">₹ <%= coupon.maximumDiscount %>
                         </td>
-                        <td class="text-center"></td>
                         <td class="text-center">
                             <button type="button" class="btn btn-info" data-bs-toggle="modal"
                                 data-bs-target="#editModal<%= index %>">Edit
@@ -199,7 +197,7 @@
                                 <label for="couponCodeEdit<%= index %>" class="mb-2">Coupon Code: </label>
                                 <div class="input-group">
                                     <input id="couponCodeEdit<%= index %>" name="couponCode" type="text"
-                                        class="form-control" value="<%= coupon.couponCode %>" required minlength="5"
+                                        class="form-control" value="<%= coupon.couponCode %>" required  minlength="5"
                                         maxlength="16">
                                 </div>
                                 <div class="form-text">Add a relevant coupon code e.g.: NEWYEAR2024, PONGAL2024, VYZ548
@@ -268,24 +266,34 @@
        
 
         <script>
-            var today = new Date().toISOString().split('T')[0];
-        
             document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('startDate').setAttribute('min', today);
+                // Get today's date
+                var today = new Date().toISOString().split('T')[0];
+                // Set the minimum value for start date input
+                document.getElementById('startDateEdit<%= index %>').setAttribute('min', today);
             });
-    
-            var startDateInput = document.getElementById('startDate<%= index %>');
-            var endDateInput = document.getElementById('endDate<%= index %>');
-            var expiryDateInput = document.getElementById('expiryDate<%= index %>');
-    
-            startDateInput.addEventListener('change', function () {
-            var startDate = startDateInput.value;
-            expiryDateInput.setAttribute('min', startDate);
+        
+            // Function to validate dates
+            function validateDates(index) {
+                var startDate = document.getElementById('startDateEdit<%= index %>').value;
+                var expiryDate = document.getElementById('expiryDateEdit<%= index %>').value;
+        
+                // Disable the submit button if expiry date is before start date
+                if (expiryDate < startDate) {
+                    document.getElementById('submitBtn<%= index %>').disabled = true;
+                    alert('Expiry date must be after start date.');
+                } else {
+                    document.getElementById('submitBtn<%= index %>').disabled = false;
+                }
+            }
+        
+            // Event listeners for date inputs
+            document.getElementById('startDateEdit<%= index %>').addEventListener('change', function () {
+                validateDates("<%= index %>");
             });
-    
-            endDateInput.addEventListener('change', function () {
-            var endDate = endDateInput.value;
-            expiryDateInput.setAttribute('max', endDate);
+        
+            document.getElementById('expiryDateEdit<%= index %>').addEventListener('change', function () {
+                validateDates("<%= index %>");
             });
         </script>
 

@@ -6,7 +6,8 @@ const couponSchema= new mongoose.Schema({
     startDate: { type: Date, required: true, default: new Date().toLocaleString() },
     expiryDate: { type: Date, required: true },
     minimumPurchase: { type: Number, required: true },
-    maximumDiscount: { type: Number, required: true }
+    maximumDiscount: { type: Number, required: true },
+
 })
 
 const couponCollection= mongoose.model('coupons', couponSchema )

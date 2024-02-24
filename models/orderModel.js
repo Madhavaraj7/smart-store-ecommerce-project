@@ -10,15 +10,14 @@ const orderSchema= new mongoose.Schema({
     cartData: { type: Array},
     grandTotalCost: { type: Number},
     paymentId: {type: String,},
-    coupon: {
-		type: mongoose.Schema.ObjectId,
-		ref: 'coupons',
-	},
-    discountAmount: {
-		type: mongoose.Schema.ObjectId,
-        ref:'products'
-	},
-
+    totalOrders: { type: Number, default: 0 },
+    totalDiscount: { type: Number, default: 0 },
+    totalCouponDeduction: { type: Number, default: 0 },
+    
+    productOffers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'productOffers' }],
+    couponOffers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'coupons' }],
+  cancelReason:{type:String,default:null},
+  ReturnReason:{type:String,default:null},
 })
 
 const orderCollection= mongoose.model( 'orders', orderSchema )

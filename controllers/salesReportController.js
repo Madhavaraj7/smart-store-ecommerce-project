@@ -44,30 +44,47 @@ const salesReport = async (req, res) => {
 
   // sales report filter
 
-const salesReportFilter = async (req, res) => {
+  const salesReportFilter = async (req, res) => {
     try {
-      let { startDate, endDate } = req.body;
-      let salesDataFiltered = await orderCollection
-        .find({
-          orderDate: { $gte: new Date(startDate), $lte: new Date(endDate) },
-        })
-        .populate("userId");
+      let { filterOption } = req.body;
+      let startDate, endDate;
   
-      salesData = salesDataFiltered.map((v) => {
-        v.orderDateFormatted = formatDate(v.orderDate);
-        return v;
-      });
+      if (filterOption === 'month') {
+        startDate = new Date();
+        startDate.setDate(1); 
+        endDate = new Date();
+        endDate.setMonth(endDate.getMonth() + 1, 0);
+    } else if (filterOption === 'week') {
+        let currentDate = new Date();
+        let currentDay = currentDate.getDay(); 
+        let diff = currentDate.getDate() - currentDay + (currentDay === 0 ? -6 : 1); 
+        startDate = new Date(currentDate.setDate(diff));
+        endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + 6); 
+    } else if (filterOption === 'year') {
+        let currentYear = new Date().getFullYear();
+        startDate = new Date(currentYear, 0, 1); 
+        endDate = new Date(currentYear, 11, 31);
+    }
+    
+  
+      let salesDataFiltered = await orderCollection.find({
+        orderDate: { $gte: startDate, $lte: endDate },
+      }).populate("userId");
+  
   
       req.session.admin = {};
-      req.session.admin.dateValues = req.body;
-      req.session.admin.salesData = JSON.parse(JSON.stringify(salesData));
-      console.log(typeof req.session.admin.salesData);
+      req.session.admin.dateValues = { startDate, endDate };
+      req.session.admin.salesData = JSON.parse(JSON.stringify(salesDataFiltered));
   
       res.status(200).json({ success: true });
     } catch (error) {
       console.error(error);
+      res.status(500).json({ success: false, error: "Internal server error" });
     }
   };
+
+
   const salesReportDownload = async (req, res) => {
     try {
       const workBook = new exceljs.Workbook();

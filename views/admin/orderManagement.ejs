@@ -26,37 +26,46 @@
             <thead>
                 <tr>
                     <th scope="col" class="border-dark">#</th>
-
                     <th scope="col" class="border-dark">Order No</th>
                     <th scope="col" class="border-dark">Amount</th>
                     <th scope="col" class="border-dark">Payment</th>
                     <th scope="col" class="border-dark">Status</th>
+                    <th scope="col" class="border-dark">Reason</th> <!-- New column for displaying reason -->
                     <th class="border-dark">Action</th>
                 </tr>
             </thead>
             <tbody>
-                <% orderData.forEach((order,i)=> { %>
+                <% orderData.forEach((order, i) => { %>
                 <tr>
-                    <td><%= i+1 %></td>
-
-                    <td><button disabled="disabled">
+                    <td><%= i + 1 %></td>
+                    <td>
+                        <button disabled="disabled">
                             <a href="/admin/orderManagement/orderStatus/<%= order._id %>">
                                 <%= order.orderNumber %>
                             </a>
-                        </button> </td>
-                    <td>₹<%= order.grandTotalCost%></td>
+                        </button>
+                    </td>
+                    <td>₹<%= order.grandTotalCost %></td>
                     <td><%= order.paymentType %></td>
                     <td><%= order.orderStatus %></td>
                     <td>
-                        <% if (order.orderStatus !=='Cancelled' ) { %>
+                        <% if (order.orderStatus === 'Cancelled' && order.cancelReason ||order.orderStatus==='Retrun' && order.ReturnReason) { %>
+                            <%= order.cancelReason %> 
+                            <%= order.ReturnReason %> 
+
+                             <!-- Display the reason -->
+                        <% } else { %>
+                            NIL
+                        <% } %>
+                        
+                    </td>
+                    <td>
+                        <% if (order.orderStatus !== 'Cancelled') { %>
                         <div class="btn-group">
-                            <button class="btn btn-secondary btn-lg dropdown-toggle" type="button"
-                                data-bs-toggle="dropdown" aria-expanded="false"></button>
+                            <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="dropdown-item"
-                                        href="/admin/orderManagement/pending/<%= order._id %>"
-                                        onclick="return confirm('Are you sure you want to change the status to Pending?')">
+                                    <a class="dropdown-item" href="/admin/orderManagement/pending/<%= order._id %>" onclick="return confirm('Are you sure you want to change the status to Pending?')">
                                         Pending
                                     </a>
                                 </li>
@@ -66,8 +75,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item"
-                                        href="/admin/orderManagement/delivered/<%= order._id %>">
+                                    <a class="dropdown-item" href="/admin/orderManagement/delivered/<%= order._id %>">
                                         Delivered
                                     </a>
                                 </li>
@@ -77,8 +85,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item"
-                                        href="/admin/orderManagement/cancelled/<%= order._id %>">
+                                    <a class="dropdown-item" href="/admin/orderManagement/cancelled/<%= order._id %>">
                                         Cancelled
                                     </a>
                                 </li>
@@ -90,6 +97,7 @@
                 <% }); %>
             </tbody>
         </table>
+        
         <div class="d-flex justify-content-center py-3">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">

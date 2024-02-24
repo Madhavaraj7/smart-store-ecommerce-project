@@ -13,7 +13,6 @@ blockuser = async (req, res, next) => {
       req.session.destroy();
       res.redirect(req.originalUrl)
     } else {
-        console.log('next');
       next();
     }
   } catch (error) {

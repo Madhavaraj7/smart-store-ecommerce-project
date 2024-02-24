@@ -44,7 +44,7 @@
             <form action="/admin/categories/add" method="POST" class="mt-4">
                 <div class="form-group">
                     <label for="categoriesName">Category Name</label>
-                    <input type="text" class="form-control" id="categoriesName" name="categoriesName" required>
+                    <input type="text" class="form-control" id="categoriesName" name="categoriesName" required pattern="[A-Za-z \s*]">
                 </div>
 
                 <div class="form-group">

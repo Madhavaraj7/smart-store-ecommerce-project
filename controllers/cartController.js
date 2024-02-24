@@ -160,6 +160,9 @@ const checkoutPage = async (req, res) => {
     let addressData = await profileCollection.find({
       userId: req.session.currentUser._id,
     });
+
+
+
     req.session.currentOrder = await orderCollection.create({
       userId: req.session.currentUser._id,
       orderNumber: (await orderCollection.countDocuments()) + 1,
