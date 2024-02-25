@@ -41,10 +41,10 @@
     <body>
         <div class="container mt-5">
             <h2>Add Category</h2>
-            <form action="/admin/categories/add" method="POST" class="mt-4">
+            <form action="/admin/categories/add" method="POST" class="mt-4" id="addEditValidation">
                 <div class="form-group">
                     <label for="categoriesName">Category Name</label>
-                    <input type="text" class="form-control" id="categoriesName" name="categoriesName" required pattern="[A-Za-z \s*]">
+                    <input type="text" class="form-control" id="categoriesName" name="categoriesName" required>
                 </div>
 
                 <div class="form-group">
@@ -132,6 +132,42 @@
         }
     }
 </script> -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"></script>
+    <script>
+
+
+        $.validator.addMethod("noWhitespace", function (value, element) {
+            return value.trim() !== ""; // Check if the trimmed value is not empty
+        }, "Please enter a valid value.");
+
+        $("#addEditValidation").validate({
+            rules: {
+                categoriesName: {
+                    required: true,
+                    noWhitespace: true, // Apply custom validation rule
+                    // pattern: /^[a-zA-Z]+$/,
+                    minlength: 2,
+                    maxlength: 20,
+                },
+               
+
+            },
+            messages: {
+                categoriesName: {
+                    required: "Please enter your Category name",
+                    noWhitespace: "cannot be empty or contain only spaces",
+                    pattern: "can only contain letters",
+                  
+                },
+               
+
+            },
+        });
+
+    </script>.
 
 
 

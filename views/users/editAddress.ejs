@@ -507,7 +507,7 @@
                     <p class="required"><sup>*</sup> Required field</p>
                 </div>
 
-                <form action="/account/editAddress/<%= existingAddress._id %>" method="POST">
+                <form  id="editAddressForm" action="/account/editAddress/<%= existingAddress._id %>" method="POST">
                     <div class="col-xs-12 col-sm-6">
                         <div class="form-group required">
                             <label for="InputName">First Name <sup>*</sup> </label>
@@ -696,7 +696,55 @@ $(window).load(function() {
 <script src="/assets/plugins/rating/bootstrap-rating.min.js"></script>
 
 
+
+
+
 </body>
 
 <!-- Mirrored from templatecycle.com/tshop/v6/gray/product-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 09 Dec 2023 06:52:50 GMT -->
 </html>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+      $('#editAddressForm').validate({
+          rules: {
+              firstName: {
+                  required: true
+              },
+              lastName: {
+                  required: true
+              },
+              addressLine1: {
+                  required: true
+              },
+              phone: {
+                  required: true,
+                  digits: true, // Ensure it contains only digits
+                  minlength: 10, // Example: Minimum 10 digits
+                  maxlength: 12 // Example: Maximum 12 digits
+              }
+          },
+          messages: {
+              firstName: "Please enter your first name",
+              lastName: "Please enter your last name",
+              addressLine1: "Please enter your address",
+              phone: {
+                  required: "Please enter your phone number",
+                  digits: "Please enter only digits",
+                  minlength: "Please enter at least 10 digits",
+                  maxlength: "Please enter at most 12 digits"
+              }
+          },
+          submitHandler: function(form) {
+              // If the form is valid, submit it
+              form.submit();
+          }
+      });
+  });
+  </script>
+  

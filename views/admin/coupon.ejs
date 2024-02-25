@@ -191,14 +191,15 @@
                         <h5 class="modal-title" id="exampleModalLabel">Edit Coupon</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form id="editCouponForm<%= index %>">
+                    <form id="EditCouponForm<%= index %>">
                         <div class="modal-body">
                             <div class="couponCodeInput p-2">
                                 <label for="couponCodeEdit<%= index %>" class="mb-2">Coupon Code: </label>
                                 <div class="input-group">
                                     <input id="couponCodeEdit<%= index %>" name="couponCode" type="text"
                                         class="form-control" value="<%= coupon.couponCode %>" required  minlength="5"
-                                        maxlength="16">
+                                        maxlength="16" >
+
                                 </div>
                                 <div class="form-text">Add a relevant coupon code e.g.: NEWYEAR2024, PONGAL2024, VYZ548
                                 </div>
@@ -217,7 +218,7 @@
                             <div class="startDateInput p-2">
                                 <label for="startDateEdit<%= index %>">Coupon Start Date:</label>
                                 <div class="input-group">
-                                    <input id="startDateEdit<%= index %>" name="startDate" id="startDate" type="date"
+                                    <input id="startDateEdit<%= index %>" name="startDate" type="date"
                                         class="form-control" value="<%= coupon.startDateFormatted %>" required>
                                 </div>
                                 <div class="form-text">Choose a start date for the discount to be considered.</div>
@@ -263,6 +264,9 @@
             </div>
         </div>
 
+
+        
+
        
 
         <script>
@@ -289,6 +293,7 @@
         
             // Event listeners for date inputs
             document.getElementById('startDateEdit<%= index %>').addEventListener('change', function () {
+                document.getElementById('expiryDateEdit<%= index %>').setAttribute('min',document.getElementById('startDateEdit<%= index %>').value)
                 validateDates("<%= index %>");
             });
         
@@ -336,6 +341,40 @@
                     }
                 });
             });
+
+
+
+
+
+            
+        $.validator.addMethod("noWhitespace", function (value, element) {
+            return value.trim() !== ""; // Check if the trimmed value is not empty
+        }, "Please enter a valid value.");
+
+        $("#EditCouponForm").validate({
+            rules: {
+                couponCode: {
+                    required: true,
+                    noWhitespace: true, // Apply custom validation rule
+                    // pattern: /^[a-zA-Z]+$/,
+                    minlength: 2,
+                    maxlength: 20,
+                },
+               
+
+            },
+            messages: {
+                productName: {
+                    required: "Please enter your product name",
+                    noWhitespace: "cannot be empty or contain only spaces",
+                    pattern: "can only contain letters",
+                  
+                },
+              
+
+            },
+        });
+
         </script>
         <% }); %>
 
@@ -428,10 +467,67 @@
             </script>
 
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"></script>
+    <script>
+
+
+        $.validator.addMethod("noWhitespace", function (value, element) {
+            return value.trim() !== ""; // Check if the trimmed value is not empty
+        }, "Please enter a valid value.");
+
+        $("#addCouponForm").validate({
+            rules: {
+                couponCode: {
+                    required: true,
+                    noWhitespace: true, // Apply custom validation rule
+                    // pattern: /^[a-zA-Z]+$/,
+                    minlength: 2,
+                    maxlength: 20,
+                },
+               
+
+            },
+            messages: {
+                productName: {
+                    required: "Please enter your product name",
+                    noWhitespace: "cannot be empty or contain only spaces",
+                    pattern: "can only contain letters",
+                  
+                },
+              
+
+            },
+        });
+
+
+
+
+
+
+
+
+
+
+    </script>.
+
+<style>
+    .error {
+        color: red;
+    }
+</style>
 
 
 
 </allScripts>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
+<script>
+  $(document).ready( function () {
+      $('#example').DataTable();
+  } );
+  </script>
 
 <%- include('../layouts/adminFooter.ejs') %>

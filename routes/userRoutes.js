@@ -105,6 +105,7 @@ userRoute.post('/checkout/razorpay/create/orderId', blockedUserCheck,cartControl
 
 
 userRoute.post("/checkout/applyCoupon",blockedUserCheck, cartController.applyCoupon);
+userRoute.post("/orders/storeDiscount",cartController.storedApplycoupon);
 
 
 

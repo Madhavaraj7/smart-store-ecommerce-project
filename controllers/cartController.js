@@ -326,57 +326,75 @@ const applyCoupon = async (req, res) => {
     console.log("1");
     let { couponCode } = req.body;
 
+    const userId = req.session.currentUser._id;
+    console.log('esssion.userID');
+    console.log(req.session.userId); 
     let couponData = await couponCollection.findOne({ couponCode });
 
-    if (couponData) {
-      
-      console.log("2");
-      console.log(couponData);
+    if (!couponData) {
+      console.log("Coupon not found");
+      return res.status(501).json({ couponApplied: false });
+    }
 
-      let { grandTotal } = req.session;
-      let { minimumPurchase, expiryDate } = couponData;
-      let minimumPurchaseCheck = minimumPurchase < grandTotal;
-      let expiryDateCheck = new Date() < new Date(expiryDate);
-      console.log("3");
-      console.log(expiryDateCheck);
-      console.log(minimumPurchaseCheck);
+    if (couponData.userId.includes(userId)) {
+      console.log("Coupon already used by this user");
+      return res.status(501).json({ couponApplied: false, couponAlreadyUsed: true });
+    }
 
-      if (minimumPurchaseCheck && expiryDateCheck) {
-        console.log("4");
+    let { grandTotal } = req.session;
+    let { minimumPurchase, expiryDate } = couponData;
+    let minimumPurchaseCheck = minimumPurchase < grandTotal;
+    let expiryDateCheck = new Date() < new Date(expiryDate);
+    console.log("3");
+    console.log(expiryDateCheck);
+    console.log(minimumPurchaseCheck);
 
-        let { discountPercentage, maximumDiscount } = couponData;
-        let discountAmount =
-          (grandTotal * discountPercentage) / 100 > maximumDiscount
-            ? maximumDiscount
-            : (grandTotal * discountPercentage) / 100;
+    if (minimumPurchaseCheck && expiryDateCheck) {
+      console.log("4");
 
-        let { currentOrder } = req.session;
-        await orderCollection.findByIdAndUpdate(
-          { _id: currentOrder._id },
-          {
-            $set: { couponApplied: couponData._id },
-            $inc: { grandTotalCost: -discountAmount },
-          }
-        );
-        console.log("5");
+      let { discountPercentage, maximumDiscount } = couponData;
+      let discountAmount =
+        (grandTotal * discountPercentage) / 100 > maximumDiscount
+          ? maximumDiscount
+          : (grandTotal * discountPercentage) / 100;
 
-        // req.session.grandTotal -= discountAmount;
-        req.session.grandTotal -= discountAmount;
-        console.log(req.session.grandTotal);
-        console.log(discountAmount);
+      let { currentOrder } = req.session;
+      await orderCollection.findByIdAndUpdate(
+        { _id: currentOrder._id },
+        {
+          $set: { couponApplied: couponData._id },
+          $inc: { grandTotalCost: -discountAmount },
+        }
+      );
+      console.log("5");
 
-        // Respond with a success status and indication that the coupon was applied
-        res.status(202).json({ couponApplied: true, discountAmount });
-      } else {
-        // Respond with an error status if the coupon is not applicable
-        res.status(501).json({ couponApplied: false });
-      }
+      req.session.grandTotal -= discountAmount;
+      console.log(req.session.grandTotal);
+      console.log(discountAmount);
+
+      await couponCollection.findByIdAndUpdate({_id: couponData._id}, { $push: { userId: userId } });
+
+      res.status(202).json({ couponApplied: true, discountAmount });
     } else {
-      // Respond with an error status if the coupon does not exist
       res.status(501).json({ couponApplied: false });
     }
   } catch (error) {
     console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+
+const storedApplycoupon =  async (req, res) => {
+  try {
+      const { orderId, discountAmount } = req.body;
+      
+      await orderCollection.findByIdAndUpdate(orderId, { totalDiscount: discountAmount });
+      res.sendStatus(200); 
+  } catch (error) {
+      console.error('Error storing discount in order:', error);
+      res.status(500).send('Internal Server Error'); 
   }
 };
 
@@ -393,4 +411,5 @@ module.exports = {
   orderPlacedEnd,
   applyCoupon,
   razorpayCreateOrderId,
+  storedApplycoupon,
 };

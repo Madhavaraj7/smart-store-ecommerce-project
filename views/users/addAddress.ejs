@@ -26,7 +26,7 @@
                     <p class="required"><sup>*</sup> Required field</p>
                 </div>
 
-                <form action="/account/addAddress" method="POST">
+                <form id="addressForm"  action="/account/addAddress" method="POST">
                     <div class="col-xs-12 col-sm-6">
                         <div class="form-group required">
                             <label for="InputName">First Name <sup>*</sup> </label>
@@ -131,5 +131,59 @@
 </body>
 </html>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
-
+<script>
+    $(document).ready(function() {
+        $.validator.addMethod("noSpace", function(value, element) {
+            return value.trim().length != 0; 
+        }, "Spaces are not allowed.");
+    
+        $('#addressForm').validate({
+            rules: {
+                firstName: {
+                    required: true,
+                    noSpace: true 
+                },
+                lastName: {
+                    required: true,
+                    noSpace: true 
+                },
+                addressLine1: {
+                    required: true,
+                    noSpace: true 
+                },
+                phone: {
+                    required: true,
+                    digits: true,
+                    minlength: 10,
+                    maxlength: 12
+                }
+            },
+            messages: {
+                firstName: {
+                    required: "Please enter your first name",
+                    noSpace: "Spaces are not allowed in the first name"
+                },
+                lastName: {
+                    required: "Please enter your last name",
+                    noSpace: "Spaces are not allowed in the last name"
+                },
+                addressLine1: {
+                    required: "Please enter your address",
+                    noSpace: "Spaces are not allowed in the address"
+                },
+                phone: {
+                    required: "Please enter your phone number",
+                    digits: "Please enter only digits",
+                    minlength: "Please enter at least 10 digits",
+                    maxlength: "Please enter at most 12 digits"
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    });
+    </script>

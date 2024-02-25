@@ -52,12 +52,13 @@
               action="/admin/addproduct"
               method="POST"
               enctype="multipart/form-data"
+              id="addProductValidation"
             >
               <div class="modal-body">
                 <div class="input-group mb-3">
+              
                   <input
-                    name="productName"
-                    id="productName"
+                    name="productName" 
                     type="name"
                     class="form-control"
                     placeholder="Product Name"
@@ -167,6 +168,11 @@
   ></script>
 
   <script>
+    
+   
+
+
+
     let crop = [];
     function loadFile(event) {
       let imageDiv = document.getElementById("imageDiv");
@@ -270,48 +276,66 @@
     }
   </script>
 
-  <!-- <script>
-        $(document).ready(function () {
-            $('#example').DataTable();
-        });
-    </script> -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"></script>
+    <script>
 
-  <!-- {{!-- onchange image display --}} -->
-  <!-- <script>
-        function displayImage1() {
-            const reader = new FileReader()
-            reader.onload = () => {
-                preview1.src = reader.result
-            }
-            const file = document.querySelector("#productImage1").files[0];
-            if (file) {
-                preview1.style.display = 'block'
-                reader.readAsDataURL(file)
-            }
-        }
-        function displayImage2() {
-            const reader = new FileReader()
-            reader.onload = () => {
-                preview2.src = reader.result
-            }
-            const file = document.querySelector("#productImage2").files[0];
-            if (file) {
-                preview2.style.display = 'block'
-                reader.readAsDataURL(file)
-            }
-        }
-        function displayImage3() {
-            const reader = new FileReader()
-            reader.onload = () => {
-                preview3.src = reader.result
-            }
-            const file = document.querySelector("#productImage3").files[0];
-            if (file) {
-                preview3.style.display = 'block'
-                reader.readAsDataURL(file)
-            }
-        }
-    </script> -->
+
+        $.validator.addMethod("noWhitespace", function (value, element) {
+            return value.trim() !== ""; // Check if the trimmed value is not empty
+        }, "Please enter a valid value.");
+
+        $("#addProductValidation").validate({
+            rules: {
+                productName: {
+                    required: true,
+                    noWhitespace: true, // Apply custom validation rule
+                    // pattern: /^[a-zA-Z]+$/,
+                    minlength: 2,
+                    maxlength: 20,
+                },
+                productPrice: {
+                    required: true,
+                    noWhitespace: true, // Apply custom validation rule
+                    minlength: 2,
+                    maxlength: 20,
+                },
+                productStock: {
+                    required: true,
+                    noWhitespace: true, // Apply custom validation rule
+                    maxlength: 20,
+                },
+
+            },
+            messages: {
+                productName: {
+                    required: "Please enter your product name",
+                    noWhitespace: "cannot be empty or contain only spaces",
+                    pattern: "can only contain letters",
+                  
+                },
+                productPrice: {
+                    required: "Please enter your price",
+                    noWhitespace: "Last name cannot be empty or contain only spaces",
+                },
+                productStock: {
+                    required: "Please enter your last name",
+                    noWhitespace: "Last name cannot be empty or contain only spaces",
+                   
+                },
+
+            },
+        });
+
+    </script>.
+
+
+
+
+  
+
+   
 
   <%- include('../layouts/adminFooter.ejs') %>
 </main>

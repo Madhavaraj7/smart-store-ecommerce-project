@@ -14,7 +14,7 @@ const orderSchema= new mongoose.Schema({
     totalDiscount: { type: Number, default: 0 },
     totalCouponDeduction: { type: Number, default: 0 },
     
-    productOffers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'productOffers' }],
+    productOffers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'products' }],
     couponOffers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'coupons' }],
   cancelReason:{type:String,default:null},
   ReturnReason:{type:String,default:null},

@@ -46,7 +46,7 @@
 
 
 
-                    <form action="/admin/editProduct/<%=productData._id%>" method="POST" enctype="multipart/form-data">
+                    <form action="/admin/editProduct/<%=productData._id%>" method="POST" id="editProductValidation" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="productName">Product Name</label>
                             <input type="text" class="form-control" id="productName"
@@ -153,6 +153,60 @@
 
 
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"></script>
+    <script>
+
+
+        $.validator.addMethod("noWhitespace", function (value, element) {
+            return value.trim() !== ""; // Check if the trimmed value is not empty
+        }, "Please enter a valid value.");
+
+        $("#editProductValidation").validate({
+            rules: {
+                productName: {
+                    required: true,
+                    noWhitespace: true, // Apply custom validation rule
+                    // pattern: /^[a-zA-Z]+$/,
+                    minlength: 2,
+                    maxlength: 20,
+                },
+                productPrice: {
+                    required: true,
+                    noWhitespace: true, // Apply custom validation rule
+                    minlength: 2,
+                    maxlength: 20,
+                },
+                productStock: {
+                    required: true,
+                    noWhitespace: true, // Apply custom validation rule
+                    minlength: 2,
+                    maxlength: 20,
+                },
+
+            },
+            messages: {
+                productName: {
+                    required: "Please enter your product name",
+                    noWhitespace: "cannot be empty or contain only spaces",
+                    pattern: "can only contain letters",
+                  
+                },
+                productPrice: {
+                    required: "Please enter your price",
+                    noWhitespace: "Last name cannot be empty or contain only spaces",
+                },
+                productStock: {
+                    required: "Please enter your last name",
+                    noWhitespace: "Last name cannot be empty or contain only spaces",
+                   
+                },
+
+            },
+        });
+
+    </script>.
 
 
 

@@ -7,10 +7,6 @@ const categoryCollection = require("../models/categoryModel.js");
 
 const couponManagement = async (req, res) => {
     try {
-  
-  
-  
-  
       let couponData = await couponCollection.find();
       couponData = couponData.map((v) => {
         v.startDateFormatted = formatDate(v.startDate, "YYYY-MM-DD");
@@ -80,6 +76,8 @@ const couponManagement = async (req, res) => {
       console.error(error);
     }
 };
+
+
 
 
   

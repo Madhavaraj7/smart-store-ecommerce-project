@@ -321,52 +321,69 @@ toggleCouponContainer();
     });
   });
 
-  // Async function to handle coupon application
   async function couponApply() {
     try {
-      // Prepare form data with the coupon code
-      const couponApplyForm = document.getElementById('couponApplyForm');
-      const formData = { couponCode: couponApplyForm.couponCode.value };
+        const couponApplyForm = document.getElementById('couponApplyForm');
+        const formData = { couponCode: couponApplyForm.couponCode.value };
 
-      // Send a POST request to the server to apply the coupon
-      const response = await fetch('/checkout/applyCoupon', {
-        method: 'POST',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      // Parse the JSON response from the server
-      const { couponApplied, discountAmount } = await response.json();
-
-      // Check if the coupon is applied or not
-      if (couponApplied) {
-        // If the coupon is applied, update the UI and show a success message
-        const grandTotalElement = document.getElementById('grandTotal');
-        const grandTotal = parseFloat(grandTotalElement.innerHTML.replace('₹', '')) - discountAmount;
-        grandTotalElement.innerHTML = '' + grandTotal.toFixed(2);
-
-        const totalDiscountElement = document.getElementById('totalDiscount');
-        totalDiscountElement.innerHTML = '₹' + discountAmount.toFixed(2);
-
-        await Swal.fire({
-          icon: "success",
-          title: "Coupon has been applied",
-          showConfirmButton: false,
-          timer: 1500,
+        const response = await fetch('/checkout/applyCoupon', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
         });
-      } else {
-        // If the coupon is not applicable, show an error message
-        await Swal.fire({
-          icon: "error",
-          title: "Coupon not applicable",
-          text: "Sorry! Your coupon is not applicable",
-        });
-      }
+
+        const { couponApplied, discountAmount, couponAlreadyUsed } = await response.json();
+
+        if (couponApplied) {
+            const grandTotalElement = document.getElementById('grandTotal');
+            const grandTotal = parseFloat(grandTotalElement.innerHTML.replace('₹', '')) - discountAmount;
+            grandTotalElement.innerHTML = '' + grandTotal.toFixed(2);
+
+            const totalDiscountElement = document.getElementById('totalDiscount');
+            totalDiscountElement.innerHTML = '₹' + discountAmount.toFixed(2);
+
+            await Swal.fire({
+                icon: "success",
+                title: "Coupon has been applied",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } else if (couponAlreadyUsed) {
+            await Swal.fire({
+                icon: "error",
+                title: "Coupon already used",
+                text: "Sorry! You have already used this coupon.",
+            });
+        } else {
+            await Swal.fire({
+                icon: "error",
+                title: "Coupon not applicable",
+                text: "Sorry! Your coupon is not applicable.",
+            });
+        }
     } catch (error) {
-      console.error('Error applying coupon:', error);
-      // Handle error if necessary
+        console.error('Error applying coupon:', error);
     }
-  }
+}
+
+
+
+
+  async function storeDiscountInOrder(orderId, discountAmount) {
+    try {
+        const response = await fetch('/orders/storeDiscount', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ orderId, discountAmount }),
+        });
+
+        // Handle response if necessary
+    } catch (error) {
+        console.error('Error storing discount in order:', error);
+        // Handle error if necessary
+    }
+}
+
 </script>
 
 
