@@ -1,4 +1,86 @@
 <%- include('../layouts/userHeader.ejs') %>
+<style>
+  .coupon-container {
+    width: 100%;
+    overflow-x: scroll; /* Enable horizontal scrolling */
+    white-space: nowrap;
+    padding: 20px 0; /* Add padding for spacing */
+    margin-bottom: 20px;
+    position: relative; /* Positioning context for scroll buttons */
+  }
+
+  .coupon-container::-webkit-scrollbar {
+    height: 8px; /* Set scrollbar height */
+  }
+
+  .coupon-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Set scrollbar track color */
+    border-radius: 10px; /* Set scrollbar track border radius */
+  }
+
+  .coupon-container::-webkit-scrollbar-thumb {
+    background: #888; /* Set scrollbar thumb color */
+    border-radius: 10px; /* Set scrollbar thumb border radius */
+  }
+
+  .coupon-card {
+    display: inline-block; /* Display coupon cards in a row */
+    width: 200px;
+    margin-right: 20px; /* Add margin between cards */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    transition: box-shadow 0.3s;
+    cursor: pointer; /* Change cursor to pointer on hover */
+    background-color: #5cb85c; /* Set background color */
+  }
+
+  .coupon-card:hover {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .coupon-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #fffbfb;
+  }
+
+  .coupon-card p {
+    margin: 0;
+    font-size: 14px;
+    color: #000000;
+  }
+
+  /* Scroll buttons */
+  .scroll-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .scroll-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .scroll-left {
+    left: 0;
+  }
+
+  .scroll-right {
+    right: 0;
+  }
+</style>
 
 
 <script>
@@ -176,11 +258,24 @@
                                         </div>
                                       </div>
                                 </td>
+                                
                             </tr>
+                            
                         </tbody>
+                        
                         <tbody>
                         </tbody>
                     </table>
+                    <div class="coupon-container">
+                        <% coupons.forEach(function(coupon) { %>
+                          <div class="coupon-card">
+                            <h3><%= coupon.couponCode %></h3>
+                            <p>Discount: <%= coupon.discountPercentage %>%</p>
+                            <p>Minimum Purchase: <%= coupon.minimumPurchase %></p>
+                            <!-- Add more coupon details as needed -->
+                          </div>
+                        <% }); %>
+                      </div>
                 </div>
                 <!--  /cartMiniTable-->
             </div>
@@ -229,75 +324,94 @@
 
 
 <script>
-    const orderBtnElement = document.getElementById('orderBtn')
-    const CODElement = document.getElementById('COD')
-    const razorpayElement = document.getElementById('razorpay')
-    const walletElement = document.getElementById('wallet')
+    const orderBtnElement = document.getElementById('orderBtn');
+    const CODElement = document.getElementById('COD');
+    const razorpayElement = document.getElementById('razorpay');
+    const walletElement = document.getElementById('wallet');
+    const grandTotalElement = document.getElementById('grandTotal');
 
-    orderBtnElement.addEventListener('click', orderBtnClickFunction)
+    // Function to disable COD button if grand total is greater than 1000
+    function checkGrandTotal() {
+        const grandTotal = parseFloat(grandTotalElement.innerText.replace('₹', ''));
+        if (grandTotal > 1000) {
+            CODElement.disabled = true;
+        } else {
+            CODElement.disabled = false;
+        }
+    }
+
+    // Call the function initially when the DOM content is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+        checkGrandTotal();
+    });
+
+    // Call the function whenever grand total changes
+    // Assuming grand total changes dynamically, replace 'yourEvent' with appropriate event
+    grandTotalElement.addEventListener('yourEvent', checkGrandTotal);
+
+    // Function to handle order button click
+    orderBtnElement.addEventListener('click', orderBtnClickFunction);
 
     async function orderBtnClickFunction(event) {
-      try {
-        console.log('1');
-        event.preventDefault()
-        console.log('1');
+        try {
+            event.preventDefault();
 
-        if (CODElement.checked) {//cash on delivery 
-          window.location.href = '/checkout/orderPlacedEnd'
-        } else if (walletElement.checked) {
-          let response = await fetch("/checkout/orderPlaced", {
-            method: "POST", // or 'PUT'
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ walletPayment: true }),
-          });
-          response = await response.json()
-          if (response.insufficientWalletBalance) {
-            return Swal.fire({
-              icon: "error",
-              title: "Insufficient Balance",
-              text: "No sufficent balance"
-            });
-          } else if (response.success) {
-            window.location.href = '/checkout/orderPlacedEnd'
-          }
-        }else if (razorpayElement.checked) {
-
-          const orderResponse = await fetch('/checkout/razorpay/create/orderId', { method: 'POST' })
-          const order = await orderResponse.json()
-          console.log(order)
-          await openRazorpay(order.amount, order.id)
+            if (CODElement.checked) { // Cash on delivery
+                window.location.href = '/checkout/orderPlacedEnd';
+            } else if (walletElement.checked) {
+                let response = await fetch("/checkout/orderPlaced", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ walletPayment: true }),
+                });
+                response = await response.json();
+                if (response.insufficientWalletBalance) {
+                    return Swal.fire({
+                        icon: "error",
+                        title: "Insufficient Balance",
+                        text: "No sufficient balance"
+                    });
+                } else if (response.success) {
+                    window.location.href = '/checkout/orderPlacedEnd';
+                }
+            } else if (razorpayElement.checked) {
+                const orderResponse = await fetch('/checkout/razorpay/create/orderId', { method: 'POST' });
+                const order = await orderResponse.json();
+                console.log(order);
+                await openRazorpay(order.amount, order.id);
+            }
+        } catch (error) {
+            console.error(error);
         }
-      } catch (error) {
-        console.error(error)
-      }
-
     }
 
+    // Function to open Razorpay
     async function openRazorpay(amount, creditId) {
-    try {
-      var options = {
-        key: "rzp_test_LSVsVjKJgjMK1G", // Enter the Key ID generated from the Dashboard
-        amount: "" + amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-        currency: "INR",
-        name: "SMART STORE",
-        description: "Test Transaction",
-        callback_url: "/checkout/orderPlaced",
-        image: "/images/logo-dark.png",
-        credit_id: creditId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        theme: {
-          color: "#3399cc",
-        },
-      };
-      var razorpay = new Razorpay(options);
-      razorpay.open();
-    } catch (error) {
-      console.error(error);
+        try {
+            var options = {
+                key: "rzp_test_LSVsVjKJgjMK1G",
+                amount: "" + amount,
+                currency: "INR",
+                name: "SMART STORE",
+                description: "Test Transaction",
+                callback_url: "/checkout/orderPlaced",
+                image: "/images/logo-dark.png",
+                credit_id: creditId,
+                theme: {
+                    color: "#3399cc",
+                },
+            };
+            var razorpay = new Razorpay(options);
+            razorpay.open();
+        } catch (error) {
+            console.error(error);
+        }
     }
-  }
+</script>
 
-  </script>
+
 
 <script>
 const isAddonCheckout = true;

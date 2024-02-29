@@ -20,6 +20,7 @@ const offerController = require("../controllers/offerControl.js");
 adminRoute.get("/", adminController.loadLogin);
 adminRoute.post("/", adminController.verifyLogin);
 adminRoute.get("/adminHome", isAdmin, adminController.adminHome);
+adminRoute.get('/dashboardData', adminController.dashboardData )
 adminRoute.get("/logout", adminController.adminLogout);
 
 // -------------------------------------------------------USER MANAGEMENT------------------------------------------------------------------------------
@@ -119,6 +120,9 @@ adminRoute.get(
 
 adminRoute.get("/salesReport", isAdmin,salesReportController.salesReport);
 adminRoute.post("/salesReport/filter", isAdmin,salesReportController.salesReportFilter);
+adminRoute.post('/salesReport/filterCustom',  salesReportController.salesReportFilterCustom)
+adminRoute.get('salesReport/download/pdf',isAdmin,salesReportController.salesReportDownloadPDF)
+
 adminRoute.get(
   "/salesReport/download/xlsx",isAdmin,
   salesReportController.salesReportDownload
@@ -143,6 +147,13 @@ adminRoute.get("/category-offer-list", isAdmin,offerController.getCategoryOffer)
 adminRoute.post("/add-category-offer", isAdmin,offerController.addCategoryOffer);
 adminRoute.put("/edit-category-offer", isAdmin,offerController.editCategoryOffer);
 adminRoute.get("/categoryoffer-status/:id", isAdmin,offerController.editCategoryOfferStatus);
+
+
+
+adminRoute.get('/filter/category/:categoryName', adminController.filterCategory)
+adminRoute.get('/filter/priceRange',  adminController.filterPriceRange)
+adminRoute.get('/sort/priceAscending',  adminController.sortPriceAscending)
+adminRoute.get('/sort/priceDescending',  adminController.sortPriceDescending)
 
 
 

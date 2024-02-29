@@ -507,7 +507,7 @@
                     <p class="required"><sup>*</sup> Required field</p>
                 </div>
 
-                <form  id="editAddressForm" action="/account/editAddress/<%= existingAddress._id %>" method="POST">
+                <form  id="editAdrress" action="/account/editAddress/<%= existingAddress._id %>" method="POST">
                     <div class="col-xs-12 col-sm-6">
                         <div class="form-group required">
                             <label for="InputName">First Name <sup>*</sup> </label>
@@ -707,44 +707,89 @@ $(window).load(function() {
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"></script>
 <script>
-  $(document).ready(function() {
-      $('#editAddressForm').validate({
-          rules: {
-              firstName: {
-                  required: true
-              },
-              lastName: {
-                  required: true
-              },
-              addressLine1: {
-                  required: true
-              },
-              phone: {
-                  required: true,
-                  digits: true, // Ensure it contains only digits
-                  minlength: 10, // Example: Minimum 10 digits
-                  maxlength: 12 // Example: Maximum 12 digits
-              }
-          },
-          messages: {
-              firstName: "Please enter your first name",
-              lastName: "Please enter your last name",
-              addressLine1: "Please enter your address",
-              phone: {
-                  required: "Please enter your phone number",
-                  digits: "Please enter only digits",
-                  minlength: "Please enter at least 10 digits",
-                  maxlength: "Please enter at most 12 digits"
-              }
-          },
-          submitHandler: function(form) {
-              // If the form is valid, submit it
-              form.submit();
-          }
-      });
-  });
-  </script>
+
+
+    $.validator.addMethod("noWhitespace", function (value, element) {
+        return value.trim() !== ""; // Check if the trimmed value is not empty
+    }, "Please enter a valid value.");
+
+    $("#editAdrress").validate({
+        rules: {
+            firstName: {
+                required: true,
+                noWhitespace: true, // Apply custom validation rule
+                pattern: /^[a-zA-Z]+$/,
+                minlength: 2,
+                maxlength: 20,
+            },
+            lastName: {
+                required: true,
+                noWhitespace: true, // Apply custom validation rule
+                pattern: /^[a-zA-Z0]+$/,
+                minlength: 2,
+                maxlength: 20,
+            },
+            addressLine1: {
+                required: true,
+                noWhitespace: true, // Apply custom validation rule
+                
+            },
+            addressLine2: {
+                required: true,
+                noWhitespace: true, // Apply custom validation rule
+                
+            },
+            addressTitle: {
+                required: true,
+                noWhitespace: true, // Apply custom validation rule
+                minlength: 2,
+                maxlength: 50,
+            },
+            phone: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10,
+            },
+            
+        },
+        messages: {
+            firstName: {
+                required: "Please enter your first name",
+                noWhitespace: "First name cannot be empty or contain only spaces",
+                pattern: "First name can only contain letters",
+                minlength: "First name must be at least 2 characters long",
+                maxlength: "First name must not exceed 20 characters",
+            },
+            lastName: {
+                required: "Please enter your last name",
+                noWhitespace: "Last name cannot be empty or contain only spaces",
+                pattern: "Last name can only contain letters and numbers",
+                minlength: "Last name must be at least 2 characters long",
+                maxlength: "Last name must not exceed 20 characters",
+            },
+            addressTitle: {
+                minlength: "Address title must be at least 2 characters long",
+                maxlength: "Address title cannot exceed 50 characters",
+            },
+            phone: {
+                required: "Please enter your phone number",
+                digits: "Please enter only digits",
+                minlength: "Phone number must be 10 digits long",
+                maxlength: "Phone number must be 10 digits long",
+            },
+            postcode: {
+                required: "Please enter your postcode",
+                digits: "Please enter only digits",
+                minlength: "Postcode must be 5 to 6 digits long",
+                maxlength: "Postcode must be 5 to 6 digits long",
+            },
+        },
+    });
+
+</script>.
+
   

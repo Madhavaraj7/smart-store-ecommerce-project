@@ -67,7 +67,7 @@ const changeStatusReturn = async (req, res) => {
     try {
       await orderCollection.findOneAndUpdate(
         { _id: req.params.id },
-        { $set: { orderStatus: "Retrun" } }
+        { $set: { orderStatus: "Return" } }
       );
       res.redirect("/admin/orderManagement");
     } catch (error) {

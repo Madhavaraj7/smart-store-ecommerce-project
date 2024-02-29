@@ -13,9 +13,7 @@ const couponManagement = async (req, res) => {
         v.expiryDateFormatted = formatDate(v.expiryDate, "YYYY-MM-DD");
         return v;
       });
-      res.render("admin/coupon", { couponData,
-      
-   });
+      res.render("admin/coupon", { couponData });
     } catch (error) {
       console.error(error);
     }
@@ -38,17 +36,16 @@ const couponManagement = async (req, res) => {
             maximumDiscount: req.body.maximumDiscount,
           },
         ]);
-        res.json({ couponAdded: true });
+        return res.json({ couponAdded: true });
       } else {
-        res.json({ couponCodeExists: true });
+        return res.json({ couponCodeExists: true });
       }
     } catch (error) {
       console.error(error);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
-
-    
   };
-
+  
   const editCoupon = async (req, res) => {
     try {
       console.log('edit coupon');
@@ -68,17 +65,16 @@ const couponManagement = async (req, res) => {
           { _id: req.params.id },
           { $set: updateFields }
         );
-        res.json({ couponEdited: true });
+        return res.json({ couponEdited: true });
       } else {
-        res.json({ couponCodeExists: true });
+        return res.json({ couponCodeExists: true });
       }
     } catch (error) {
       console.error(error);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
-};
-
-
-
+  };
+  
 
   
   module.exports = {

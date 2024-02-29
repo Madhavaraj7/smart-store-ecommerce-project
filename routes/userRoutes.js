@@ -131,10 +131,15 @@ userRoute.patch('/account/changePassword', auth.isLogin,blockedUserCheck, accoun
 //account-orderlist
 userRoute.get('/account/orderList', auth.isLogin,blockedUserCheck, accountController.orderList);
 userRoute.get('/account/orderList/orderStatus/:id',auth.isLogin, blockedUserCheck, accountController.orderStatus)
+
+
 userRoute.put('/account/orderList/orderStatus/cancelOrder/:id',auth.isLogin, blockedUserCheck,accountController.cancelOrder )
 userRoute.put('/account/orderList/orderStatus/returnorder/:id', accountController.returnRequest)
+userRoute.get('/account/orderList/orderStatus/downloadInvoice/:id', blockedUserCheck, accountController.downloadInvoice)
+
 userRoute.post('/account/razorpay/create/orderId', blockedUserCheck, accountController.razorpayCreateWallet)
 userRoute.post('/account/razoropay/end', blockedUserCheck, accountController.addRazorpayAmountToWallet);
+
 
 
 

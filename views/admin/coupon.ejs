@@ -52,19 +52,22 @@
                         <div class="couponCodeInput p-2">
                             <label for="couponCode" class="mb-2">Coupon Code: </label>
                             <div class="input-group">
-                                <input id="couponCode" name="couponCode" title="Enter a valid coupon code" type="text"
+                                <input style="width: 100%;" id="couponCode" name="couponCode" title="Enter a valid coupon code" type="text"
                                     class="form-control" placeholder="Enter coupon code" required minlength="5"
                                     maxlength="16" />
                             </div>
                             <div class="form-text">
                                 Add a relevant coupon code eg: NEWYEAR2024, PONGAL2024, VYZ548
                             </div>
+
+
+                             <span id="couponCodeError" class="error"></span>
                         </div>
 
                         <div class="discountPercentageInput p-2">
                             <label for="expiryDate" class="mb-2">Discount Percentage: </label>
                             <div class="input-group">
-                                <input id="discountPercentage" name="discountPercentage" type="number" min="5" max="90"
+                                <input style="width: 100%;" id="discountPercentage" name="discountPercentage" type="number" min="5" max="90"
                                     class="form-control" placeholder="Enter discount percentage" required />
                             </div>
                             <div class="form-text">
@@ -75,7 +78,7 @@
                         <div class="startDateInput p-2">
                             <label for="startDate">Coupon Start Date: </label>
                             <div class="input-group">
-                                <input id="startDate" name="startDate" type="date" class="form-control" required />
+                                <input style="width: 100%;"  id="startDate" name="startDate" type="date" class="form-control" required />
                             </div>
                             <div class="form-text">
                                 Choose a start date for the discount to be considered.
@@ -85,7 +88,7 @@
                         <div class="expiryDateInput p-2">
                             <label for="expiryDate">Coupon Expiry Date : </label>
                             <div class="input-group">
-                                <input id="expiryDate" name="expiryDate" type="date" class="form-control" required />
+                                <input style="width: 100%;"  id="expiryDate" name="expiryDate" type="date" class="form-control" required />
                             </div>
                             <div class="form-text">
                                 Choose an expiry date for the discount to end.
@@ -95,7 +98,7 @@
                         <div class="minimumPurchaseInput p-2">
                             <label for="minimumPurchase">Minimum Purchase: </label>
                             <div class="input-group">
-                                <input id="minimumPurchase" name="minimumPurchase" type="number" class="form-control"
+                                <input style="width: 100%;"  id="minimumPurchase" name="minimumPurchase" type="number" class="form-control"
                                     placeholder="Enter minimum purchase required" required min="1" />
                             </div>
                             <div class="form-text">
@@ -107,7 +110,7 @@
                         <div class="maximumDiscount p-2">
                             <label for="maximumDiscount">Maximum Discount: </label>
                             <div class="input-group">
-                                <input id="maximumDiscount" name="maximumDiscount" type="number" class="form-control"
+                                <input style="width: 100%;"  id="maximumDiscount" name="maximumDiscount" type="number" class="form-control"
                                     placeholder="Maximum discount applicable" required  min="1"/>
                             </div>
                             <div class="form-text">
@@ -191,12 +194,12 @@
                         <h5 class="modal-title" id="exampleModalLabel">Edit Coupon</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form id="EditCouponForm<%= index %>">
+                    <form id="editCouponForm<%= index %>">
                         <div class="modal-body">
                             <div class="couponCodeInput p-2">
                                 <label for="couponCodeEdit<%= index %>" class="mb-2">Coupon Code: </label>
                                 <div class="input-group">
-                                    <input id="couponCodeEdit<%= index %>" name="couponCode" type="text"
+                                    <input style="width: 100%;"  id="couponCodeEdit<%= index %>" name="couponCode" type="text"
                                         class="form-control" value="<%= coupon.couponCode %>" required  minlength="5"
                                         maxlength="16" >
 
@@ -209,7 +212,7 @@
                                 <label for="discountPercentageEdit<%= index %>" class="mb-2">Discount Percentage:
                                 </label>
                                 <div class="input-group">
-                                    <input id="discountPercentageEdit<%= index %>" name="discountPercentage" type="number"
+                                    <input style="width: 100%;"  id="discountPercentageEdit<%= index %>" name="discountPercentage" type="number"
                                         class="form-control" value="<%= coupon.discountPercentage %>" required min="5" max="90">
                                 </div>
                                 <div class="form-text">Choose a percentage to be discounted. Between 5% and 90%.</div>
@@ -218,7 +221,7 @@
                             <div class="startDateInput p-2">
                                 <label for="startDateEdit<%= index %>">Coupon Start Date:</label>
                                 <div class="input-group">
-                                    <input id="startDateEdit<%= index %>" name="startDate" type="date"
+                                    <input style="width: 100%;" id="startDateEdit<%= index %>" name="startDate" type="date"
                                         class="form-control" value="<%= coupon.startDateFormatted %>" required>
                                 </div>
                                 <div class="form-text">Choose a start date for the discount to be considered.</div>
@@ -227,7 +230,7 @@
                             <div class="expiryDateInput p-2">
                                 <label for="expiryDateEdit<%= index %>">Coupon Expiry Date: </label>
                                 <div class="input-group">
-                                    <input id="expiryDateEdit<%= index %>" name="expiryDate" type="date"
+                                    <input style="width: 100%;"  id="expiryDateEdit<%= index %>" name="expiryDate" type="date"
                                         class="form-control" value="<%= coupon.expiryDateFormatted %>" required>
                                 </div>
                                 <div class="form-text">Choose an expiry date for the discount to end.</div>
@@ -236,7 +239,7 @@
                             <div class="minimumPurchaseInput p-2">
                                 <label for="minimumPurchaseEdit<%= index %>">Minimum Purchase: </label>
                                 <div class="input-group">
-                                    <input id="minimumPurchaseEdit<%= index %>" name="minimumPurchase" type="number"
+                                    <input style="width: 100%;"  id="minimumPurchaseEdit<%= index %>" name="minimumPurchase" type="number"
                                         class="form-control" placeholder="Enter minimum purchase required"
                                         value="<%= coupon.minimumPurchase %>" required min="1">
                                 </div>
@@ -247,7 +250,7 @@
                             <div class="maximumDiscount p-2">
                                 <label for="maximumDiscountEdit<%= index %>">Maximum Discount: </label>
                                 <div class="input-group">
-                                    <input id="maximumDiscountEdit<%= index %>" name="maximumDiscount" type="number"
+                                    <input style="width: 100%;" id="maximumDiscountEdit<%= index %>" name="maximumDiscount" type="number"
                                         class="form-control" placeholder="Maximum discount applicable"
                                         value="<%= coupon.maximumDiscount %>" required min="1">
                                 </div>
@@ -351,7 +354,7 @@
             return value.trim() !== ""; // Check if the trimmed value is not empty
         }, "Please enter a valid value.");
 
-        $("#EditCouponForm").validate({
+        $("#editCouponForm").validate({
             rules: {
                 couponCode: {
                     required: true,
@@ -400,7 +403,6 @@
                 });
         
                 var startDateInput = document.getElementById('startDate');
-                var endDateInput = document.getElementById('endDate');
                 var expiryDateInput = document.getElementById('expiryDate');
         
                 startDateInput.addEventListener('change', function () {
@@ -408,9 +410,9 @@
                 expiryDateInput.setAttribute('min', startDate);
                 });
         
-                endDateInput.addEventListener('change', function () {
-                var endDate = endDateInput.value;
-                expiryDateInput.setAttribute('max', endDate);
+                expiryDateInput.addEventListener('change', function () {
+                var expiryDate = expiryDateInput.value;
+                startDateInput.setAttribute('max', expiryDate);
                 });
             </script>
             <script>
@@ -515,6 +517,8 @@
 <style>
     .error {
         color: red;
+        display: block; /* Make the error message appear as a block element */
+        margin-top: 5px; 
     }
 </style>
 

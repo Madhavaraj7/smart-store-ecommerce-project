@@ -70,9 +70,36 @@
       </div>
       <div class="col-md-2" style="padding-top: 27px">
         <div class="btn btn-primary" id="downloadPDF">Download(PDF)</div>
-      </div>
+    </div>
 
-       
+      <% if (dateValues) { %>
+        <div class="col-md-2">
+            <label for="startDate" class="form-label">From:</label>
+            <input id="startDate" type="date" class="form-control" value="<%= dateValues.startDate %>">
+        </div>
+
+        <div class="col-md-2">
+            <label for="endDate" class="form-label">To:</label>
+            <input id="endDate" type="date" class="form-control" value="<%= dateValues.endDate %>">
+        </div>
+
+        <% } else { %>
+
+            <div class="col-md-2">
+                <label for="startDate" class="form-label">From:</label>
+                <input id="startDate" type="date" class="form-control">
+            </div>
+
+            <div class="col-md-2">
+                <label for="endDate" class="form-label">To:</label>
+                <input id="endDate" type="date" class="form-control">
+            </div>
+
+            <% } %>
+
+                <div class="col-md-2">
+                    <button id="filterBtnCustom" class="btn btn-success" style="margin-top: 30px;">Filter</button>
+                </div>
     </div>
   </div>
   <br>
@@ -230,17 +257,56 @@
   });
     </script>
 
-    <script>
-      let downloadPDF = document.getElementById("downloadPDF");
-      downloadPDF.addEventListener("click", () => window.print());
+    
 
+<script>
+  let filterBtnCustom = document.getElementById('filterBtnCustom')
+  filterBtnCustom.addEventListener('click', async (e) => {
+      e.preventDefault()
+      let startDate = document.getElementById('startDate').value
+      let endDate = document.getElementById('endDate').value
+      let formData = { startDate, endDate }
+      console.log(formData)
 
+      let response = await fetch('/admin/salesReport/filterCustom',
+          {
+              method: 'POST',
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(formData)
+          })
+      let result = await response.json()
 
+      if (result.success) {
+          console.log('hello')
+          location.reload()
+      }
+  })
+</script>
 
-      
-    </script>
+<script>
+  document.getElementById('downloadPDF').addEventListener('click', async () => {
+    try {
+      const response = await fetch('/admin/salesReport/download/pdf', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/pdf'
+        }
+      });
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'salesReport.pdf';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a); 
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+    }
+  });
+</script>
 
-  
 
 
 

@@ -161,7 +161,7 @@ const checkoutPage = async (req, res) => {
       userId: req.session.currentUser._id,
     });
 
-
+    const coupons = await couponCollection.find(); 
 
     req.session.currentOrder = await orderCollection.create({
       userId: req.session.currentUser._id,
@@ -182,11 +182,13 @@ const checkoutPage = async (req, res) => {
       cartData,
       addressData: req.session.addressData,
       addressData,
+      coupons: coupons 
     });
   } catch (error) {
     res.redirect("/cart");
   }
 };
+
 const razorpayCreateOrderId= async (req, res) => {
 
   if(req.query?.combinedWalletPayment){
@@ -287,11 +289,13 @@ const orderPlacedEnd = async (req, res) => {
     .populate("productId");
   // console.log(cartData);
   console.log("safjkdhf");
-  cartData.map(async (v) => {
-    v.productId.productStock -= v.productQuantity; //reducing from stock qty
-    await v.productId.save();
-    return v;
-  });
+
+
+    for (const item of cartData) {
+    item.productId.productStock -= item.productQuantity; // we use for reducing Qyantity
+    item.productId.stockSold += 1;  //stocjSolf ++
+    await item.productId.save();
+  }
   
   
   let orderData= await orderCollection.findOne({ _id: req.session.currentOrder._id})

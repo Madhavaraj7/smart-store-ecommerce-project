@@ -99,7 +99,7 @@
                       />
                     </div>
                     <!-- Close button -->
-                    <button type="button" style="width: fit-content; display: none;" id="cls-btn" class="btn btn-danger mt-2" onclick="clearImageInput()">Clear images</button>
+                    <!-- <button type="button" style="width: fit-content; display: none;" id="cls-btn" class="btn btn-danger mt-2" onclick="clearImageInput()">Clear images</button> -->
                   </div>
                  
                   
@@ -175,93 +175,78 @@
 
     let crop = [];
     function loadFile(event) {
-      let imageDiv = document.getElementById("imageDiv");
-      imageDiv.innerHTML = "";
+  let imageDiv = document.getElementById("imageDiv");
+  imageDiv.innerHTML = "";
 
-      const maxImages = 4;
-      const files = event.target.files;
-      if (files.length > maxImages) {
-        alert(`Please select only up to ${maxImages} images.`);
-        document.getElementById("image").value = ""; // Clear the file input
-        return;
-      }
+  const maxImages = 3;
 
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+  const files = event.target.files;
+  if (files.length > maxImages) {
+    alert(`Please select only up to ${maxImages} images.`);
+    document.getElementById("image").value = ""; // Clear the file input
+    return;
+  }
 
-        const reader = new FileReader();
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
 
-        reader.onload = (e) => {
-          // Create an image element and set its source to the selected file
-          const div = document.createElement("div");
-          div.style.height = "300px";
-          div.style.width = "300px";
-          const img = new Image();
-          img.src = e.target.result;
-          img.style.margin = "30px";
+    const reader = new FileReader();
 
-          // Append the image to the container
-          div.appendChild(img);
-          imageDiv.appendChild(div);
+    reader.onload = (e) => {
+      // Create an image container
+      const container = document.createElement("div");
+      container.style.display = "flex";
+      container.style.alignItems = "center";
+      container.style.marginBottom = "10px";
 
-          // Initialize Cropper.js on the image
-          const cropper = new Cropper(img, {
-            aspectRatio: 3.5 / 4, // Set the aspect ratio as needed
-            viewMode: 1, // Set the view mode as needed
-          });
+      // Create an image element and set its source to the selected file
+      const img = new Image();
+      img.src = e.target.result;
+      img.style.width = "100px";
+      img.style.height = "100px";
+      img.style.objectFit = "cover";
 
-          // Store the cropper instance in the croppers array
-          crop.push(cropper);
-        };
+      // Append the image to the container
+      container.appendChild(img);
 
-        reader.readAsDataURL(file);
-      }
-      // document.getElementById("img-container").style.height = "200px"
+      // Create a delete button for the image
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Delete";
+      deleteButton.className = "btn btn-danger";
+      deleteButton.style.marginLeft = "10px";
 
-      document.getElementById("cropButton").addEventListener(
-        "click",
-        function () {
-          // Get the cropped canvas data
-          const canvas = cropper.getCroppedCanvas();
+      // Add an event listener to delete the image when the button is clicked
+      deleteButton.addEventListener("click", function () {
+        container.remove(); // Remove the image container
+        // Remove the Cropper instance from the array
+        crop.splice(i, 1);
+        // Update the file input value if needed
+        document.getElementById("image").value = "";
+      });
 
-          // Set the source of the cropped image
-          croppedImg.src = canvas.toDataURL("image/png");
+      // Append the delete button to the container
+      container.appendChild(deleteButton);
 
-          canvas.toBlob(function (blob) {
-            const file = new File([blob], "croppedImg.png", {
-              type: "image/png",
-            });
+      // Append the container to the imageDiv
+      imageDiv.appendChild(container);
 
-            const formData = new FormData();
-            formData.append("image", file);
+      // Initialize Cropper.js on the image
+      const cropper = new Cropper(img, {
+        aspectRatio: 3.5 / 4, // Set the aspect ratio as needed
+        viewMode: 1, // Set the view mode as needed
+      });
 
-            fetch("/addproduct", {
-              method: "POST",
-              body: formData,
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                // Check if the upload was successful
-                if (data.success) {
-                  // Optionally, you can handle success here
-                  window.location.href = "/products"; // Change this URL
-                } else {
-                  // Handle the case where upload was not successful
-                  console.error("Upload failed:", data.error);
-                }
-              })
-              .catch((error) => {
-                console.error("Error:", error);
-              });
-          });
+      // Store the cropper instance in the crop array
+      crop.push(cropper);
+    };
 
-          cropper.destroy();
-          // image.style.display = "none";
-        },
-        "image/png"
-      );
-      document.getElementById("cls-btn").style.display="block"
-    }
+    reader.readAsDataURL(file);
+  }
+
+  // Show clear button
+  document.getElementById("cls-btn").style.display = "block";
+}
+
   </script>
 
 <script>
@@ -276,7 +261,7 @@
     }
   </script>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"></script>
     <script>

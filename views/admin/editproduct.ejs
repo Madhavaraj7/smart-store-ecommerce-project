@@ -6,8 +6,7 @@
             <form class="searchform">
                 <div class="input-group">
                     <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                    <button class="btn btn-light bg" type="button"> <i
-                            class="material-icons md-search"></i></button>
+                    <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
                 </div>
                 <datalist id="search_terms">
                     <option value="Products">
@@ -25,150 +24,84 @@
     <main class="main-wrap" style="width: 50%; margin-left: 12em;">
         
         <section class="content-main">
+            <div class="container mt-5">
+                <h2>Edit Product</h2>
+                <form action="/admin/editProduct/<%=productData._id%>" method="POST" id="editProductValidation" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="productName">Product Name</label>
+                        <input type="text" class="form-control" id="productName" value="<%= productData.productName %>" name="productName" required >
+                    </div>
 
-            
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <img src="/upload/<%= productData.productImage1 %>" alt="" id="preview1" style="width: 100px; height: 100px">
+                        </div>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-danger delete-button" onclick="deleteImage(1, this)">Delete</button>
+                        </div>
+                        <input name="productImage1" id="productImage1" type="file" class="form-control" placeholder="Product Image1" onchange="displayImage1()">
+                    </div>
+                    
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <img src="/upload/<%= productData.productImage2 %>" alt="" id="preview2" style="width: 100px; height: 100px">
+                        </div>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-danger delete-button" onclick="deleteImage(2, this)">Delete</button>
+                        </div>
+                        <input name="productImage2" id="productImage2" type="file" class="form-control" placeholder="Product Image2" onchange="displayImage2()">
+                    </div>
+                    
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <img src="/upload/<%= productData.productImage3 %>" alt="" id="preview3" style="width: 100px; height: 100px">
+                        </div>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-danger delete-button" onclick="deleteImage(3, this)">Delete</button>
+                        </div>
+                        <input name="productImage3" id="productImage3" type="file" class="form-control" placeholder="Product Image3" required onchange="displayImage3()">
+                    </div>
+                    <div class="input-group mb-3">
+                        <input name="productPrice" type="number" class="form-control" value="<%= productData.productPrice %>" min="100" required>
+                    </div>
 
+                    <div class="input-group mb-3">
+                        <input name="productStock" type="number" class="form-control" value="<%= productData.productStock %>" min="0" required>
+                    </div>
 
-            <!DOCTYPE html>
-            <html lang="en">
-
-            <head>
-                <meta charset="UTF-8">
-                <title>Edit Product</title>
-                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-            </head>
-
-            <body>
-                <div class="container mt-5">
-                    <h2>Edit Product</h2>
-
-
-
-
-
-                    <form action="/admin/editProduct/<%=productData._id%>" method="POST" id="editProductValidation" enctype="multipart/form-data">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label for="productName">Product Name</label>
-                            <input type="text" class="form-control" id="productName"
-                                value="<%= productData.productName %>" name="productName" required >
+                            <label for="Category">Category</label>
+                            <select class="form-control p_input" name="categories" placeholder="category" >
+                                <% categories.forEach((value)=>{ %>
+                                    <option value="<%=value.categoryName  %>"><%= value.categoryName %></option>
+                                <% }) %>
+                            </select>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Save Changes</button>
                         </div>
-
-
-
-
-
-                        <div class="input-group mb-3">
-                            <img src="/upload/<%= productData.productImage1 %>" alt="" id="preview1"
-                                style="width: 100px; height: 100px">
-                            <div class="input-group mb-3">
-                                <input name="productImage1" id="productImage1" type="file" class="form-control"
-                                    placeholder="Product Image1" onchange="displayImage1()" >
-                            </div>
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <img src="/upload/<%= productData.productImage2 %>" alt=""
-                                style="width: 100px; height: 100px">
-                            <div class="input-group mb-3">
-                                <input name="productImage2" id="productImage2" type="file" class="form-control"
-                                    placeholder="Product Image2" onchange="displayImage2()" >
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <img src="/upload/<%= productData.productImage3 %>" alt=""
-                                style="width: 100px; height: 100px" id="preview1">
-                            <div class="input-group mb-3">
-                                <input name="productImage3" type="file" class="form-control" onchange="displayImage3()">
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <input name="productPrice" type="number" class="form-control"
-                                value="<%= productData.productPrice %>" min="100" required>
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <input name="productStock" type="number" class="form-control"
-                                value="<%= productData.productStock %>" min="0" required>
-                        </div>
-
-
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="Category">Category</label>
-
-                                <select class="form-control p_input" name="categories" placeholder="category" >
-                                    <% categories.forEach((value)=>{ %>
-                                        <option value="<%=value.categoryName  %>">
-                                            <%= value.categoryName %>
-                                        </option>
-                                        <% }) %>
-
-                                </select>
-
-                                <!-- <div class="form-group">
-
-                                                <input type="file" class="form-control-file" id="productImage"
-                                                    name="productImage">
-                                            </div> -->
-                                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Save Changes</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-
-                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-            </body>
-
-            </html>
-
-
-
-
-
-
-
-
-
-
-            <!-- <div class="pagination-area mt-15 mb-50">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-start">
-                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                    <li class="page-item"><a class="page-link" href="#">02</a></li>
-                    <li class="page-item"><a class="page-link" href="#">03</a></li>
-                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                    <li class="page-item"><a class="page-link" href="#">16</a></li>
-                    <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
-                </ul>
-            </nav>
-        </div> -->
+                    </div>
+                </form>
+            </div>
         </section> <!-- content-main end// -->
         
     </main>
-
-
-
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"></script>
     <script>
+        // Function to delete image and hide delete button
+        function deleteImage(imageNumber, button) {
+            $("#preview" + imageNumber).hide();
+            $(button).hide();
+        }
 
-
-        $.validator.addMethod("noWhitespace", function (value, element) {
-            return value.trim() !== ""; // Check if the trimmed value is not empty
-        }, "Please enter a valid value.");
-
+        // Form validation rules
         $("#editProductValidation").validate({
             rules: {
                 productName: {
                     required: true,
                     noWhitespace: true, // Apply custom validation rule
-                    // pattern: /^[a-zA-Z]+$/,
                     minlength: 2,
                     maxlength: 20,
                 },
@@ -184,14 +117,12 @@
                     minlength: 2,
                     maxlength: 20,
                 },
-
             },
             messages: {
                 productName: {
                     required: "Please enter your product name",
                     noWhitespace: "cannot be empty or contain only spaces",
                     pattern: "can only contain letters",
-                  
                 },
                 productPrice: {
                     required: "Please enter your price",
@@ -200,55 +131,53 @@
                 productStock: {
                     required: "Please enter your last name",
                     noWhitespace: "Last name cannot be empty or contain only spaces",
-                   
                 },
-
             },
         });
+    </script>
 
-    </script>.
-
-
-
-
-
-
-
-    <!-- {{!-- onchange image display --}} -->
-    <!-- <script>
-        function displayImage1() {
-            const reader = new FileReader()
-            reader.onload = () => {
-                preview1.src = reader.result
-            }
-            const file = document.querySelector("#productImage1").files[0];
-            if (file) {
-                preview1.style.display = 'block'
-                reader.readAsDataURL(file)
-            }
+<script>
+    function displayImage1() {
+        const reader = new FileReader();
+        reader.onload = () => {
+            $("#preview1").attr("src", reader.result); // Update the src attribute of the preview image
+            $("#preview1").show(); // Show the preview image
+            $("#deleteButton1").show(); // Show the delete button
+        };
+        const file = document.querySelector("#productImage1").files[0];
+        if (file) {
+            reader.readAsDataURL(file);
         }
-        function displayImage2() {
-            const reader = new FileReader()
-            reader.onload = () => {
-                preview2.src = reader.result
-            }
-            const file = document.querySelector("#productImage2").files[0];
-            if (file) {
-                preview2.style.display = 'block'
-                reader.readAsDataURL(file)
-            }
+    }
+
+    function displayImage2() {
+        const reader = new FileReader();
+        reader.onload = () => {
+            $("#preview2").attr("src", reader.result); // Update the src attribute of the preview image
+            $("#preview2").show(); // Show the preview image
+            $("#deleteButton2").show(); // Show the delete button
+        };
+        const file = document.querySelector("#productImage2").files[0];
+        if (file) {
+            reader.readAsDataURL(file);
         }
-        function displayImage3() {
-            const reader = new FileReader()
-            reader.onload = () => {
-                preview3.src = reader.result
-            }
-            const file = document.querySelector("#productImage3").files[0];
-            if (file) {
-                preview3.style.display = 'block'
-                reader.readAsDataURL(file)
-            }
+    }
+
+    function displayImage3() {
+        const reader = new FileReader();
+        reader.onload = () => {
+            $("#preview3").attr("src", reader.result); // Update the src attribute of the preview image
+            $("#preview3").show(); // Show the preview image
+            $("#deleteButton3").show(); // Show the delete button
+        };
+        const file = document.querySelector("#productImage3").files[0];
+        if (file) {
+            reader.readAsDataURL(file);
         }
-    </script> -->
+    }
+</script>
+
+
+
 
 <%- include('../layouts/adminFooter.ejs') %>

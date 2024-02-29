@@ -4,6 +4,8 @@ const addressCollection = require("../models/addressModel");
 const orderCollection = require("../models/orderModel");
 const formatDate = require("../service/formatDateHelper");
 const walletCollection = require("../models/walletModel.js");
+const { generateInvoice } = require("../service/generatePDF.js");
+
 
 const razorpay = require("../service/razorpay.js");
 
@@ -176,9 +178,8 @@ module.exports = {
       let orderData = await orderCollection
         .findOne({ _id: req.params.id })
         .populate("addressChosen");
-      let isCancelled = orderData.orderStatus == "Cancelled";
-      let isReturn = orderData.orderStatus == "Retrun";
-
+      let isCancelled = orderData.orderStatus == "Cancelled" ? true : false;
+      let isReturn = orderData.orderStatus == "Return" ? true : false ;
       res.render("users/orderStatus", {
         currentUser: req.session.currentUser,
         orderData,
@@ -189,6 +190,27 @@ module.exports = {
       console.error(error);
     }
   },
+  downloadInvoice: async (req, res) => {
+    try {
+      let orderData = await orderCollection
+        .findOne({ _id: req.params.id })
+        .populate("addressChosen");
+
+      const stream = res.writeHead(200, {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": "attachment;filename=invoice.pdf",
+      });
+
+      generateInvoice(
+        (chunk) => stream.write(chunk),
+        () => stream.end(),
+        orderData
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
   cancelOrder: async (req, res) => {
     try {
       const { cancelReason } = req.body;
@@ -230,7 +252,7 @@ module.exports = {
 
       await orderCollection.findByIdAndUpdate(
         { _id: req.params.id },
-        { $set: { orderStatus: "Retrun", ReturnReason } }
+        { $set: { orderStatus: "Return", ReturnReason } }
       );
 
       let walletTransaction = {

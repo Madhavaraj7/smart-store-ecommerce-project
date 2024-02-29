@@ -1,5 +1,9 @@
 const userRoute = require("../routes/userRoutes");
 const userdata = require("../models/userModel");
+const productCollection = require("../models/productModel.js");
+const dashboard = require("../service/dashboardChart.js");
+
+
 
 //requiring bcrypt
 const bcrypt = require("bcrypt");
@@ -45,7 +49,7 @@ const verifyLogin = async (req, res) => {
           });
         } else {
           req.session.isAdmin = true;
-          res.render("admin/dashboard");
+          res.redirect("/admin/adminHome");
         }
       } else {
         res.render("admin/login", { message: "Email and password incorrect" });
@@ -59,9 +63,18 @@ const verifyLogin = async (req, res) => {
 };
 
 const adminHome = async (req, res) => {
+  console.log("kkkkkkkkkk");
   try {
     const userData = await userdata.findById({ _id: req.session.user_id });
-    res.render("admin/dashboard", { admin: userData });
+    let productData = req.session?.shopProductData || await productCollection
+    .find({ isListed: true })
+    console.log("kkkkkkk",productData);
+
+    if (!productData) {
+      productData = []; // or handle the case where productData is not available
+    }
+    
+    res.render("admin/dashboard", { productData,userData });
   } catch (error) {
     console.log(error.message);
   }
@@ -129,6 +142,99 @@ const unblockUserController = async (req, res) => {
   }
 };
 
+
+const dashboardData = async (req, res) => {
+  try {
+   
+    const [
+      productsCount,
+      categoryCount,
+      pendingOrdersCount,
+      completedOrdersCount,
+      currentDayRevenue,
+      fourteenDaysRevenue,
+      categoryWiseRevenue,
+      shipping,
+    ] = await Promise.all([
+      dashboard.productsCount(),
+      dashboard.categoryCount(),
+      dashboard.pendingOrdersCount(),
+      dashboard.completedOrdersCount(),
+      dashboard.currentDayRevenue(),
+      dashboard.fourteenDaysRevenue(),
+      dashboard.categoryWiseRevenue(),
+      dashboard.shipping(),
+    ]);
+
+    const data = {
+      productsCount,
+      categoryCount,
+      pendingOrdersCount,
+      completedOrdersCount,
+      currentDayRevenue,
+      fourteenDaysRevenue,
+      categoryWiseRevenue,
+      shipping,
+    };
+
+    res.json(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+const filterCategory = async (req, res) => {
+  try {
+    req.session.shopProductData = await productCollection.find({
+      isListed: true,
+      categoryName: req.body.categoriesName,
+    }).populate("parentCategory");
+    res.redirect("/admin/adminHome");
+  } catch (error) {
+    console.error(error);
+  }
+}
+const filterPriceRange = async (req, res) => {
+  try {
+    req.session.shopProductData = await productCollection.find({
+      isListed: true,
+      stockSold: {
+        $gt: 0 + 500 * req.query.priceRange,
+        $lte: 500 + 500 * req.query.priceRange,
+      },
+    });
+    res.redirect("/admin/adminHome");
+  } catch (error) {
+    console.error(error);
+  }
+}
+const sortPriceAscending =  async (req, res) => {
+  try {
+    console.log('asending');
+    req.session.shopProductData = await productCollection
+      .find({ isListed: true })
+      .sort({stockSold: 1 });
+    res.json({ success: true });
+    console.log('asending2');
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+const sortPriceDescending = async (req, res) => {
+  try {
+    console.log('desending');
+
+    req.session.shopProductData = await productCollection
+      .find({ isListed: true })
+      .sort({ stockSold: -1 });
+    res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 module.exports = {
   loadLogin,
   verifyLogin,
@@ -137,6 +243,11 @@ module.exports = {
   userListController,
   blockUserController,
   unblockUserController,
+  dashboardData,
+  filterCategory,
+  filterPriceRange,
+  sortPriceAscending,
+  sortPriceDescending
   // userManagement,
   // blockUser,
   // unBlockUser,
