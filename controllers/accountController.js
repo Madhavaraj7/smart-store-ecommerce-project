@@ -158,6 +158,8 @@ module.exports = {
       let orderData = await orderCollection.find({
         userId: req.session.currentUser._id,
       });
+      orderData = orderData.filter((order) => order.paymentType !== "toBeChosen");
+
 
       //sending the formatted date to the page
       orderData = orderData.map((v) => {

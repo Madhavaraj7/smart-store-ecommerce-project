@@ -192,7 +192,7 @@
                                                                     <div style="clear:both;"></div>
                                                                     <div class="card-paynemt-box payment-method">
                                                                         <label class="radio-inline" for="CashOnDelivery" aria-controls="CashOnDeliveryCollapse">
-                                                                            <input name="radios" id="COD" value="COD" type="radio" checked>Cash On Delivery
+                                                                            <input name="radios" id="COD" value="COD" type="radio"  >Cash On Delivery
                                                                         </label>
                                                                     </div>
                                                                     <div class="card-paynemt-box payment-method">
@@ -330,15 +330,20 @@
     const walletElement = document.getElementById('wallet');
     const grandTotalElement = document.getElementById('grandTotal');
 
-    // Function to disable COD button if grand total is greater than 1000
-    function checkGrandTotal() {
-        const grandTotal = parseFloat(grandTotalElement.innerText.replace('₹', ''));
-        if (grandTotal > 1000) {
-            CODElement.disabled = true;
-        } else {
-            CODElement.disabled = false;
-        }
+    // Function to disable or hide COD button if grand total is greater than 1000
+function checkGrandTotal() {
+    const grandTotal = parseFloat(grandTotalElement.innerText.replace('₹', ''));
+    if (grandTotal > 1000) {
+        // Disable COD option
+        CODElement.disabled = true;
+        // Hide COD option
+        CODElement.closest('.card-paynemt-box').style.display = 'none';
+    } else {
+        CODElement.disabled = false;
+        CODElement.closest('.card-paynemt-box').style.display = 'block';
     }
+}
+
 
     // Call the function initially when the DOM content is loaded
     document.addEventListener('DOMContentLoaded', function () {
@@ -355,6 +360,7 @@
     async function orderBtnClickFunction(event) {
         try {
             event.preventDefault();
+            
 
             if (CODElement.checked) { // Cash on delivery
                 window.location.href = '/checkout/orderPlacedEnd';
@@ -381,6 +387,13 @@
                 const order = await orderResponse.json();
                 console.log(order);
                 await openRazorpay(order.amount, order.id);
+            }
+            else{
+                return Swal.fire({
+                icon: "error",
+                title: "Payment method not selected",
+                text: "Please select a payment method",
+            });
             }
         } catch (error) {
             console.error(error);
