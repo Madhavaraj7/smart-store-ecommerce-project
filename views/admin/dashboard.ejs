@@ -102,7 +102,7 @@
           </div>
       </div>
       <div class="col-lg-3">
-          <div class="card card-body mb-4">
+          <div class="card card-body mb-4" style="padding-bottom: 40px;">
               <article class="icontext">
                   <span class="icon icon-sm rounded-circle bg-success-light"><i
                           class="text-success material-icons md-local_shipping"></i></span>
@@ -135,8 +135,8 @@
                   <span class="icon icon-sm rounded-circle bg-info-light"><i
                           class="text-info material-icons md-shopping_basket"></i></span>
                   <div class="text">
-                      <h6 class="mb-1 card-title">Two Week Earning</h6>
-                      <h5 id="fourteenDaysRevenue" class="card-title"></h5>
+                      <h6 class="mb-1 card-title">One Month Earning</h6>
+                      <h5 id="MonthlyRevenue" class="card-title"></h5>
                       <span class="text-sm"> Based in your local time. </span>
                       
                   </div>
@@ -221,21 +221,21 @@
                   pendingOrdersCount,
                   completedOrdersCount,
                   currentDayRevenue,
-                  fourteenDaysRevenue,
+                  MonthlyRevenue,
                   categoryWiseRevenue,
                   shipping,
               } = data;
               console.log("11");
-              let fourteenDaysRevenueTotal= fourteenDaysRevenue.revenue.reduce( (acc,curr)=>acc+curr,0   )
+              let MonthlyRevenueTotal= MonthlyRevenue.revenue.reduce( (acc,curr)=>acc+curr,0   )
               document.getElementById('currentDayRevenue').innerText = '₹' + currentDayRevenue
               document.getElementById('completedOrdersCount').innerText = completedOrdersCount
               document.getElementById('productsCount').innerText = productsCount
               document.getElementById('categoryCount').innerText = 'in ' + categoryCount + ' categories'
-              document.getElementById('fourteenDaysRevenue').innerText = '₹' + fourteenDaysRevenueTotal
+              document.getElementById('MonthlyRevenue').innerText = '₹' + MonthlyRevenueTotal
 
               // document.getElementById('pendingOrdersCount').innerText = pendingOrdersCount
 
-              console.log(fourteenDaysRevenue);
+              console.log(MonthlyRevenue);
               console.log("1");
               console.log(shipping);
 
@@ -244,11 +244,11 @@
               const twoWeeksSalesChartOptions = {
                   type: "line",
                   data: {
-                      labels: fourteenDaysRevenue.date,
+                      labels: MonthlyRevenue.date,
                       datasets: [
                           {
                               label: "Last 2 weeks revenue per day",
-                              data: fourteenDaysRevenue.revenue,
+                              data: MonthlyRevenue.revenue,
                               borderWidth: 1,
                           },
                       ],

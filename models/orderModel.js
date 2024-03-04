@@ -9,6 +9,10 @@ const orderSchema = new mongoose.Schema({
   orderDate: { type: Date, required: true, default: new Date() },
   paymentType: { type: String, default: "toBeChosen" },
   orderStatus: { type: String, default: "Pending" },
+  returnApproval: {
+    type: Boolean,
+    default: false,
+  },
   addressChosen: {
     type: mongoose.Types.ObjectId,
     required: true,

@@ -74,6 +74,17 @@ const couponManagement = async (req, res) => {
       return res.status(500).json({ error: "Internal Server Error" });
     }
   };
+
+  const deleteCoupon = async (req, res) => {
+    try {
+        await couponCollection.findByIdAndDelete(req.params.id);
+        return res.json({ couponDeleted: true });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
   
 
   
@@ -81,6 +92,7 @@ const couponManagement = async (req, res) => {
     couponManagement,
     addCoupon,
     editCoupon,
+    deleteCoupon,
 
   };
   

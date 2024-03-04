@@ -267,7 +267,7 @@
                         </tbody>
                     </table>
                     <div class="coupon-container">
-                        <% coupons.forEach(function(coupon) { %>
+                        <% coupons.reverse().forEach(function(coupon) { %>
                           <div class="coupon-card">
                             <h3><%= coupon.couponCode %></h3>
                             <p>Discount: <%= coupon.discountPercentage %>%</p>

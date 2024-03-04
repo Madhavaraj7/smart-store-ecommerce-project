@@ -61,7 +61,7 @@ const currentDayRevenue = async () => {
   }
 };
 
-const fourteenDaysRevenue = async () => {
+const MonthlyRevenue = async () => {
   try {
     const result = await orderCollection.aggregate([
       {
@@ -74,7 +74,7 @@ const fourteenDaysRevenue = async () => {
         $sort: { _id: 1 },
       },
       {
-        $limit: 14,
+        $limit: 30,
       },
     ]);
     console.log("result:");
@@ -127,7 +127,7 @@ module.exports = {
   pendingOrdersCount,
   completedOrdersCount,
   currentDayRevenue,
-  fourteenDaysRevenue,
   categoryWiseRevenue,
+  MonthlyRevenue,
   shipping,
 };

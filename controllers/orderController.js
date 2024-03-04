@@ -17,8 +17,6 @@ const orderManagement = async (req, res) => {
         .populate("userId").skip(skip).limit(limit);
       console.log(orderData[0]);
       console.log(orderData);
-      // orderData = orderData.filter((order) => order.paymentType !== "toBeChosen");
-
       res.render("admin/orderManagement", { orderData, count, limit, page });
     } catch (error) {
       console.error(error);

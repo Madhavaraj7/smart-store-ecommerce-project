@@ -153,9 +153,9 @@
           <th scope="col">#</th>
           <th scope="col">Order No</th>
           <th scope="col">Products</th>
-          <th scope="col">Current Price</th> <!-- Added column for product price -->
-          <th scope="col">Product Before Price</th> <!-- Added column for product price -->
-          <th scope="col">Product Offer (%)</th> <!-- Added column for product offer percentage -->
+          <th scope="col">Current Price</th> 
+          <th scope="col">Product Before Price</th> 
+          <th scope="col">Product Offer (%)</th> 
           <th scope="col">No. of Items</th>
           <th scope="col">Paid Amount</th>
           <th scope="col">Payment Method</th>
@@ -188,7 +188,7 @@
               <% }) %>
             </ul>
           </td>
-          <td> <!-- Display product offer percentage -->
+          <td> 
             <ul>
               <% sale.cartData.forEach(function(cartItem) { %>
               <li><%= cartItem.productId.productOfferPercentage %> %</li>
@@ -287,10 +287,7 @@
   document.getElementById('downloadPDF').addEventListener('click', async () => {
     try {
       const response = await fetch('/admin/salesReport/download/pdf', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/pdf'
-        }
+        method: 'GET'
       });
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -306,6 +303,7 @@
     }
   });
 </script>
+
 
 
 

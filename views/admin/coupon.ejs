@@ -172,6 +172,8 @@
                                 data-bs-target="#editModal<%= index %>">Edit
                                 <i class="fas fa-edit"></i>
                             </button>
+                            <button type="button" class="btn btn-danger" onclick="deleteCoupon('<%= coupon._id %>')">Delete</button>
+
 
                         </td>
                     </tr>
@@ -533,5 +535,44 @@
       $('#example').DataTable();
   } );
   </script>
+
+
+<script>
+    async function deleteCoupon(couponId) {
+        try {
+            // Show confirmation dialog
+            const confirmed = window.confirm("Are you sure you want to delete this coupon?");
+            
+            if (!confirmed) {
+                return; // If user cancels, do nothing
+            }
+            
+            let response = await fetch(`/admin/couponManagement/deleteCoupon/${couponId}`, {
+                method: 'DELETE'
+            });
+
+            let result = await response.json();
+
+            if (result.couponDeleted) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Coupon has been deleted",
+                    showConfirmButton: false,
+                    timer: 3500
+                }).then(() => location.reload())
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed to delete coupon",
+                    text: "Please try again"
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+</script>
+
+
 
 <%- include('../layouts/adminFooter.ejs') %>

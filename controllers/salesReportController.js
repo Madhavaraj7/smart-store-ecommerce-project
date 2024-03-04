@@ -1,12 +1,12 @@
 const orderCollection = require("../models/orderModel.js");
 const formatDate = require("../service/formatDateHelper.js");
-
+const getSalesData = require("../service/salesData.js");
 const exceljs = require("exceljs");
-const fs = require('fs');
-const PDFDocument = require('pdfkit');
+const fs = require("fs");
+// const PDFDocument = require('pdfkit');
+const puppeteer = require("puppeteer");
 
 // const { ObjectId } = require("mongodb");
-
 
 const salesReport = async (req, res) => {
   try {
@@ -22,14 +22,12 @@ const salesReport = async (req, res) => {
     let count = await orderCollection.countDocuments({ isListed: true });
 
     let salesData = await orderCollection
-      .find({ orderStatus: "Delivered" }) 
+      .find({ orderStatus: "Delivered" })
       .populate("userId")
       .skip(skip)
       .limit(limit);
 
-      
-
-    console.log("lllllll",salesData);
+    console.log("lllllll", salesData);
     res.render("admin/salesReport", {
       salesData,
       dateValues: null,
@@ -42,7 +40,7 @@ const salesReport = async (req, res) => {
   }
 };
 
-const salesReportFilterCustom= async (req, res) => {
+const salesReportFilterCustom = async (req, res) => {
   try {
     let { startDate, endDate } = req.body;
     let salesDataFiltered = await orderCollection
@@ -68,50 +66,46 @@ const salesReportFilterCustom= async (req, res) => {
   }
 };
 
+const salesReportFilter = async (req, res) => {
+  try {
+    let { filterOption } = req.body;
+    let startDate, endDate;
 
-  // sales report filter
-
-  const salesReportFilter = async (req, res) => {
-    try {
-        let { filterOption } = req.body;
-        let startDate, endDate;
-
-        if (filterOption === 'month') {
-            startDate = new Date();
-            startDate.setDate(1);
-            endDate = new Date();
-            endDate.setMonth(endDate.getMonth() + 1, 0);
-        } else if (filterOption === 'week') {
-            let currentDate = new Date();
-            let currentDay = currentDate.getDay();
-            let diff = currentDate.getDate() - currentDay - 7; 
-            startDate = new Date(currentDate.setDate(diff));
-            endDate = new Date(startDate);
-            endDate.setDate(startDate.getDate() + 6);
-        } else if (filterOption === 'year') {
-            let currentYear = new Date().getFullYear();
-            startDate = new Date(currentYear, 0, 1);
-            endDate = new Date(currentYear, 11, 31);
-        }
-
-        let salesDataFiltered = await orderCollection.find({
-            orderDate: { $gte: startDate, $lte: endDate },
-            orderStatus: "Delivered" // Only include delivered orders
-
-        }).populate("userId");
-
-        req.session.admin = {};
-        req.session.admin.dateValues = { startDate, endDate };
-        req.session.admin.salesData = JSON.parse(JSON.stringify(salesDataFiltered));
-
-        res.status(200).json({ success: true });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, error: "Internal server error" });
+    if (filterOption === "month") {
+      startDate = new Date();
+      startDate.setDate(1);
+      endDate = new Date();
+      endDate.setMonth(endDate.getMonth() + 1, 0);
+    } else if (filterOption === "week") {
+      let currentDate = new Date();
+      let currentDay = currentDate.getDay();
+      let diff = currentDate.getDate() - currentDay - 7;
+      startDate = new Date(currentDate.setDate(diff));
+      endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 6);
+    } else if (filterOption === "year") {
+      let currentYear = new Date().getFullYear();
+      startDate = new Date(currentYear, 0, 1);
+      endDate = new Date(currentYear, 11, 31);
     }
+
+    let salesDataFiltered = await orderCollection
+      .find({
+        orderDate: { $gte: startDate, $lte: endDate },
+        orderStatus: "Delivered",
+      })
+      .populate("userId");
+
+    req.session.admin = {};
+    req.session.admin.dateValues = { startDate, endDate };
+    req.session.admin.salesData = JSON.parse(JSON.stringify(salesDataFiltered));
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
 };
-
-
 
 const salesReportDownload = async (req, res) => {
   try {
@@ -128,15 +122,15 @@ const salesReportDownload = async (req, res) => {
     ];
 
     let salesData = req.session?.admin?.dateValues
-      ? req.session.admin.salesData // Use filtered sales data from session
-      : await orderCollection.find().populate("userId"); // Use all sales data
+      ? req.session.admin.salesData
+      : await orderCollection.find().populate("userId");
 
     salesData = salesData.map((v) => {
       v.orderDateFormatted = formatDate(v.orderDate);
       return v;
     });
 
-    salesData.forEach((v) => { // Use forEach instead of map since we're not returning a new array
+    salesData.forEach((v) => {
       sheet.addRow({
         no: v.orderNumber,
         username: v.userId.username,
@@ -149,28 +143,29 @@ const salesReportDownload = async (req, res) => {
       });
     });
 
-    // Calculate total orders, total sales, and total discount
     const totalOrders = salesData.length;
-    const totalSales = salesData.reduce((total, sale) => total + sale.grandTotalCost, 0);
+    const totalSales = salesData.reduce(
+      (total, sale) => total + sale.grandTotalCost,
+      0
+    );
     const totalDiscount = salesData.reduce((total, sale) => {
       let discountAmount = sale.cartData.reduce((discount, cartItem) => {
         let productPrice = cartItem.productId.productPrice;
         let priceBeforeOffer = cartItem.productId.priceBeforeOffer;
-        let discountPercentage = cartItem.productId.productOfferPercentage || 0; // If no discount, default to 0
+        let discountPercentage = cartItem.productId.productOfferPercentage || 0;
         let actualAmount = productPrice * cartItem.productQuantity;
-        let paidAmount = actualAmount - (actualAmount * discountPercentage / 100); // Calculate paid amount after discount
-        return discount + (actualAmount - paidAmount); // Add discounted amount to total discount
+        let paidAmount =
+          actualAmount - (actualAmount * discountPercentage) / 100;
+        return discount + (actualAmount - paidAmount);
       }, 0);
       return total + discountAmount;
     }, 0);
 
-    // Add summary column headers and data to the sheet
-    sheet.addRow({}); // Add empty row for spacing
+    sheet.addRow({});
     sheet.addRow({ "Total Orders": totalOrders });
     sheet.addRow({ "Total Sales": "₹" + totalSales });
     sheet.addRow({ "Total Discount": "₹" + totalDiscount });
 
-    // Write workbook to response
     res.setHeader(
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -188,52 +183,64 @@ const salesReportDownload = async (req, res) => {
   }
 };
 
-
-
-
-
-
 const salesReportDownloadPDF = async (req, res) => {
   try {
-    const doc = new PDFDocument();
+    const salesData = await getSalesData();
 
-    doc.fontSize(12);
-    doc.text('Sales Report', { align: 'center' });
-    doc.moveDown();
-    doc.text('No\tOrder Date\tProducts\tNo of items\tTotal Cost\tPayment Method\tStatus');
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
 
-    let salesData = req.session?.admin?.dateValues
-      ? await orderCollection
-        .find({
-          orderDate: {
-            $gte: new Date(req.session.admin.dateValues.startDate),
-            $lte: new Date(req.session.admin.dateValues.endDate),
-          },
-        })
-        .populate('userId')
-      : await orderCollection.find().populate('userId');
+    let htmlContent = `
+      <h1 style="text-align: center;">Sales Report</h1>
+      <table style="width:100%">
+        <tr>
+          <th>Order Number</th>
+          <th>Order Date</th>
+          <th>Products</th>
+          <th>Quantity</th>
+          <th>Total Cost</th>
+          <th>Payment Method</th>
+          <th>Status</th>
+        </tr>`;
 
-    salesData = salesData.map((v) => {
-      v.orderDateFormatted = formatDate(v.orderDate);
-      return v;
+    salesData.forEach((order) => {
+      htmlContent += `
+        <tr>
+          <td>${order.orderNumber}</td>
+          <td>${order.orderDate}</td>
+          <td>${order.products}</td>
+          <td>${order.quantities}</td>
+          <td>Rs.${order.totalCost}</td>
+          <td>${order.paymentMethod}</td>
+          <td>${order.orderStatus}</td>
+        </tr>`;
     });
 
-    salesData.forEach((v) => {
-      doc.moveDown();
-      doc.text(`${v.orderNumber}\t${v.orderDateFormatted}\t${v.cartData.map((v) => v.productId.productName).join(', ')}\t${v.cartData.map((v) => v.productQuantity).join(', ')}\t₹${v.grandTotalCost}\t${v.paymentType}\t${v.orderStatus}`);
-    });
+    htmlContent += `</table>`;
 
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename=salesReport.pdf');
+    await page.setContent(htmlContent);
 
-    doc.pipe(res);
-    doc.end();
+    const pdfBuffer = await page.pdf({ format: "A4" });
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=salesReport.pdf"
+    );
+
+    res.send(pdfBuffer);
+
+    await browser.close();
   } catch (error) {
-    console.error('Error generating PDF:', error);
-    res.status(500).send('Internal Server Error');
+    console.error("Error generating PDF:", error);
+    res.status(500).send("Internal Server Error");
   }
 };
 
-
-  
-  module.exports = { salesReport, salesReportDownload, salesReportFilter ,salesReportFilterCustom,salesReportDownloadPDF};
+module.exports = {
+  salesReport,
+  salesReportDownload,
+  salesReportFilter,
+  salesReportFilterCustom,
+  salesReportDownloadPDF,
+};

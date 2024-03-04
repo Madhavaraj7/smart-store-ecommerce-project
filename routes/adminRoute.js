@@ -121,7 +121,7 @@ adminRoute.get(
 adminRoute.get("/salesReport", isAdmin,salesReportController.salesReport);
 adminRoute.post("/salesReport/filter", isAdmin,salesReportController.salesReportFilter);
 adminRoute.post('/salesReport/filterCustom',  salesReportController.salesReportFilterCustom)
-adminRoute.get('salesReport/download/pdf',isAdmin,salesReportController.salesReportDownloadPDF)
+adminRoute.get('/salesReport/download/pdf',isAdmin,salesReportController.salesReportDownloadPDF)
 
 adminRoute.get(
   "/salesReport/download/xlsx",isAdmin,

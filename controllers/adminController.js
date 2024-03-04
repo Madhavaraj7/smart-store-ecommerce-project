@@ -63,12 +63,10 @@ const verifyLogin = async (req, res) => {
 };
 
 const adminHome = async (req, res) => {
-  console.log("kkkkkkkkkk");
   try {
     const userData = await userdata.findById({ _id: req.session.user_id });
     let productData = req.session?.shopProductData || await productCollection
     .find({ isListed: true })
-    console.log("kkkkkkk",productData);
 
     if (!productData) {
       productData = []; // or handle the case where productData is not available
@@ -89,7 +87,6 @@ const adminLogout = async (req, res) => {
     req.session.isAdmin = false;
     req.session.admin = null;
     req.session.user_id=null;
-    console.log("logged out");
     res.redirect("/admin");
   } catch (error) {
     console.log(error.message);
@@ -121,7 +118,6 @@ const userListController = async (req, res) => {
   }
 };
 const blockUserController = async (req, res) => {
-  console.log("hello");
   try {
     const { id } = req.params;
     const user = await userdata.findByIdAndUpdate(id, { isBlocked: true });
@@ -136,7 +132,6 @@ const unblockUserController = async (req, res) => {
     const { id } = req.params;
     const user = await userdata.findByIdAndUpdate(id, { isBlocked: false });
     res.redirect("/admin/userManagement");
-    console.log("heyy");
   } catch (error) {
     console.log(error);
   }
@@ -152,7 +147,7 @@ const dashboardData = async (req, res) => {
       pendingOrdersCount,
       completedOrdersCount,
       currentDayRevenue,
-      fourteenDaysRevenue,
+      MonthlyRevenue,
       categoryWiseRevenue,
       shipping,
     ] = await Promise.all([
@@ -161,7 +156,7 @@ const dashboardData = async (req, res) => {
       dashboard.pendingOrdersCount(),
       dashboard.completedOrdersCount(),
       dashboard.currentDayRevenue(),
-      dashboard.fourteenDaysRevenue(),
+      dashboard.MonthlyRevenue(),
       dashboard.categoryWiseRevenue(),
       dashboard.shipping(),
     ]);
@@ -172,7 +167,7 @@ const dashboardData = async (req, res) => {
       pendingOrdersCount,
       completedOrdersCount,
       currentDayRevenue,
-      fourteenDaysRevenue,
+      MonthlyRevenue,
       categoryWiseRevenue,
       shipping,
     };
@@ -211,12 +206,10 @@ const filterPriceRange = async (req, res) => {
 }
 const sortPriceAscending =  async (req, res) => {
   try {
-    console.log('asending');
     req.session.shopProductData = await productCollection
       .find({ isListed: true })
       .sort({stockSold: 1 });
     res.json({ success: true });
-    console.log('asending2');
 
   } catch (error) {
     console.error(error);
@@ -224,7 +217,6 @@ const sortPriceAscending =  async (req, res) => {
 }
 const sortPriceDescending = async (req, res) => {
   try {
-    console.log('desending');
 
     req.session.shopProductData = await productCollection
       .find({ isListed: true })

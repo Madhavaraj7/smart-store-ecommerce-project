@@ -91,7 +91,6 @@ module.exports = {
         userId: req.session.currentUser._id,
         _id: req.params.id,
       });
-      console.log(existingAddress);
       res.render("users/editAddress", {
         currentUser: req.session.currentUser,
         existingAddress,
@@ -139,14 +138,11 @@ module.exports = {
 
   changePasswordPatch: async (req, res) => {
     try {
-      console.log(req.body.password);
-      console.log(req.session.user);
 
       await userCollection.updateOne(
         { user_id: req.body.user_id },
         { $set: { password: req.body.password } }
       );
-      console.log("1234567");
       res.json({ success: true });
     } catch (error) {
       console.error(error);
@@ -216,7 +212,6 @@ module.exports = {
   cancelOrder: async (req, res) => {
     try {
       const { cancelReason } = req.body;
-      console.log("hhhhhh", cancelReason);
 
       const orderData = await orderCollection.findOne({ _id: req.params.id });
 
@@ -281,7 +276,6 @@ module.exports = {
     const { amount } = req.body;
     req.session.walletCredit= amount
 
-    console.log('wallet amount:'+amount);
     if (!amount) {
       return res.status(400).json({ error: "Wallet amount is required" });
     }
@@ -289,8 +283,6 @@ module.exports = {
       amount: amount  + "00",
       currency: "INR",
     };
-    console.log("options:");
-    console.log(options);
     razorpay.instance.orders.create(options, function (err, order) {
       res.json(order);
     });
@@ -299,8 +291,6 @@ module.exports = {
 
   addRazorpayAmountToWallet: async (req, res) => {
     try {
-      console.log('req.body:');
-      console.log(req.body);
       
       const userWallet = await walletCollection.findOne({ userId: req.session.currentUser._id });
       if (!userWallet) {
@@ -309,7 +299,6 @@ module.exports = {
   
       const newWalletBalance = userWallet.walletBalance + Number( req.session.walletCredit);
 
-      console.log(newWalletBalance);
 
       const walletTransaction = {
         transactionDate: new Date(),

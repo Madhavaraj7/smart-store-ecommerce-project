@@ -18,7 +18,6 @@ async function grandTotal(req) {
     let userCartData = await cartCollection
       .find({ userId: req.session.currentUser._id })
       .populate("productId");
-    console.log(Array.isArray(userCartData));
     let grandTotal = 0;
     for (const v of userCartData) {
       grandTotal += v.productId.productPrice * v.productQuantity;
@@ -44,9 +43,7 @@ async function grandTotal(req) {
 const cart = async (req, res) => {
   try {
     let userCartData = await grandTotal(req);
-    // console.log(userCartData);
-    // console.log(req.session.currentUser);
-    // console.log(req.session.user);
+
 
     res.render("users/cart", {
       signIn: req.session.signIn,
@@ -57,7 +54,6 @@ const cart = async (req, res) => {
       userCartData,
       grandTotal: req.session.grandTotal,
     });
-    console.log(req.session.currentUser);
   } catch (error) {
     console.error("Error in cart:", error);
     // res.status(500).send("Internal Server Error");
