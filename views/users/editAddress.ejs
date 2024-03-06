@@ -713,38 +713,38 @@ $(window).load(function() {
 
 
     $.validator.addMethod("noWhitespace", function (value, element) {
-        return value.trim() !== ""; // Check if the trimmed value is not empty
+        return value.trim() !== ""; 
     }, "Please enter a valid value.");
 
     $("#editAdrress").validate({
         rules: {
             firstName: {
                 required: true,
-                noWhitespace: true, // Apply custom validation rule
+                noWhitespace: true, 
                 pattern: /^[a-zA-Z]+$/,
                 minlength: 2,
                 maxlength: 20,
             },
             lastName: {
                 required: true,
-                noWhitespace: true, // Apply custom validation rule
+                noWhitespace: true,
                 pattern: /^[a-zA-Z0]+$/,
                 minlength: 2,
                 maxlength: 20,
             },
             addressLine1: {
                 required: true,
-                noWhitespace: true, // Apply custom validation rule
+                noWhitespace: true, 
                 
             },
             addressLine2: {
                 required: true,
-                noWhitespace: true, // Apply custom validation rule
+                noWhitespace: true, 
                 
             },
             addressTitle: {
                 required: true,
-                noWhitespace: true, // Apply custom validation rule
+                noWhitespace: true,
                 minlength: 2,
                 maxlength: 50,
             },

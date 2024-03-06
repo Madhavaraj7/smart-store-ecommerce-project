@@ -5,6 +5,8 @@ const path = require("path");
 const session = require("express-session");
 const bcrypt = require("bcrypt");
 const adminRoute = require("./routes/adminRoute");
+const flash = require('express-flash');
+
 
 const nocache = require("nocache");
 
@@ -28,6 +30,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({ resave: true, saveUninitialized: true, secret: "my secret" })
 );
+
+
+app.use(flash());
+
 
 const userRoute = require("./routes/userRoutes");
 

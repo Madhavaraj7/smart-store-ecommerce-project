@@ -9,8 +9,8 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/assets/ico/apple-touch-icon-114-precomposed.png" />
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/ico/apple-touch-icon-72-precomposed.png" />
     <link rel="apple-touch-icon-precomposed" href="/ico/apple-touch-icon-57-precomposed.html" />
-    <link rel="shortcut icon" href="/assets/ico/favicon.png" />
-    <title>TSHOP - Bootstrap E-Commerce Parallax Theme</title>
+    <link rel="shortcut icon" href="/images/logo.png" />
+    <title>Smart Store</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 
@@ -400,7 +400,7 @@
                         <% if (orderData.orderStatus=="Delivered" || orderData.orderStatus=="Return" ) { %>
                             <div class="col-sm-12">
                                 <% if (isReturn) { %>
-                                    <button class="btn btn-danger btn-lg btn-block">This order has been
+                                    <button class="btn btn-warning btn-lg btn-block">This order has been
                                         Returned</button>
                                 <% } else { %>
                                         <div class="input-group mb-3">
@@ -493,7 +493,6 @@
                                                                 cartItem.totalCostPerProduct %> </span></td>
                                                 </tr>
                                                 <% }); %>
-                                                    <!-- Other rows for total, shipping, grand total -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -598,11 +597,9 @@
                 },
                 body: JSON.stringify({ cancelReason: reason }),
             }).then(() => {
-                // Reload the page after the action is completed
                 location.reload();
             }).catch(error => console.error('Error:', error));
             
-            // Hide cancel button and show cancelled button
             cancelBtnElement.style.display = 'none';
             cancelledBtnElement.style.display = 'block';
         }
@@ -612,7 +609,6 @@
 async function returnorderConfirmation(orderId) {
     let reason = document.getElementById('ReturnReason').value;
 
-    // Your Swal.fire confirmation dialog
     Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -630,11 +626,9 @@ async function returnorderConfirmation(orderId) {
                 },
                 body: JSON.stringify({ ReturnReason: reason }),
             }).then(() => {
-                // Reload the page after the action is completed
                 location.reload();
             }).catch(error => console.error('Error:', error));
 
-            // Hide cancel button and show returned message
             let cancelBtnElement = document.getElementById('cancelBtn');
             let returnedBtnElement = document.getElementById('returnedBtn');
             cancelBtnElement.style.display = 'none';

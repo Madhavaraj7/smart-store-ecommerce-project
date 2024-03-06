@@ -30,7 +30,7 @@
                     <th scope="col" class="border-dark">Amount</th>
                     <th scope="col" class="border-dark">Payment</th>
                     <th scope="col" class="border-dark">Status</th>
-                    <th scope="col" class="border-dark">Reason</th> <!-- New column for displaying reason -->
+                    <th scope="col" class="border-dark">Reason</th> 
                     <th class="border-dark">Action</th>
                 </tr>
             </thead>
@@ -49,13 +49,12 @@
                     <td><%= order.paymentType %></td>
                     <td><%= order.orderStatus %></td>
                     <td>
-                        <% if (order.orderStatus === 'Cancelled' && order.cancelReason ||order.orderStatus==='Retrun' && order.ReturnReason) { %>
+                        <% if (order.orderStatus === 'Cancelled' && order.cancelReason ||order.orderStatus==='Return' && order.ReturnReason) { %>
                             <%= order.cancelReason %> 
                             <%= order.ReturnReason %> 
 
-                             <!-- Display the reason -->
                         <% } else { %>
-                            NIL
+                            NIL 
                         <% } %>
                         
                     </td>
@@ -80,7 +79,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="/admin/orderManagement/return/<%= order._id %>">
+                                    <a class="dropdown-item" href="/admin/orderManagement/return/<%= order._id %>" onclick="return confirm('Are you sure you want to Return that Product')">
                                         Return
                                     </a>
                                 </li>

@@ -21,46 +21,10 @@
                         <a href="/account/orderList/orderStatus/<%= orderData._id %>">#<%= orderData.orderNumber %></a>
                     </h1>
                     <h4>we'll let you know when your items are on their way</h4>
+                    <a class='btn btn-primary btn-default' href='/home' style="color: white; ">Back to shop</a>
                 </div>
 
-                <!-- <div class="col-lg-7 col-center">
-                    <h4></h4>
-
-                    <div class="cartContent table-responsive w100">
-                        <table style="width: 100%" class="cartTable cartTableBorder">
-                            <tbody>
-                                <tr class="CartProduct cartTableHeader">
-                                    <td colspan="2">Items to be Shipped</td>
-
-                                    <td style="width: 15%"></td>
-                                </tr>
-                                <% orderCartData.forEach(function(orderItem) { %>
-                                <tr class="CartProduct">
-                                    <td class="CartProductThumb">
-                                        <div>
-                                            <a href="product-details.html"><img alt="img"
-                                                    src="/upload/<%= orderItem.productId.productImage1 %>" /></a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="CartDescription">
-                                            <h4>
-                                                <a href="product-details.html"><%= orderItem.productId.productName %>
-                                                </a>
-                                            </h4>
-
-                                            <div class="price"><span>₹<%= orderItem.productId.productPrice %> X
-                                                    <%= orderItem.productQuantity %></span></div>
-                                        </div>
-                                    </td>
-
-                                    <td class="price">₹<%= orderItem.totalCostPerProduct %></td>
-                                </tr>
-                                <% }); %>
-                            </tbody>
-                        </table>
-                    </div>
-                </div> -->
+               
             </div>
             <!--/row end-->
         </div>

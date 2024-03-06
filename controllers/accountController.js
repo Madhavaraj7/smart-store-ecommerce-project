@@ -10,7 +10,6 @@ const { generateInvoice } = require("../service/generatePDF.js");
 const razorpay = require("../service/razorpay.js");
 
 module.exports = {
-  //account
   accountPage: async (req, res) => {
     try {
       let userData = await userCollection.findOne({
@@ -20,14 +19,13 @@ module.exports = {
         userId: req.session.currentUser._id,
       });
 
-      //sending the formatted date to the page
       if (walletData?.walletTransaction.length > 0) {
         walletData.walletTransaction = walletData.walletTransaction
           .map((v) => {
             v.transactionDateFormatted = formatDate(v.transactionDate);
             return v;
           })
-          .reverse(); //reverse is for sorting the latest transactions
+          .reverse(); 
       }
       res.render("users/account", {
         currentUser: req.session.currentUser,
@@ -157,7 +155,6 @@ module.exports = {
       orderData = orderData.filter((order) => order.paymentType !== "toBeChosen");
 
 
-      //sending the formatted date to the page
       orderData = orderData.map((v) => {
         v.orderDateFormatted = formatDate(v.orderDate);
         return v;

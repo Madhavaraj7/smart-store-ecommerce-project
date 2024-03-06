@@ -272,7 +272,6 @@
                             <h3><%= coupon.couponCode %></h3>
                             <p>Discount: <%= coupon.discountPercentage %>%</p>
                             <p>Minimum Purchase: <%= coupon.minimumPurchase %></p>
-                            <!-- Add more coupon details as needed -->
                           </div>
                         <% }); %>
                       </div>
@@ -330,13 +329,10 @@
     const walletElement = document.getElementById('wallet');
     const grandTotalElement = document.getElementById('grandTotal');
 
-    // Function to disable or hide COD button if grand total is greater than 1000
 function checkGrandTotal() {
     const grandTotal = parseFloat(grandTotalElement.innerText.replace('₹', ''));
     if (grandTotal > 1000) {
-        // Disable COD option
         CODElement.disabled = true;
-        // Hide COD option
         CODElement.closest('.card-paynemt-box').style.display = 'none';
     } else {
         CODElement.disabled = false;
@@ -345,16 +341,13 @@ function checkGrandTotal() {
 }
 
 
-    // Call the function initially when the DOM content is loaded
     document.addEventListener('DOMContentLoaded', function () {
         checkGrandTotal();
     });
 
-    // Call the function whenever grand total changes
-    // Assuming grand total changes dynamically, replace 'yourEvent' with appropriate event
+
     grandTotalElement.addEventListener('yourEvent', checkGrandTotal);
 
-    // Function to handle order button click
     orderBtnElement.addEventListener('click', orderBtnClickFunction);
 
     async function orderBtnClickFunction(event) {
@@ -504,10 +497,8 @@ toggleCouponContainer();
             body: JSON.stringify({ orderId, discountAmount }),
         });
 
-        // Handle response if necessary
     } catch (error) {
         console.error('Error storing discount in order:', error);
-        // Handle error if necessary
     }
 }
 

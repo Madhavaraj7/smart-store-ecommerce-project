@@ -48,8 +48,7 @@ const cart = async (req, res) => {
     res.render("users/cart", {
       signIn: req.session.signIn,
       user: req.body.user,
-      // addressData: req.session.addressData,
-      // addressData,
+      
       currentUser: req.session.currentUser,
       userCartData,
       grandTotal: req.session.grandTotal,
@@ -90,10 +89,6 @@ const addToCart = async (req, res) => {
   } catch (error) {
     console.log(error);
 
-    // res.redirect('/loginpage')
-
-    // console.error("Error in addToCart:", error);
-    // res.status(500).send("Internal Server Error");
   }
 };
 

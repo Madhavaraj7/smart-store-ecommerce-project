@@ -33,6 +33,8 @@
                     </div>
 
                     <div class="input-group mb-3">
+                        <label for="image" class="form-label">product Name</label>
+
                         <div class="input-group-prepend">
                             <img src="/upload/<%= productData.productImage1 %>" alt="" id="preview1" style="width: 100px; height: 100px">
                         </div>
@@ -72,9 +74,13 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="Category">Category</label>
-                            <select class="form-control p_input" name="categories" placeholder="category" >
-                                <% categories.forEach((value)=>{ %>
-                                    <option value="<%=value.categoryName  %>"><%= value.categoryName %></option>
+                            <select class="form-control p_input" name="category" placeholder="category">
+                                <% categories.forEach((value) => { %>
+                                    <% if (value._id.toString() === productData.parentCategory.toString()) { %>
+                                        <option value="<%= value._id %>" selected><%= value.categoryName %></option>
+                                    <% } else { %>
+                                        <option value="<%= value._id %>"><%= value.categoryName %></option>
+                                    <% } %>
                                 <% }) %>
                             </select>
                             <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Save Changes</button>

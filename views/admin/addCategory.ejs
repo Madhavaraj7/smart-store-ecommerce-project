@@ -41,6 +41,10 @@
     <body>
         <div class="container mt-5">
             <h2>Add Category</h2>
+            <% if(categoryExists){%>
+
+                <h2 class="error">Categorie alreay exist</h2>
+            <%}%>
             <form action="/admin/categories/add" method="POST" class="mt-4" id="addEditValidation">
                 <div class="form-group">
                     <label for="categoriesName">Category Name</label>
@@ -168,7 +172,12 @@
         });
 
     </script>.
-
+<style>
+    .error {
+    color: red;
+    /* Add any additional styling here */
+}
+</style>
 
 
 <%- include('../layouts/adminFooter.ejs') %>

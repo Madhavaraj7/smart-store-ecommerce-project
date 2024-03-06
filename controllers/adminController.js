@@ -3,8 +3,6 @@ const userdata = require("../models/userModel");
 const productCollection = require("../models/productModel.js");
 const dashboard = require("../service/dashboardChart.js");
 
-
-
 //requiring bcrypt
 const bcrypt = require("bcrypt");
 
@@ -33,13 +31,13 @@ const loadLogin = async (req, res) => {
 const verifyLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(req.body);
 
     const userData = await userdata.findOne({ email });
+    console.log(userData);
 
     if (userData) {
-      const passwordMatch = await bcrypt.compare(password, userData.password);
-
-      if (passwordMatch) {
+      if (password === userData.password) {
         req.session.user_id = userData._id;
         req.session.isLoggedin = true;
 
@@ -65,14 +63,15 @@ const verifyLogin = async (req, res) => {
 const adminHome = async (req, res) => {
   try {
     const userData = await userdata.findById({ _id: req.session.user_id });
-    let productData = req.session?.shopProductData || await productCollection
-    .find({ isListed: true })
+    let productData =
+      req.session?.shopProductData ||
+      (await productCollection.find({ isListed: true }));
 
     if (!productData) {
-      productData = []; // or handle the case where productData is not available
+      productData = [];
     }
-    
-    res.render("admin/dashboard", { productData,userData });
+
+    res.render("admin/dashboard", { productData, userData });
   } catch (error) {
     console.log(error.message);
   }
@@ -81,12 +80,9 @@ const adminHome = async (req, res) => {
 //logout function
 const adminLogout = async (req, res) => {
   try {
-    // req.session.destroy();
-    // req.session.userId = false
-    // req.session.isLoggedin = false
     req.session.isAdmin = false;
     req.session.admin = null;
-    req.session.user_id=null;
+    req.session.user_id = null;
     res.redirect("/admin");
   } catch (error) {
     console.log(error.message);
@@ -137,10 +133,8 @@ const unblockUserController = async (req, res) => {
   }
 };
 
-
 const dashboardData = async (req, res) => {
   try {
-   
     const [
       productsCount,
       categoryCount,
@@ -178,18 +172,19 @@ const dashboardData = async (req, res) => {
   }
 };
 
-
 const filterCategory = async (req, res) => {
   try {
-    req.session.shopProductData = await productCollection.find({
-      isListed: true,
-      categoryName: req.body.categoriesName,
-    }).populate("parentCategory");
+    req.session.shopProductData = await productCollection
+      .find({
+        isListed: true,
+        categoryName: req.body.categoriesName,
+      })
+      .populate("parentCategory");
     res.redirect("/admin/adminHome");
   } catch (error) {
     console.error(error);
   }
-}
+};
 const filterPriceRange = async (req, res) => {
   try {
     req.session.shopProductData = await productCollection.find({
@@ -203,21 +198,19 @@ const filterPriceRange = async (req, res) => {
   } catch (error) {
     console.error(error);
   }
-}
-const sortPriceAscending =  async (req, res) => {
+};
+const sortPriceAscending = async (req, res) => {
   try {
     req.session.shopProductData = await productCollection
       .find({ isListed: true })
-      .sort({stockSold: 1 });
+      .sort({ stockSold: 1 });
     res.json({ success: true });
-
   } catch (error) {
     console.error(error);
   }
-}
+};
 const sortPriceDescending = async (req, res) => {
   try {
-
     req.session.shopProductData = await productCollection
       .find({ isListed: true })
       .sort({ stockSold: -1 });
@@ -225,7 +218,7 @@ const sortPriceDescending = async (req, res) => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 module.exports = {
   loadLogin,
@@ -239,7 +232,7 @@ module.exports = {
   filterCategory,
   filterPriceRange,
   sortPriceAscending,
-  sortPriceDescending
+  sortPriceDescending,
   // userManagement,
   // blockUser,
   // unBlockUser,

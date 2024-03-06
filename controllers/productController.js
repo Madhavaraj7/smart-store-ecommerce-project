@@ -1,5 +1,7 @@
 const categoryCollection = require("../models/categoryModel");
 const productCollection = require("../models/productModel");
+const mongoose = require('mongoose');
+
 
 
 
@@ -108,7 +110,7 @@ const productlist= async (req, res) => {
         const updateFields = {
           $set: {
             productName: req.body.productName,
-            parentCategory: req.body.parentCategory,
+            parentCategory: new mongoose.Types.ObjectId(req.body.category),
             productPrice: req.body.productPrice,
             productStock: req.body.productStock,
           },
