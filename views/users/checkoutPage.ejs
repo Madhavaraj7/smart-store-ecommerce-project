@@ -378,7 +378,6 @@ function checkGrandTotal() {
             } else if (razorpayElement.checked) {
                 const orderResponse = await fetch('/checkout/razorpay/create/orderId', { method: 'POST' });
                 const order = await orderResponse.json();
-                console.log(order);
                 await openRazorpay(order.amount, order.id);
             }
             else{

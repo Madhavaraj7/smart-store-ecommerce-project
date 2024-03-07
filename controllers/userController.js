@@ -22,9 +22,11 @@ const userLandingPage = async (req, res) => {
     if (req.session.isLoggedin) {
       res.redirect("/home");
     } else {
-      res.render("users/userLandingPage", { error: null });
+      let productData = await productCollection
+      .find({ isListed: true })
+      res.render("users/userLandingPage", { error: null ,productData,
+        });
     }
-    console.log("hello");
   } catch (error) {
     console.log(error.message);
   }
@@ -50,8 +52,6 @@ const userSignup = async (req, res) => {
 
 //render into otp function
 const insertUser = async (req, res) => {
-  // console.log("hello");
-  console.log(req.session.userData);
   const email = req.session.userData.email;
   let otp = await userSendOtp(email);
   req.session.otp = otp;
@@ -64,7 +64,6 @@ const signedUp = async (req, res) => {
   try {
     const emailExcisting = await userdata.findOne({ email: req.body.email });
 
-    console.log(`emailExcisting \n${emailExcisting}`);
 
     
     let referralCode= Math.floor(1000 + Math.random() * 9000);
@@ -96,31 +95,7 @@ const signedUp = async (req, res) => {
   }
 };
 
-// console.log("hello")
-//   try {
-//     const spassword = await bcrypt.hash(req.body.password, 10);
-//     await new userModel({
-//       name: req.body.name, // using body-parser middleware
-//       email: req.body.email,
-//       phonenumber: req.body.mobile,
-//       password: spassword,
-//       is_admin: 0,
-//     }).save()
 
-//     //returning a promise
-//     // const userData = await user.save(); //saving data to mongo db
-
-//     if (userData) {
-//       res.render("otpPage", {
-//         message: "Your registration has Sucessfully Please login!",
-//       });
-//     } else {
-//       res.render("usersignup", { message: "Your registration has failed." });
-//     }
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// };
 
 ////////////////////to send otp for the verification to user email
 const userSendOtp = async (email) => {
@@ -129,10 +104,10 @@ const userSendOtp = async (email) => {
 
     // Create a Nodemailer transporter
     const transporter = nodemailer.createTransport({
-      service: "Gmail",
+      service: process.env.EMAIL_SERVICE, 
       auth: {
-        user: "storesmart863@gmail.com",
-        pass: "shpv unkn wdpx lpsy",
+        user: process.env.EMAIL_USER, 
+        pass: process.env.EMAIL_PASSWORD, 
       },
     });
 
@@ -159,7 +134,6 @@ const userSendOtp = async (email) => {
 
 const loadLogin = async (req, res) => {
   try {
-    console.log(req.url);
     // req.session.user = { name: user.name, id: user._id }
     res.render("users/login");
   } catch (error) {
@@ -237,8 +211,6 @@ const forgetVerify = async (req, res) => {
           { email: email },
           { $set: { token: randomString } }
         );
-        // console.log(req.body.token)
-        console.log(randomString);
         sendResetPasswordMail(userData.name, userData.email, randomString);
         res.render("users/forget", {
           message: "please check your mail to reset your password",
@@ -256,8 +228,7 @@ const forgetVerify = async (req, res) => {
 
 const sendResetPasswordMail = async (name, email, token) => {
   try {
-    // console.log("in send otp function");
-    //  console.log(req.body.token);
+  
 
     // Create a Nodemailer transporter
     const transporter = nodemailer.createTransport({
@@ -346,7 +317,6 @@ const userLogout = async (req, res) => {
     req.session.userIsThere = false;
     req.session.save();
     req.session.user_id=null;
-    console.log("logged out");
     res.redirect("/");
   } catch (error) {
     console.log(error.message);
@@ -370,7 +340,6 @@ const productDetils = async (req, res) => {
         productQtyLimit.push(i+1)
         i++
       }
-    console.log(currentProduct);
     res.render("users/productDetils.ejs", {
       _id: req.body.user_id,
       user: req.session.user,
@@ -415,10 +384,8 @@ module.exports = {
     console.log(otp);
     console.log(req.session.otp);
     if (otp == req.session.otp) {
-      console.log("otp verified");
 
       const user = new userdata({ name, email, phonenumber, password,referralCode });
-      console.log(user);
       req.session.userIsThere = {
         isAlive: true,
         userName: name,
@@ -435,6 +402,11 @@ module.exports = {
        }
     
       await walletCollection.create({userId : userDetail._id })
+      req.session.user_id=userDetail;
+      req.session.currentUser=userDetail;
+      req.session.isLoggedin = true;
+
+
       res.redirect("/home");
     } else {
       res.render("users/otpPage", { message: "Invalid otp" });
@@ -483,7 +455,6 @@ module.exports = {
 
       console.log(req.url);
 
-      console.log("heyyy");
     } catch (error) {
       console.log(error.message);
     }

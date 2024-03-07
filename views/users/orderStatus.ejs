@@ -466,33 +466,48 @@
                                     <table class="order-details-cart">
                                         <tbody>
                                             <% orderData.cartData.forEach(function(cartItem) { %>
-                                                <tr class="cartProduct">
-                                                    <td class="cartProductThumb" style="width: 20%">
-                                                        <div>
-                                                            <a href="/productDetails/<%= cartItem.productId._id %>">
-                                                                <img alt="img"
-                                                                    src="/upload/<%= cartItem.productId.productImage1 %>" />
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                    <td style="width: 40%">
-                                                        <div class="miniCartDescription">
-                                                            <h4>
-                                                                <a href="product-details.html">
-                                                                    <%= cartItem.productId.productName %>
-                                                                </a>
-                                                            </h4>
-                                                            <div class="price"><span>
-                                                                    <%= cartItem.productId.productName %>
-                                                                </span></div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="" style="width: 10%"><a> X<%= cartItem.productQuantity %>
-                                                        </a></td>
-                                                    <td class="" style="width: 15%"><span> ₹<%=
-                                                                cartItem.totalCostPerProduct %> </span></td>
-                                                </tr>
-                                                <% }); %>
+                                            <tr class="cartProduct">
+                                                <td class="cartProductThumb" style="width: 20%">
+                                                    <div>
+                                                        <a href="/productDetails/<%= cartItem.productId._id %>">
+                                                            <img alt="img" src="/upload/<%= cartItem.productId.productImage1 %>" />
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td style="width: 40%">
+                                                    <div class="miniCartDescription">
+                                                        <h4>
+                                                            <a href="product-details.html"><%= cartItem.productId.productName %></a>
+                                                        </h4>
+                                                        <div class="price"><span><%= cartItem.productId.productName %></span></div>
+                                                    </div>
+                                                </td>
+                                                <td class="" style="width: 10%"><a> X<%= cartItem.productQuantity %> </a></td>
+                                                <td class="" style="width: 15%"><span> ₹<%= cartItem.totalCostPerProduct %> </span></td>
+                                            </tr>
+                                            <% }); %>
+                                            <tr class="cartTotalTr blank">
+                                                <td class="" style="width:20%"><div></div></td>
+                                                <td style="width:40%"></td>
+                                                <td class="" style="width:20%"></td>
+                                                <td class="" style="width:15%"><span> </span></td>
+                                            </tr>
+                                            <tr class="cartTotalTr">
+                                                <td class="" style="width:20%"><div></div></td>
+                                                <td colspan="2" style="width:40%">Total (excl. offers & coupons)</td>
+                                                <td class="" style="width:15%"><span> ₹<%= orderData.grandTotalCost %></span></td>
+                                            </tr>
+                                            <tr class="cartTotalTr">
+                                                <td class="" style="width:20%"><div></div></td>
+                                                <td colspan="2" style="width:40%">Shipping</td>
+                                                <td class="" style="width:15%"><span> Free </span></td>
+                                            </tr>
+                                            <tr class="cartTotalTr">
+                                                <td class="" style="width:20%"><div></div></td>
+                                                <td style="width:40%"></td>
+                                                <td class="" style="width:20%">GrandTotal</td>
+                                                <td class="" style="width:15%"><span class="price">₹<%= orderData.grandTotalCost %> </span></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

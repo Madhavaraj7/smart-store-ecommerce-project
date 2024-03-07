@@ -215,7 +215,6 @@
     $(document).ready(function () {
         $("#editProductOfferForm<%= index %>").submit(async function (event) {
             event.preventDefault();
-            console.log('1');
             let formData = {
             
                 productName: $("#productName<%= index %>").val(),
@@ -224,7 +223,6 @@
                 expiryDate: $("#endDate<%= index %>").val(),
                
             };
-            console.log(formData);
 
             let response = await fetch('/admin/productOfferManagement/editOffer/<%= product._id %>', {
                 method: 'PUT',
@@ -233,7 +231,6 @@
             });
 
             let result = await response.json();
-            console.log(result);
             if (result.success) {
                 Swal.fire({
                     icon: "success",

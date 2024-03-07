@@ -241,7 +241,6 @@
     e.preventDefault();
     let filterOption = document.getElementById('filterOption').value;
     let formData = { filterOption };
-    console.log(formData);
 
     let response = await fetch('/admin/salesReport/filter', {
       method: 'POST',
@@ -251,7 +250,6 @@
     let result = await response.json();
 
     if (result.success) {
-      console.log('Filtered by:', filterOption);
       location.reload(); 
     }
   });
@@ -266,7 +264,6 @@
       let startDate = document.getElementById('startDate').value
       let endDate = document.getElementById('endDate').value
       let formData = { startDate, endDate }
-      console.log(formData)
 
       let response = await fetch('/admin/salesReport/filterCustom',
           {
@@ -277,7 +274,6 @@
       let result = await response.json()
 
       if (result.success) {
-          console.log('hello')
           location.reload()
       }
   })

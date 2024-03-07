@@ -312,7 +312,6 @@
             $(document).ready(function () {
                 $("#editCouponForm<%= index %>").submit(async function (event) {
                     event.preventDefault();
-                    console.log('1');
                     let formData = {
                         couponCode: $("#couponCodeEdit<%= index %>").val(),
                         discountPercentage: $("#discountPercentageEdit<%= index %>").val(),

@@ -101,10 +101,10 @@ userRoute.get('/checkout', auth.isLogin,blockedUserCheck, cartController.checkou
 userRoute.all('/checkout/orderPlaced', auth.isLogin,blockedUserCheck, cartController.orderPlaced);
 userRoute.all('/checkout/orderPlacedEnd', auth.isLogin,blockedUserCheck,cartController.orderPlacedEnd)
 // userRoute.post('/checkout/razorpay/create/orderId', blockedUserCheck, cartController.razorpayCreateOrderId)
-userRoute.post('/checkout/razorpay/create/orderId', blockedUserCheck,cartController.razorpayCreateOrderId)
+userRoute.post('/checkout/razorpay/create/orderId', auth.isLogin,blockedUserCheck,cartController.razorpayCreateOrderId)
 
 
-userRoute.post("/checkout/applyCoupon",blockedUserCheck, cartController.applyCoupon);
+userRoute.post("/checkout/applyCoupon",auth.isLogin,blockedUserCheck, cartController.applyCoupon);
 userRoute.post("/orders/storeDiscount",cartController.storedApplycoupon);
 
 
@@ -135,10 +135,10 @@ userRoute.get('/account/orderList/orderStatus/:id',auth.isLogin, blockedUserChec
 
 userRoute.put('/account/orderList/orderStatus/cancelOrder/:id',auth.isLogin, blockedUserCheck,accountController.cancelOrder )
 userRoute.put('/account/orderList/orderStatus/returnorder/:id', accountController.returnRequest)
-userRoute.get('/account/orderList/orderStatus/downloadInvoice/:id', blockedUserCheck, accountController.downloadInvoice)
+userRoute.get('/account/orderList/orderStatus/downloadInvoice/:id', auth.isLogin,blockedUserCheck, accountController.downloadInvoice)
 
-userRoute.post('/account/razorpay/create/orderId', blockedUserCheck, accountController.razorpayCreateWallet)
-userRoute.post('/account/razoropay/end', blockedUserCheck, accountController.addRazorpayAmountToWallet);
+userRoute.post('/account/razorpay/create/orderId', auth.isLogin,blockedUserCheck, accountController.razorpayCreateWallet)
+userRoute.post('/account/razoropay/end', auth.isLogin,blockedUserCheck, accountController.addRazorpayAmountToWallet);
 
 
 
@@ -148,7 +148,7 @@ userRoute.post('/account/razoropay/end', blockedUserCheck, accountController.add
 
 // -------------------------------------------------------WISH LIST------------------------------------------------------------------------------
 
-userRoute.get("/wishlist",wishlistController.getWishList)
+userRoute.get("/wishlist",auth.isLogin,blockedUserCheck,wishlistController.getWishList)
 userRoute.get('/wishlist/:id',auth.isLogin, blockedUserCheck,wishlistController.addToWishlistController) 
 userRoute.delete('/wishlist/delete/:id', auth.isLogin,blockedUserCheck,wishlistController.removeFromWishList) 
 

@@ -31,10 +31,8 @@ const loadLogin = async (req, res) => {
 const verifyLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body);
 
     const userData = await userdata.findOne({ email });
-    console.log(userData);
 
     if (userData) {
       if (password === userData.password) {

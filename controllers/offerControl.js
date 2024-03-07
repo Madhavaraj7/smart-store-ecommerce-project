@@ -85,7 +85,6 @@ module.exports = {
       if (!existingOffer || existingOffer._id == req.params.id) {
         let { discountPercentage, startDate, expiryDate } =
           req.body;
-        console.log(req.body);
         let updateFields = {
          productName,
          productOfferPercentage:Number( discountPercentage),

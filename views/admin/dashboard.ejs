@@ -208,7 +208,6 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
-      console.log("11");
 
       const fetchData = (async () => {
           try {
@@ -224,7 +223,6 @@
                   categoryWiseRevenue,
                   shipping,
               } = data;
-              console.log("11");
               let MonthlyRevenueTotal= MonthlyRevenue.revenue.reduce( (acc,curr)=>acc+curr,0   )
               document.getElementById('currentDayRevenue').innerText = '₹' + currentDayRevenue
               document.getElementById('completedOrdersCount').innerText = completedOrdersCount
@@ -234,9 +232,7 @@
 
               // document.getElementById('pendingOrdersCount').innerText = pendingOrdersCount
 
-              console.log(MonthlyRevenue);
-              console.log("1");
-              console.log(shipping);
+         
 
               const twoWeeksSalesChartElement =
                   document.getElementById("twoWeeksSalesChart");
@@ -256,12 +252,10 @@
                       scales: { y: { beginAtZero: true } },
                   },
               };
-              console.log("2");
 
               const categoryWiseRevenueChartElement = document.getElementById(
                   "categoryWiseRevenueChart"
               );
-              console.log(categoryWiseRevenue);
               const categoryWiseRevenueChartOptions = {
                   type: "polarArea",
                   data: {
@@ -280,7 +274,6 @@
                       ],
                   },
               };
-              console.log("3");
               // const xChart = document.getElementById("myChart");
               // const yChart = {
               //     type: "doughnut",
@@ -299,7 +292,6 @@
               //         ],
               //     },
               // };
-              console.log("4");
 
               new Chart(twoWeeksSalesChartElement, twoWeeksSalesChartOptions);
 
@@ -381,25 +373,19 @@
   <script>
       async function sortDropdownFn() {
           try {
-              console.log('1');
               const sortDropdown = document.getElementById('sortDropdown');
               if (sortDropdown.value === 'default') {
-                  console.log('default');
                   window.location.href = '/admin/adminHome';
                   return; // Added return statement to exit the function
               }
-              console.log('2');
   
               const response = await fetch('/admin/sort/' + sortDropdown.value, { method: 'GET' });
-              console.log('2');
   
               const data = await response.json();
-              console.log('3');
   
               if (data.success) {
                   localStorage.setItem('selectedDropdownOption', sortDropdown.value);
                   window.location.href = '/admin/adminHome';
-                  console.log('data success');
               }
           } catch (error) {
               console.error(error);

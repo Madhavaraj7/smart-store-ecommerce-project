@@ -53,7 +53,6 @@ module.exports={
           cartData,
         });
     
-        console.log(req.session.currentUser);
       } catch (error) {
         console.error("Error fetching product data:", error);
         res.status(500).send("Internal Server Error");
@@ -110,13 +109,11 @@ sortPriceAscending: async (req, res) => {
   searchUserProductController : async (req, res) => {
     try {
       const { search } = req.body;
-      console.log("search : ",search);
       const products = await productCollection.find({
         $or: [
           { productName: { $regex: search, $options: "i" } },
         ],
       }).populate("parentCategory");
-      console.log(products);
       req.session.shopProductData = products;
       res.redirect("/productList");
     } catch (error) {

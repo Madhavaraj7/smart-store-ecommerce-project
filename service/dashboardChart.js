@@ -30,7 +30,6 @@ const pendingOrdersCount = async () => {
 
 const shipping = async () => {
   try {
-    console.log(orderCollection);
     return await orderCollection.countDocuments({ orderStatus: "Shipped" });
   } catch (error) {
     console.error(error);
@@ -77,8 +76,7 @@ const MonthlyRevenue = async () => {
         $limit: 30,
       },
     ]);
-    console.log("result:");
-    console.log(result);
+   
     return {
       date: result.map((v) => v._id),
       revenue: result.map((v) => v.dailyRevenue),
@@ -100,24 +98,23 @@ const categoryWiseRevenue = async () => {
       },
     ]);
 
+    let categoryData = await categoryCollection.find();
 
-   
-    
-    let categoryData= await categoryCollection.find()
-    
-    let finalData= {
-        categoryName: result.map((v) =>{           
-            let match= categoryData.find( catVal=>catVal._id == v._id )              
-            return match.categoryName
-            
-        }       
-        ),
-        revenuePerCategory: result.map((v) => v.revenuePerCategory),
+    if (!categoryData || categoryData.length === 0) {
+      throw new Error("No category data found");
+    }
+
+    let finalData = {
+      categoryName: result.map((v) => {
+        let match = categoryData.find((catVal) => catVal._id == v._id);
+        return match ? match.categoryName : "Unknown Category";}),
+      revenuePerCategory: result.map((v) => v.revenuePerCategory),
     };
-     
-    return finalData
-} catch (error) {
+
+    return finalData;
+  } catch (error) {
     console.error(error);
+    throw error; // rethrow the error to be handled by the caller
   }
 };
 

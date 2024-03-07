@@ -48,7 +48,6 @@ const couponManagement = async (req, res) => {
   
   const editCoupon = async (req, res) => {
     try {
-      console.log('edit coupon');
       let existingCoupon = await couponCollection.findOne({
         couponCode: { $regex: new RegExp(req.body.couponCode, "i") },
       });

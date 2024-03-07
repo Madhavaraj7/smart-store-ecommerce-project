@@ -15,8 +15,7 @@ const orderManagement = async (req, res) => {
       let orderData = await orderCollection
         .find().sort({orderNumber: -1})
         .populate("userId").skip(skip).limit(limit);
-      console.log(orderData[0]);
-      console.log(orderData);
+
       res.render("admin/orderManagement", { orderData, count, limit, page });
     } catch (error) {
       console.error(error);

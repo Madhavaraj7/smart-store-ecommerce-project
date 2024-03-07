@@ -14,7 +14,6 @@ const razorpay = require("../service/razorpay.js");
 
 async function grandTotal(req) {
   try {
-    console.log("session" + req.session.currentUser);
     let userCartData = await cartCollection
       .find({ userId: req.session.currentUser._id })
       .populate("productId");
@@ -61,7 +60,6 @@ const cart = async (req, res) => {
 };
 
 const addToCart = async (req, res) => {
-  console.log(req.session.currentUser);
   try {
     let existingProduct = await cartCollection.findOne({
       userId: req.session.currentUser._id,
@@ -83,7 +81,6 @@ const addToCart = async (req, res) => {
       });
     }
 
-    console.log(req.body);
     res.redirect("/cart");
     // res.status(200).json({ success: true });
   } catch (error) {
@@ -153,28 +150,33 @@ const checkoutPage = async (req, res) => {
     });
 
     const coupons = await couponCollection.find(); 
+    if (addressData.length > 0) {
+      req.session.currentOrder = await orderCollection.create({
+        userId: req.session.currentUser._id,
+        orderNumber: (await orderCollection.countDocuments()) + 1,
+        orderDate: new Date(),
+        addressChosen: JSON.parse(JSON.stringify(addressData[0])),
+        cartData: await grandTotal(req),
+        grandTotalCost: req.session.grandTotal,
+      });
+      let userCartData = await grandTotal(req);
+      res.render("users/checkoutPage", {
+        signIn: req.session.signIn,
+        user: req.body.user,
+        currentUser: req.session.currentUser,
+        grandTotal: req.session.grandTotal,
+        userCartData,
+        cartData,
+        addressData: req.session.addressData,
+        addressData,
+        coupons: coupons 
+      });
 
-    req.session.currentOrder = await orderCollection.create({
-      userId: req.session.currentUser._id,
-      orderNumber: (await orderCollection.countDocuments()) + 1,
-      orderDate: new Date(),
-      addressChosen: JSON.parse(JSON.stringify(addressData[0])),
-      cartData: await grandTotal(req),
-      grandTotalCost: req.session.grandTotal,
-    });
-    let userCartData = await grandTotal(req);
-    console.log(addressData);
-    res.render("users/checkoutPage", {
-      signIn: req.session.signIn,
-      user: req.body.user,
-      currentUser: req.session.currentUser,
-      grandTotal: req.session.grandTotal,
-      userCartData,
-      cartData,
-      addressData: req.session.addressData,
-      addressData,
-      coupons: coupons 
-    });
+    }else{
+        req.session.addressPageFrom = "cart";
+        res.redirect("/account/addAddress");
+    }
+
   } catch (error) {
     res.redirect("/cart");
   }
@@ -187,7 +189,7 @@ const razorpayCreateOrderId= async (req, res) => {
     let walletData = await walletCollection.findOne({userId: req.session.currentUser._id})
 
     var options = {
-      amount: req.session.grandTotal - walletData.walletBalance  + "00", // amount in the smallest currency unit
+      amount: req.session.grandTotal - walletData.walletBalance  + "00", 
       currency: "INR",
     };
 
@@ -195,7 +197,7 @@ const razorpayCreateOrderId= async (req, res) => {
   }else{
 
     var options = {
-      amount: req.session.grandTotal + "00", // amount in the smallest currency unit
+      amount: req.session.grandTotal + "00", 
       currency: "INR",
     };
   }
@@ -207,9 +209,7 @@ const razorpayCreateOrderId= async (req, res) => {
 }
 
 const orderPlaced = async (req, res) => {
-  console.log('q');
   try {
-    console.log(req.session.grandTotal);
     if (req.body.razorpay_payment_id) {
       //razorpay payment
       await orderCollection.updateOne(
@@ -226,7 +226,6 @@ const orderPlaced = async (req, res) => {
       const walletData = await walletCollection.findOne({
         userId : req.session.currentUser._id,
       });
-      console.log(walletData);
       if (walletData.walletBalance >= req.session.grandTotal) {
         walletData.walletBalance -= req.session.grandTotal;
 
@@ -278,8 +277,6 @@ const orderPlacedEnd = async (req, res) => {
   let cartData = await cartCollection
     .find({ userId: req.session.currentUser._id })
     .populate("productId");
-  // console.log(cartData);
-  console.log("safjkdhf");
 
 
     for (const item of cartData) {
@@ -299,8 +296,7 @@ const orderPlacedEnd = async (req, res) => {
   
 
 
-  console.log('StockSold incremented successfully.');
-  console.log("rendering next");
+
   res.render("users/orderPlacedPage", {
     signIn: req.session.signIn,
     user: req.session.user,
@@ -309,7 +305,6 @@ const orderPlacedEnd = async (req, res) => {
   });
   //delete product from cart since the order is placed
   await cartCollection.deleteMany({ userId: req.session.currentUser._id });
-  console.log("deleting finished");
 };
 
 
@@ -318,21 +313,16 @@ const orderPlacedEnd = async (req, res) => {
 
 const applyCoupon = async (req, res) => {
   try {
-    console.log("1");
     let { couponCode } = req.body;
 
     const userId = req.session.currentUser._id;
-    console.log('esssion.userID');
-    console.log(req.session.userId); 
     let couponData = await couponCollection.findOne({ couponCode });
 
     if (!couponData) {
-      console.log("Coupon not found");
       return res.status(501).json({ couponApplied: false });
     }
 
     if (couponData.userId.includes(userId)) {
-      console.log("Coupon already used by this user");
       return res.status(501).json({ couponApplied: false, couponAlreadyUsed: true });
     }
 
@@ -340,12 +330,9 @@ const applyCoupon = async (req, res) => {
     let { minimumPurchase, expiryDate } = couponData;
     let minimumPurchaseCheck = minimumPurchase < grandTotal;
     let expiryDateCheck = new Date() < new Date(expiryDate);
-    console.log("3");
-    console.log(expiryDateCheck);
-    console.log(minimumPurchaseCheck);
+  
 
     if (minimumPurchaseCheck && expiryDateCheck) {
-      console.log("4");
 
       let { discountPercentage, maximumDiscount } = couponData;
       let discountAmount =
@@ -361,11 +348,8 @@ const applyCoupon = async (req, res) => {
           $inc: { grandTotalCost: -discountAmount },
         }
       );
-      console.log("5");
 
       req.session.grandTotal -= discountAmount;
-      console.log(req.session.grandTotal);
-      console.log(discountAmount);
 
       await couponCollection.findByIdAndUpdate({_id: couponData._id}, { $push: { userId: userId } });
 

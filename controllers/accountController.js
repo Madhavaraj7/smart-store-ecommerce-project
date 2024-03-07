@@ -128,6 +128,8 @@ module.exports = {
     try {
       res.render("users/changePassword", {
         invalidCurrentPassword: req.session.invalidCurrentPassword,
+        currentUser: req.session.currentUser,
+
       });
     } catch (error) {
       console.error(error);
@@ -136,16 +138,30 @@ module.exports = {
 
   changePasswordPatch: async (req, res) => {
     try {
-
-      await userCollection.updateOne(
-        { user_id: req.body.user_id },
-        { $set: { password: req.body.password } }
+      const compareCurrentPass = bcrypt.compareSync(
+        req.body.currentPassword,
+        req.session.currentUser.password
       );
-      res.json({ success: true });
+      if (compareCurrentPass) {
+        const encryptedNewPassword = bcrypt.hashSync(
+          req.body.confirmPass,
+          10
+        );
+        await userCollection.updateOne(
+          { _id: req.session.currentUser._id },
+          { $set: { password: encryptedNewPassword } }
+        );
+        // req.session.currentPassword=await userCollection.find({_id: req.session.currentUser._id})
+        res.json({ success: true });
+      } else {
+        req.session.invalidCurrentPassword = true;
+        res.json({ success: false });
+      }
     } catch (error) {
       console.error(error);
     }
   },
+
 
   orderList: async (req, res) => {
     try {
@@ -190,12 +206,18 @@ module.exports = {
       let orderData = await orderCollection
         .findOne({ _id: req.params.id })
         .populate("addressChosen");
-
+  
+      // Extract order number
+      const orderNumber = orderData.orderNumber;
+  
+      // Construct filename with order number
+      const filename = `invoice_order_${orderNumber}.pdf`;
+  
       const stream = res.writeHead(200, {
         "Content-Type": "application/pdf",
-        "Content-Disposition": "attachment;filename=invoice.pdf",
+        "Content-Disposition": `attachment; filename=${filename}`,
       });
-
+  
       generateInvoice(
         (chunk) => stream.write(chunk),
         () => stream.end(),
@@ -205,6 +227,7 @@ module.exports = {
       console.error(error);
     }
   },
+  
 
   cancelOrder: async (req, res) => {
     try {

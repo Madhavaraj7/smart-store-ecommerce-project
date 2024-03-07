@@ -37,17 +37,13 @@ const addCategory = async (req, res) => {
     let categoryExists = await categoryCollection.findOne({
       categoryName: { $regex: new RegExp(`^${categoryName}$`, "i") },
     });
-    console.log(categoryExists);
-    console.log(req.body);
     if (!categoryExists) {
       await new categoryCollection({
         categoryName: req.body.categoriesName,
         categoryDescription: req.body.categoriesDescription,
       }).save();
-      console.log("Added category");
       res.redirect("/admin/categories");
     } else {
-      console.log("Category already exists!");
 
       req.session.categoryExists = true;
 
@@ -62,7 +58,6 @@ const editCategory = async (req, res) => {
   req.session.categoryExists;
 
   try {
-    console.log(req.params.id);
     let data = await categoryCollection.findOne({ _id: req.params.id });
 
     res.render("admin/editCategory.ejs", {
@@ -78,7 +73,6 @@ const editCategory = async (req, res) => {
 
 const editCategoriesPage = async (req, res) => {
   try {
-    console.log(req.body);
     let categoryName = req.body.categoriesName;
     let categoryExists = await categoryCollection.findOne({
       categoryName: { $regex: new RegExp(`^${categoryName}$`, "i") },
@@ -93,10 +87,8 @@ const editCategoriesPage = async (req, res) => {
           },
         }
       );
-      // console.log();
       res.redirect("/admin/categories");
     } else {
-      console.log("Category already exists!");
 
       req.session.categoryExists = true; 
       res.redirect('back');
@@ -108,7 +100,6 @@ const editCategoriesPage = async (req, res) => {
 
 const deleteCategory = async (req, res) => {
   try {
-    console.log(req.body);
     await categoryCollection.findOneAndDelete({ _id: req.params.id });
     res.redirect("/admin/categories");
   } catch (error) {
@@ -130,7 +121,6 @@ const listCategory = async (req, res) => {
 
 const unlistCategory = async (req, res) => {
   try {
-    console.log(req.params.id);
     await categoryCollection.findOneAndUpdate(
       { _id: req.params.id },
       { $set: { isListed: false } }

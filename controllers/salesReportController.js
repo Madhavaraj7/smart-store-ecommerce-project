@@ -27,7 +27,6 @@ const salesReport = async (req, res) => {
       .skip(skip)
       .limit(limit);
 
-    console.log("lllllll", salesData);
     res.render("admin/salesReport", {
       salesData,
       dateValues: null,
@@ -58,7 +57,6 @@ const salesReportFilterCustom = async (req, res) => {
     req.session.admin = {};
     req.session.admin.dateValues = req.body;
     req.session.admin.salesData = JSON.parse(JSON.stringify(salesData));
-    console.log(typeof req.session.admin.salesData);
 
     res.status(200).json({ success: true });
   } catch (error) {
@@ -185,8 +183,28 @@ const salesReportDownload = async (req, res) => {
 
 const salesReportDownloadPDF = async (req, res) => {
   try {
-    const salesData = await getSalesData();
+    let startDate, endDate;
 
+    // Extract filter parameters from request body
+    if (req.body.startDate && req.body.endDate) {
+      startDate = new Date(req.body.startDate);
+      endDate = new Date(req.body.endDate);
+    } else {
+      // Set default date range if filter parameters are not provided
+      startDate = new Date();
+      startDate.setDate(startDate.getDate() - 7); // Default: 7 days ago
+      endDate = new Date();
+    }
+
+    // Fetch sales data based on filter parameters
+    const salesData = await orderCollection
+      .find({
+        orderDate: { $gte: startDate, $lte: endDate },
+        orderStatus: "Delivered",
+      })
+      .populate("userId");
+
+    // Generate PDF using fetched sales data
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
@@ -207,11 +225,11 @@ const salesReportDownloadPDF = async (req, res) => {
       htmlContent += `
         <tr>
           <td>${order.orderNumber}</td>
-          <td>${order.orderDate}</td>
-          <td>${order.products}</td>
-          <td>${order.quantities}</td>
-          <td>Rs.${order.totalCost}</td>
-          <td>${order.paymentMethod}</td>
+          <td>${formatDate(order.orderDate)}</td>
+          <td>${order.cartData.map((item) => item.productId.productName).join(", ")}</td>
+          <td>${order.cartData.map((item) => item.productQuantity).join(", ")}</td>
+          <td>Rs.${order.grandTotalCost}</td>
+          <td>${order.paymentType}</td>
           <td>${order.orderStatus}</td>
         </tr>`;
     });
@@ -222,20 +240,24 @@ const salesReportDownloadPDF = async (req, res) => {
 
     const pdfBuffer = await page.pdf({ format: "A4" });
 
+    // Set response headers to indicate PDF download
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
       "attachment; filename=salesReport.pdf"
     );
 
+    // Send the PDF buffer as response
     res.send(pdfBuffer);
 
+    // Close the Puppeteer browser instance
     await browser.close();
   } catch (error) {
     console.error("Error generating PDF:", error);
     res.status(500).send("Internal Server Error");
   }
 };
+
 
 module.exports = {
   salesReport,

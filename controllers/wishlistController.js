@@ -18,7 +18,6 @@ const getWishList = async (req, res) => {
          
           
         });
-        console.log(req.session.currentUser);
       } catch (error) {
         console.error("Error in cart:", error);
         // res.status(500).send("Internal Server Error");
@@ -50,7 +49,6 @@ const addToWishlistController = async (req, res) => {
           });
         }
     
-        console.log(req.body);
         res.redirect("/wishList");
         // res.status(200).json({ success: true });
       } catch (error) {

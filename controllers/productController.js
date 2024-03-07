@@ -15,7 +15,6 @@ const productlist= async (req, res) => {
         let   count = await productCollection.find().estimatedDocumentCount();
     
         let productData = await productCollection.find().populate("parentCategory").skip(skip).limit(limit);
-        console.log(productData);
         let categoryList = await categoryCollection.find(
           {},
           { categoryName: true }
@@ -37,7 +36,6 @@ const productlist= async (req, res) => {
     try {
       const categories = await categoryCollection.find({ isListed:true});
   
-      console.log(categories);
       res.render("admin/addproduct.ejs", {
         categories,
       });
@@ -49,15 +47,12 @@ const productlist= async (req, res) => {
 
   const addProduct = async (req, res) => {
 
-    console.log(productCollection);
     try {
       let existingProduct = await productCollection.findOne({
         productName: { $regex: new RegExp(req.body.productName, "i") },
          productName: req.body.productName,
       });
       if (!existingProduct) {
-        console.log("in");
-        console.log("gggggggggggg",req.body.parentCategory);
         await productCollection.insertMany([
           {
             productName: req.body.productName,
@@ -69,10 +64,8 @@ const productlist= async (req, res) => {
             productStock: req.body.productStock,
           },
         ]);
-        console.log(req.files[0].filename);
         res.redirect("/admin/products");
       } else {
-        console.log("out");
         req.session.productAlreadyExists = existingProduct;
         res.redirect("/admin/addproduct");
       }
@@ -83,12 +76,9 @@ const productlist= async (req, res) => {
 
   const editProductpage = async (req, res) => {
     try {
-      console.log("editpage");
       const productId = req.params.id;
-      console.log(productId);
       const productData = await productCollection.findOne({_id:productId}); 
       const categories = await categoryCollection.find({})
-      console.log(categories);
       res.render("admin/editproduct.ejs", {
         productData,categories
         // productExists: req.session.productAlreadyExists,
@@ -99,13 +89,11 @@ const productlist= async (req, res) => {
   };
   
   const editProduct = async (req, res) => {
-    console.log("edit");
     try {
       let existingProduct = await productCollection.findOne({
         productName: { $regex: new RegExp(req.body.productName, "i") },
       });
       if (!existingProduct || existingProduct._id == req.params.id) {
-        console.log("edit1");
   
         const updateFields = {
           $set: {
@@ -132,7 +120,6 @@ const productlist= async (req, res) => {
           { _id: req.params.id },
           updateFields
         );
-        console.log("edit3");
   
         res.redirect("/admin/products");
       } else {
@@ -168,7 +155,6 @@ const productlist= async (req, res) => {
   };
 
   const deleteProduct = async (req, res) => {
-    console.log("delete");
     try {
       await productCollection.findOneAndDelete({ _id: req.params.id });
       res.redirect("/admin/products");

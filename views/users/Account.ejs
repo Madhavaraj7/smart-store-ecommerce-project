@@ -217,11 +217,8 @@
 async function walletAmountClickFunction(event) {
     try {
         event.preventDefault();
-        console.log("1");
         const walletAmountInput = document.getElementById("walletAmountInput");
         const walletAmount = walletAmountInput.value;
-        console.log("2");
-        console.log('wallet amount:'+walletAmount);
 
         if (walletAmount) {
             const orderResponse = await fetch('/account/razorpay/create/orderId', {
@@ -231,7 +228,6 @@ async function walletAmountClickFunction(event) {
                 },
                 body: JSON.stringify({ amount: walletAmount }) 
             });
-            console.log("3")
             const order = await orderResponse.json();
             await openRazorpay(order.amount, order.id); 
         }
