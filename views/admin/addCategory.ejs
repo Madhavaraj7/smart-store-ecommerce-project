@@ -23,7 +23,6 @@
     </header>
 <section class="content-main" style="width: 50%; margin-left: 12em;">
 
-    <div class="card mb-4">
 
 
     </div> <!-- card end// -->
@@ -43,7 +42,7 @@
             <h2>Add Category</h2>
             <% if(categoryExists){%>
 
-                <h2 class="error">Categorie alreay exist</h2>
+                <h2 class="error">Category already exist</h2>
             <%}%>
             <form action="/admin/categories/add" method="POST" class="mt-4" id="addEditValidation">
                 <div class="form-group">
@@ -51,11 +50,7 @@
                     <input type="text" class="form-control" id="categoriesName" name="categoriesName" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="categoriesDescription">Category Description</label>
-                    <textarea class="form-control" id="categoriesDescription" rows="3"
-                        name="categoriesDescription"></textarea>
-                </div>
+                
 
                 <button type="submit" class="btn btn-primary">Add Category</button>
             </form>

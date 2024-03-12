@@ -66,9 +66,7 @@
               <div class="col-md-4">
                   <input type="text" name="categoryName" placeholder="Category Name" class="form-control">
               </div>
-              <div class="col-md-4">
-                  <input type="text" name="categoryDescription" placeholder="Description" class="form-control">
-              </div>
+             
               <div class="col-md-4">
 
                   <button type="button" class="btn btn-primary">
@@ -86,7 +84,6 @@
           <thead class="thead-dark">
               <tr>
                   <th>Category Name</th>
-                  <th>Description</th>
                   <th>List/Unlist</th>
                   <th>Actions</th>
               </tr>
@@ -98,9 +95,7 @@
                       <td>
                           <%= category.categoryName %>
                       </td>
-                      <td>
-                          <%= category.categoryDescription %>
-                      </td>
+                     
                       <td>
                           <% if (category.isListed) { %>
                               <form action="/admin/categories/unList/<%= category._id %>" method="POST">
