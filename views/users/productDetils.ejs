@@ -565,13 +565,13 @@
                           </div>
                           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                           
-                            <a href="/cart/<%= currentProduct._id %>" class="button btn-block btn-cart cart first green-button" onclick="addToCart()"><span>add to cart</span></a>
+                            <a href="/cart/<%= currentProduct._id %>" class="button btn-block btn-cart cart first green-button" onclick="addToCart()" style="width: max-content;"><span>add to cart</span></a>
                             <style>
                               .green-button {   
                                 background: #4ec67f;
                                 color: white;}
                             </style>
-                             <a href="/wishList/<%= currentProduct._id %>" class="button btn-block btn-cart cart first green1-button" id="wishList" onclick="addToWishList()" ><span>add to Wishlist</span></a>
+                             <a href="/wishList/<%= currentProduct._id %>" class="button btn-block btn-cart cart first green1-button" id="wishList" onclick="addToWishList()" style="width: max-content;" ><span>add to Wishlist</span></a>
                              <style>
                                .green1-button {   
                                  background: #4ec67f;
