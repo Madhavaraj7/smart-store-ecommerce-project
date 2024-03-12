@@ -27,7 +27,7 @@ module.exports = {
           })
           .reverse(); 
       }
-      res.render("users/account", {
+      res.render("/users/account", {
         currentUser: req.session.currentUser,
         userData,
         walletData,

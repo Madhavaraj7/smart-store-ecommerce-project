@@ -247,7 +247,7 @@ const sendResetPasswordMail = async (name, email, token) => {
       html:
         "<p>Hello " +
         name +
-        ',</p><p>please click here to <a href="http://localhost:3001/forget-password?token=' +
+        ',</p><p>please click here to <a href="https://smartstorehub.online/forget-password?token=' +
         token +
         '">reset </a> your password.</p>',
     };
