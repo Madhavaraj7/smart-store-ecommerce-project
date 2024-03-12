@@ -270,7 +270,7 @@
               <div class="pull-left">
                 <ul class="userMenu">
                   <li>
-                    <a href="contact-us.html">
+                    <a href="/404">
                       <span class="hidden-xs">contact us</span
                       ><i
                         class="glyphicon glyphicon-info-sign hide visible-xs"
@@ -314,27 +314,27 @@
                     ></a>
                     <ul class="dropdown-menu">
                       <li>
-                        <a href="account.html">
+                        <a href="/account">
                           <i class="fa fa-user"></i> Account</a
                         >
                       </li>
                       <li>
-                        <a href="account.html"
+                        <a href="/account/changePassword"
                           ><i class="fa fa fa-cog"></i> Profile</a
                         >
                       </li>
                       <li>
-                        <a href="my-address.html"
+                        <a href="/account/myAddress"
                           ><i class="fa fa-map-marker"></i> Addresses</a
                         >
                       </li>
                       <li>
-                        <a href="order-list.html"
+                        <a href="/account/orderList"
                           ><i class="fa fa-calendar"></i> Orders</a
                         >
                       </li>
                       <li>
-                        <a href="wishlist.html" title="My wishlists">
+                        <a href="/wishlist" title="My wishlists">
                           <i class="fa fa-heart"></i>
                           My wishlists
                         </a>
@@ -376,7 +376,7 @@
             <i class="fa fa-shopping-cart colorWhite"> </i>
             <span class="cartRespons colorWhite"> Cart ($210.00) </span>
           </button>
-          <a class="navbar-brand" href="index.html">
+          <a class="navbar-brand" href="/home">
             <img
               src="images/logo.png"
               alt="TSHOP"
@@ -478,14 +478,13 @@
             </div>
             <!--/.cartMenu-->
 
-            <div class="search-box">
+             <div class="search-box">
               <div class="input-group">
                 <button class="btn btn-nobg getFullSearch" type="button">
                   <i class="fa fa-search"> </i>
                 </button>
               </div>
-              <!-- /input-group -->
-            </div>
+            </div> 
             <!--/.search-box -->
           </div>
           <!--/.navbar-nav hidden-xs-->
@@ -493,27 +492,35 @@
         <!--/.nav-collapse -->
       </div>
       <!--/.container -->
-
       <div class="search-full text-right">
         <a class="pull-right search-close">
           <i class="fa fa-times-circle"> </i>
         </a>
 
-        <div class="searchInputBox pull-right">
-          <input
+        <div  id="searched" class="searchInputBox pull-right">
+          
+          <form class="d-flex" role="search" action="/search-prouct" method="post">
+            <input
             type="search"
             data-searchurl="search?="
-            name="q"
+            name="search"
             placeholder="start typing and hit enter to search"
             class="search-input"
           />
-          <button class="btn-nobg search-btn" type="submit">
-            <i class="fa fa-search"> </i>
-          </button>
+            <button class="btn btn-outline-light rounded-end-pill" type="submit" style="background-color: #e74c3c; color:white; border-color: black;">submit</i></button>
+          </form>
         </div>
+      </div>
       </div>
       <!--/.search-full-->
     </div>
+
+
+
+
+
+
+    
     <!-- /.Fixed navbar  -->
     <div class="banner">
       <div class="full-container">

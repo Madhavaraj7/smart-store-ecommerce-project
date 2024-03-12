@@ -386,10 +386,10 @@ module.exports = {
     if (otp == req.session.otp) {
 
       const user = new userdata({ name, email, phonenumber, password,referralCode });
-      req.session.userIsThere = {
-        isAlive: true,
-        userName: name,
-      };
+      // req.session.userIsThere = {
+      //   isAlive: true,
+      //   userName: name,
+      // };
       // req.session.save();
       await user.save();
      
@@ -405,6 +405,10 @@ module.exports = {
       req.session.user_id=userDetail;
       req.session.currentUser=userDetail;
       req.session.isLoggedin = true;
+      req.session.userIsThere = {
+        isAlive: true,
+        userName: name,
+    };
 
 
       res.redirect("/home");
@@ -460,3 +464,13 @@ module.exports = {
     }
   },
 };
+
+
+
+
+
+
+
+
+
+

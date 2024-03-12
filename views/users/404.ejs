@@ -1,9 +1,32 @@
+<%- include('../layouts/userHeader.ejs') %>
 
-<h1>
-    <% if (typeof message !=='undefined' ) { %>
+<div class="container main-container headerOffset">
 
-        <p class="alert alert-danger text-light mb-3">
-            <%= message %>
-        </p>
-        <% } %>
-</h1>
+    
+    <div class="row innerPage">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="row userInfo">
+
+                <p class="lead text-center"> ... CONTENT NOT FOUND .... </p>
+
+                <h1 class="h1error"><span class="err404"> 404</span> ERROR </h1>
+
+                <h1 class="h1error"><span class="err404"> <i class="fa fa-frown-o"></i></span></h1>
+
+
+
+
+
+                
+                
+            </div>
+            <!--/row end-->
+        </div>
+    </div>
+    <div class="pull-left"><a href="/home" class='btn btn-primary btn-default'  style="margin-left: 490px;"> <i class="fa fa-arrow-left"></i>
+        &nbsp; Continue shopping </a></div>
+    <!--/.innerPage-->
+    <div style="clear:both"></div>
+</div>
+
+<%- include('../layouts/userFooter.ejs') %>

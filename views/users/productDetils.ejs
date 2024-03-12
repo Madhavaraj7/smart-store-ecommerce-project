@@ -341,7 +341,7 @@
             data-target=".navbar-cart"
           >
             <i class="fa fa-shopping-cart colorWhite"> </i>
-            <span class="cartRespons colorWhite"> Cart ($210.00) </span>
+            <span class="cartRespons colorWhite"> Cart </span>
           </button>
           <a class="navbar-brand" href="/home">
             <img
@@ -422,7 +422,7 @@
             <div class="dropdown cartMenu">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-shopping-cart"> </i>
-                <span class="cartRespons"> Cart ($210.00) </span>
+                <span class="cartRespons"> Cart  </span>
                 <b class="caret"> </b>
               </a>
 
@@ -460,23 +460,23 @@
         <!--/.nav-collapse -->
       </div>
       <!--/.container -->
-
       <div class="search-full text-right">
         <a class="pull-right search-close">
           <i class="fa fa-times-circle"> </i>
         </a>
 
-        <div class="searchInputBox pull-right">
-          <input
+        <div  id="searched" class="searchInputBox pull-right">
+          
+          <form class="d-flex" role="search" action="/search-prouct" method="post">
+            <input
             type="search"
             data-searchurl="search?="
-            name="q"
+            name="search"
             placeholder="start typing and hit enter to search"
             class="search-input"
           />
-          <button class="btn-nobg search-btn" type="submit">
-            <i class="fa fa-search"> </i>
-          </button>
+            <button class="btn btn-outline-light rounded-end-pill" type="submit" style="background-color: #e74c3c; color:white; border-color: black;">submit</i></button>
+          </form>
         </div>
       </div>
       <!--/.search-full-->

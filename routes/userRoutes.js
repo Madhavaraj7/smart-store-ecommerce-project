@@ -176,6 +176,12 @@ userRoute.get("/logout", userController.userLogout);
 
 
 
+// Define a route for handling 404 errors
+userRoute.use('/404', function(req, res, next) {
+    res.status(404).render('users/404', {
+        message: 'Page Not Found'
+    });
+});
 
 
 
@@ -184,3 +190,9 @@ userRoute.get("/logout", userController.userLogout);
 
 // Export the userRoute
 module.exports= userRoute;
+
+
+
+
+
+
