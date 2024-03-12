@@ -20,7 +20,7 @@ const productlist= async (req, res) => {
           { categoryName: true }
         );
     
-        res.render("admin/productlist.ejs", {
+        res.render("admin/productList.ejs", {
           productData,
           categoryList,count,
           limit,
