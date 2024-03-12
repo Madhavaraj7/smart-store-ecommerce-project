@@ -45,6 +45,10 @@ app.use("/admin", adminRoute);
 
 const PORT = process.env.PORT || 3001;
 
+app.use("/*", (req, res) => {
+  res.render("users/404", {  currentUser: req.session.currentUser });
+});
+
 //listen to port 3000
 app.listen(PORT, () => {
   console.log(`Server Started at http://localhost:${PORT}...`);
