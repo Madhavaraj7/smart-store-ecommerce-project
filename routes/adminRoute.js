@@ -140,6 +140,8 @@ adminRoute.put("/couponManagement/editCoupon/:id", isAdmin,couponController.edit
 adminRoute.get("/productOfferManagement", isAdmin,offerController.productOfferManagement);
 adminRoute.post("/productOfferManagement/addOffer",isAdmin,offerController.addOffer);
 adminRoute.put("/productOfferManagement/editOffer/:id", isAdmin,offerController.editOffer);
+adminRoute.delete("/couponManagement/deleteCoupon/:id", isAdmin, couponController.deleteCoupon);
+
 
 // -------------------------------------------------------Category offer Managementt------------------------------------------------------------------------------
 
