@@ -185,18 +185,15 @@ const salesReportDownloadPDF = async (req, res) => {
   try {
     let startDate, endDate;
 
-    // Extract filter parameters from request body
     if (req.body.startDate && req.body.endDate) {
       startDate = new Date(req.body.startDate);
       endDate = new Date(req.body.endDate);
     } else {
-      // Set default date range if filter parameters are not provided
       startDate = new Date();
-      startDate.setDate(startDate.getDate() - 7); // Default: 7 days ago
+      startDate.setDate(startDate.getDate() - 7); 
       endDate = new Date();
     }
 
-    // Fetch sales data based on filter parameters
     const salesData = await orderCollection
       .find({
         orderDate: { $gte: startDate, $lte: endDate },
@@ -204,7 +201,6 @@ const salesReportDownloadPDF = async (req, res) => {
       })
       .populate("userId");
 
-    // Generate PDF using fetched sales data
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
@@ -240,17 +236,14 @@ const salesReportDownloadPDF = async (req, res) => {
 
     const pdfBuffer = await page.pdf({ format: "A4" });
 
-    // Set response headers to indicate PDF download
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
       "attachment; filename=salesReport.pdf"
     );
 
-    // Send the PDF buffer as response
     res.send(pdfBuffer);
 
-    // Close the Puppeteer browser instance
     await browser.close();
   } catch (error) {
     console.error("Error generating PDF:", error);
